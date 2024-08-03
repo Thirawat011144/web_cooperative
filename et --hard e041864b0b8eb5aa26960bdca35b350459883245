@@ -1,0 +1,55 @@
+[33mcommit e041864b0b8eb5aa26960bdca35b350459883245[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Author: Thirawat011144 <144359615+Thirawat011144@users.noreply.github.com>
+Date:   Thu May 30 21:21:09 2024 +0700
+
+    ก่อนจะแก้ register
+
+[33mcommit 9ea08c7756c103eea68227fd8a4a2ece7fd09a28[m
+Author: Thirawat011144 <144359615+Thirawat011144@users.noreply.github.com>
+Date:   Thu May 30 10:51:05 2024 +0700
+
+    เพิ่มการดึงข้อมูลจากสองตาราง
+
+[33mcommit 3f23f274587d7cd390be9cbe3578139e88d07aa0[m[33m ([m[1;32mrevert-to-3f23f2[m[33m)[m
+Author: Thirawat011144 <144359615+Thirawat011144@users.noreply.github.com>
+Date:   Wed May 29 14:21:51 2024 +0700
+
+    ก่อนจะแก้ไข models
+
+[33mcommit ceba2c4aaff344ef8f875b1336204faa80effa01[m
+Author: Thirawat011144 <144359615+Thirawat011144@users.noreply.github.com>
+Date:   Wed May 29 12:01:23 2024 +0700
+
+    เพิ่ม Companies Controller
+
+[33mcommit 169c4e049ac69a3c1d5529e19b1743b0fed4b99d[m
+Author: Thirawat011144 <144359615+Thirawat011144@users.noreply.github.com>
+Date:   Tue May 28 12:12:50 2024 +0700
+
+    form register
+    
+    เพิ่มเติมหน้า user ก่อนจะปรับเปลี่ยน register form
+
+[33mcommit 5a7c121094cd81eb408c59d10eb53cf468f06fd0[m
+Author: Thirawat011144 <144359615+Thirawat011144@users.noreply.github.com>
+Date:   Thu May 23 20:26:43 2024 +0700
+
+    ทำ route เสร็จแล้ว
+
+[33mcommit 633b92466cde1179055f7099bd3a63705db7ea1e[m
+Author: Thirawat011144 <144359615+Thirawat011144@users.noreply.github.com>
+Date:   Thu May 23 19:12:48 2024 +0700
+
+    แก้ไขหน้า home ให้ อ ตรวจ และแก้ route นิดหน่่อย
+
+[33mcommit b34ac157f85f385f22f60da6b1ce32f10bd75625[m
+Author: Thirawat011144 <144359615+Thirawat011144@users.noreply.github.com>
+Date:   Wed May 22 23:00:33 2024 +0700
+
+    ก่อนจะแก้ไขหน้า home
+
+[33mcommit a0da8f4e5275c28f17a2f25fdac7a25f5847b357[m
+Author: Thirawat011144 <144359615+Thirawat011144@users.noreply.github.com>
+Date:   Wed May 22 11:52:24 2024 +0700
+
+    first
