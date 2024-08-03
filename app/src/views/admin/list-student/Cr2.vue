@@ -115,7 +115,7 @@ onMounted(() => {
       <div class="card-header">
         <div class="card-title mb-2">ข้อมูลนักศึกษาชั้นประกาศนียบัตรวิชาชีพ ชั้นปีที่ 3
           <div>
-            <router-link :to="`/admin-index/cr2-req`"> 
+            <!-- <router-link :to="`/admin-index/cr2-req`"> 
               <button class="btn btn-primary m-1">ขออนุมัติ</button>
             </router-link>
             <router-link :to="`/admin-index/vcr2-approved`">
@@ -129,7 +129,7 @@ onMounted(() => {
             </router-link>
             <router-link :to="`/admin-index/cr2-notpass`">
               <button class="btn btn-danger m-1">ไม่ผ่าน</button>
-            </router-link>
+            </router-link> -->
             <button class="btn btn-info m-1" @click="downloadExcel">ดาวน์โหลด Excel</button>
           </div>
         </div>
