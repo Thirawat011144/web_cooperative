@@ -6,6 +6,7 @@ import Swal from 'sweetalert2';
 import { useRoute, useRouter } from 'vue-router';
 import * as XLSX from 'xlsx';
 import { makeModalDraggable } from "@/utils/draggable";
+import { downloadExcel } from "@/utils/downloadBeforeEvaluation";
 
 const users = ref([]);
 const isModalVisible = ref(false);
@@ -85,24 +86,24 @@ const sortedUsers = computed(() => {
   return users.value.slice().sort((a, b) => a.id - b.id);
 });
 
-const downloadExcel = () => {
-  const data = sortedUsers.value.map(user => ({
-    'รหัสนักศึกษา': user.studentID,
-    'ชื่อ': user.firstName,
-    'นามสกุล': user.lastName,
-    'สาขา': user.branch,
-    'ชั้นปี': user.year,
-    'สถานะ': user.status,
-    'เบอร์โทรศัพท์': user.phoneNumber,
-    'อีเมล์': user.email,
-    'สถานที่ฝึกประสบการณ์': user.companyDetails?.companyName || 'ไม่มีข้อมูล'
-  }));
+// const downloadExcel = () => {
+//   const data = sortedUsers.value.map(user => ({
+//     'รหัสนักศึกษา': user.studentID,
+//     'ชื่อ': user.firstName,
+//     'นามสกุล': user.lastName,
+//     'สาขา': user.branch,
+//     'ชั้นปี': user.year,
+//     'สถานะ': user.status,
+//     'เบอร์โทรศัพท์': user.phoneNumber,
+//     'อีเมล์': user.email,
+//     'สถานที่ฝึกประสบการณ์': user.companyDetails?.companyName || 'ไม่มีข้อมูล'
+//   }));
 
-  const worksheet = XLSX.utils.json_to_sheet(data);
-  const workbook = XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(workbook, worksheet, "Students");
-  XLSX.writeFile(workbook, 'students.xlsx');
-};
+//   const worksheet = XLSX.utils.json_to_sheet(data);
+//   const workbook = XLSX.utils.book_new();
+//   XLSX.utils.book_append_sheet(workbook, worksheet, "Students");
+//   XLSX.writeFile(workbook, 'students.xlsx');
+// };
 
 onMounted(() => {
   fetchData();
@@ -115,22 +116,22 @@ onMounted(() => {
       <div class="card-header">
         <div class="card-title mb-2">ข้อมูลนักศึกษาชั้นประกาศนียบัตรวิชาชีพ ชั้นปีที่ 3
           <div>
-            <router-link :to="`/admin-index/cr2-req`"> 
+            <router-link :to="`/admin-index/cr2-req`">
               <button class="btn btn-primary m-1">ขออนุมัติ</button>
             </router-link>
             <router-link :to="`/admin-index/vcr2-approved`">
               <button class="btn btn-success m-1">อนุมัติ</button>
             </router-link>
-            <router-link :to="`/admin-index/cr2-active`"> 
+            <router-link :to="`/admin-index/cr2-active`">
               <button class="btn btn-warning m-1">เข้ารับการฝึก</button>
             </router-link>
-            <router-link :to="`/admin-index/cr2-success`"> 
+            <router-link :to="`/admin-index/cr2-success`">
               <button class="btn btn-success m-1">ผ่าน</button>
             </router-link>
             <router-link :to="`/admin-index/cr2-notpass`">
               <button class="btn btn-danger m-1">ไม่ผ่าน</button>
             </router-link>
-            <button class="btn btn-info m-1" @click="downloadExcel">ดาวน์โหลด Excel</button>
+            <button class="btn btn-info m-1" @click="downloadExcel('student', sortedUsers)">ดาวน์โหลด Excel</button>
           </div>
         </div>
         <table class="table">
@@ -190,7 +191,8 @@ onMounted(() => {
               <p class="text-bold">ข้อมูลสถานที่ฝึกประสบการณ์</p>
               <p>สถานประกอบการ: {{ modalData.companyDetails.companyName }}</p>
               <p>แผนก: {{ modalData.companyDetails.companyDepartment }}</p>
-              <p>ชื่อ-นามสกุลผู้ประสานงาน: {{ modalData.companyDetails.contactFirstName }} {{ modalData.companyDetails.contactLastName }}</p>
+              <p>ชื่อ-นามสกุลผู้ประสานงาน: {{ modalData.companyDetails.contactFirstName }} {{
+                modalData.companyDetails.contactLastName }}</p>
               <p>เบอร์โทรศัพท์: {{ modalData.companyDetails.companyPhone }}</p>
               <p v-if="modalData.companyDetails.companyEmail">Email: {{ modalData.companyDetails.companyEmail }}</p>
               <p v-else></p>
@@ -199,7 +201,8 @@ onMounted(() => {
             <div v-else-if="modalData.collegeDetails">
               <p class="text-bold">ข้อมูลสถานที่ฝึกประสบการณ์</p>
               <p>สถานประกอบการ: {{ modalData.collegeDetails.collegeName }}</p>
-              <p>ชื่อ-นามสกุลผู้ประสานงาน: {{ modalData.collegeDetails.contactFirstName }} {{ modalData.collegeDetails.contactLastName }}</p>
+              <p>ชื่อ-นามสกุลผู้ประสานงาน: {{ modalData.collegeDetails.contactFirstName }} {{
+                modalData.collegeDetails.contactLastName }}</p>
               <p>เบอร์โทรศัพท์: {{ modalData.collegeDetails.collegePhone }}</p>
               <p v-if="modalData.collegeDetails.collegeEmail">Email: {{ modalData.collegeDetails.collegeEmail }}</p>
               <p v-else></p>

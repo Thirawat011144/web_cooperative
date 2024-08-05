@@ -196,6 +196,9 @@ const handleRegister = async () => {
                                             </select>
                                         </div>
 
+                                         <!-- <input v-model="branch.name" @input="logBranchData(branch, index)" :id="'branchName_' + index" type="text" -->
+            <!-- class="form-control" required> -->
+
                                         <div class="row">
                                             <div class="col mb-4">
                                                 <div>

@@ -14,10 +14,12 @@ const userName = ref('');
 const password = ref('');
 
 const handleLogin = async () => {
+    const trimmedUsername = userName.value.trim();
+    const trimmedPassword = password.value.trim();
     try {
         const payload = {
-            userName: userName.value,
-            password: password.value
+            userName: trimmedUsername,
+            password: trimmedPassword
         };
         const response = await axios.post(`${config.api_path}/login`, payload);
         if (response.data.message === "Success") {
@@ -92,14 +94,14 @@ const handleLogin = async () => {
                                 <input v-model="password" type="password"
                                     class="form-control form-control-lg bg-light fs-6" placeholder="Password" required>
                             </div>
-                            <div class="input-group mb-5 d-flex justify-content-between">
+                            <!-- <div class="input-group mb-5 d-flex justify-content-between">
                                 <div class="form-check">
                                     <input type="checkbox" class="form-check-input" id="formCheck">
                                     <label for="formCheck" class="form-check-label text-secondary"><small>Remember
                                             Me</small></label>
                                 </div>
-                            </div>
-                            <div class="input-group mb-3">
+                            </div> -->
+                            <div class="input-group mb-3 mt-5">
                                 <button style="background-color: mediumvioletred; color: white;"
                                     class="btn w-100 fs-6">Login</button>
 

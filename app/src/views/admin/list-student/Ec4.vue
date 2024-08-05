@@ -9,7 +9,7 @@ import { saveAs } from 'file-saver';
 import THSarabunNewFont from '../../../../THSarabunNew-normal'; // Base64-encoded font file
 import * as XLSX from 'xlsx'; // import library
 import { makeModalDraggable } from "@/utils/draggable";
-
+import { downloadExcel } from "@/utils/downloadBeforeEvaluation";
 
 const users = ref([]);
 const isModalVisible = ref(false);
@@ -130,24 +130,24 @@ const sortedUsers = computed(() => {
 });
 
 // ฟังก์ชันสำหรับการดาวน์โหลดไฟล์ Excel
-const downloadExcel = () => {
-  const data = sortedUsers.value.map(user => ({
-    'รหัสนักศึกษา': user.studentID,
-    'ชื่อ': user.firstName,
-    'นามสกุล': user.lastName,
-    'สาขา': user.branch,
-    'ชั้นปี': user.year,
-    'สถานะ': user.status,
-    'เบอร์โทรศัพท์': user.phoneNumber,
-    'อีเมล์': user.email,
-    'สถานที่ฝึกประสบการณ์': user.college
-  }));
+// const downloadExcel = () => {
+//   const data = sortedUsers.value.map(user => ({
+//     'รหัสนักศึกษา': user.studentID,
+//     'ชื่อ': user.firstName,
+//     'นามสกุล': user.lastName,
+//     'สาขา': user.branch,
+//     'ชั้นปี': user.year,
+//     'สถานะ': user.status,
+//     'เบอร์โทรศัพท์': user.phoneNumber,
+//     'อีเมล์': user.email,
+//     'สถานที่ฝึกประสบการณ์': user.college
+//   }));
 
-  const worksheet = XLSX.utils.json_to_sheet(data);
-  const workbook = XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(workbook, worksheet, "Students");
-  XLSX.writeFile(workbook, 'students.xlsx');
-};
+//   const worksheet = XLSX.utils.json_to_sheet(data);
+//   const workbook = XLSX.utils.book_new();
+//   XLSX.utils.book_append_sheet(workbook, worksheet, "Students");
+//   XLSX.writeFile(workbook, 'students.xlsx');
+// };
 
 
 onMounted(() => {
@@ -159,7 +159,7 @@ onMounted(() => {
   <section class="content">
     <div class="card">
       <div class="card-header">
-        <div class="card-title mb-2">ข้อมูลนักศึกษาชั้นปริญาตรี ชั้นปีที่ 
+        <div class="card-title mb-2">ข้อมูลนักศึกษาชั้นปริญาตรี ชั้นปีที่ 4
           <div>
             <router-link :to="`/admin-index/Ec4-req`"> <button
                 class="btn btn-primary m-1">ขออนุมัติ</button></router-link>
@@ -172,7 +172,7 @@ onMounted(() => {
             <router-link :to="`/admin-index/Ec4-notpass`"> <button class="btn btn-danger m-1">ไม่ผ่าน</button>
             </router-link>
             <!-- <button @click="downloadPDF" class="btn btn-primary">ดาวน์โหลด PDF</button>  -->
-            <button class="btn btn-info m-1" @click="downloadExcel">ดาวน์โหลด Excel</button>
+            <button class="btn btn-info m-1" @click="downloadExcel('student', sortedUsers)">ดาวน์โหลด Excel</button>
           </div>
         </div>
         <table class="table">

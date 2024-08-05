@@ -1,7 +1,7 @@
 <template>
     <div class="content mt-4">
         <div class="card">
-            <h5 class="card-header">ข้อมูลสถานประกอบการที่ลงทะเบียน</h5>
+            <h5 class="card-header">ข้อมูลสถานศึกษาที่ลงทะเบียน</h5>
             <table class="table">
                 <thead>
                     <tr>

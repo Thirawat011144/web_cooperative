@@ -70,6 +70,10 @@ const InternshipModel = connect.define("internships", {
     otherContact: {
         type: DataTypes.STRING(255),
         allowNull: true,
+    },
+    branch: {
+        type: DataTypes.STRING(255),
+        allowNull: true,
     }
 });
 

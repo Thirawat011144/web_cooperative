@@ -17,6 +17,9 @@
                                                     <select id="form3ExamplePrefix" class="form-control-lg"
                                                         v-model="prefix" required>
                                                         <!-- <option value="" disabled selected>-</option> -->
+                                                        <option value="นาย">นาย</option>
+                                                        <option value="นาง">นาง</option>
+                                                        <option value="นางสาว">นางสาว</option>
                                                         <option value="อาจารย์">อาจารย์</option>
                                                         <option value="ผู้ช่วยศาสตราจารย์">ผู้ช่วยศาสตราจารย์</option>
                                                         <option value="รองศาสตราจารย์">รองศาสตราจารย์</option>
@@ -90,7 +93,7 @@
                                         </div>
 
                                         <div class="row">
-                                            <label for="">สาขาวิชาที่ดูแล</label>
+                                            <label for="">สาขาวิชาที่ดูแล(สามารถเปลี่ยนได้)</label>
                                             <div class="col mb-4">
                                                 <select v-model="branch" class="form-select" required>
                                                     <option value="" disabled>-</option>

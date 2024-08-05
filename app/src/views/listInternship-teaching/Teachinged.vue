@@ -49,8 +49,15 @@ const perPage = ref(4); // จำนวนสถานที่ฝึกงา�
 const fetchUsers = async () => {
   try {
     const response = await axios.get(`${config.api_path}/users`);
+    // กรองข้อมูลสถานที่ที่มีชื่อซ้ำกัน
+    const seen = new Set();
     users.value = response.data
       .filter(user => user.year === "ป.ตรี ปีที่ 4" && user.collegeDetails)
+      .filter(user => {
+        const duplicate = seen.has(user.collegeDetails.collegeName);
+        seen.add(user.collegeDetails.collegeName);
+        return !duplicate;
+      })
       .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
   } catch (error) {
     console.error('Error fetching users:', error);

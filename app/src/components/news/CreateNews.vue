@@ -74,7 +74,7 @@ export default {
       }if (news.value.imageFile) {
         formData.append('imageFile', news.value.imageFile);
       }
-
+// console.log("aaaa",formData)
       try {
         const response = await axios.post('http://localhost:3000/api/news/', formData, {
           headers: {

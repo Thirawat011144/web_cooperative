@@ -477,7 +477,8 @@
                     <tbody>
                         <tr>
                             <td>สรุปโดยรวมของนักศึกษา</td>
-                            <td><input type="radio" :value="5" v-model.number="studentOverallEvaluation" required></td>
+                            <td><input type="radio" class="" :value="5" v-model.number="studentOverallEvaluation"
+                                    required></td>
                             <td><input type="radio" :value="4" v-model.number="studentOverallEvaluation"></td>
                             <td><input type="radio" :value="3" v-model.number="studentOverallEvaluation"></td>
                             <td><input type="radio" :value="2" v-model.number="studentOverallEvaluation"></td>
@@ -572,7 +573,7 @@ const submitEvaluation = async () => {
             evaluatorStatus: evaluatorStatus,
             time: time.value,
             evaluatorName: evaluatorName,
-            idCard:idCard,
+            idCard: idCard,
             studentId: student.value.studentID,
             criteria: criteria.value,
             hrGuidance: hrGuidance.value,
@@ -637,15 +638,15 @@ const submitEvaluation = async () => {
                 router.push('/teacher-index/student-tec2active');
             } else if (evaluatorStatus === 'ผู้ดูแล' && userYear === "ปวส 2") {
                 router.push('/home-evaluation/student-ev-uvcr');
-            } else if(evaluatorStatus === 'อาจารย์นิเทศ' && userYear === 'ปวช 3'){
-                router.push('/teacher-index/list-cr2');
-            } else if(evaluatorStatus === 'อาจารย์นิเทศ' && userYear === 'ปวส 2'){
+            } else if (evaluatorStatus === 'อาจารย์นิเทศ' && userYear === 'ปวช 3') {
+                router.push('/teacher-index/student-vcr2active');
+            } else if (evaluatorStatus === 'อาจารย์นิเทศ' && userYear === 'ปวส 2') {
                 router.push('/teacher-index/student-uvcractive');
-            } else {    
+            } else {
                 router.push('/home-evaluation/student-ev-vcr2');
             }
-            console.log("userYear",userYear)
-            console.log("evaluatorStatus",evaluatorStatus)
+            console.log("userYear", userYear)
+            console.log("evaluatorStatus", evaluatorStatus)
         }
 
     } catch (error) {
@@ -677,12 +678,23 @@ onMounted(() => {
 .evaluation-table td {
     border: 1px solid #ddd;
     padding: 8px;
+    text-align: start;
 }
 
 .evaluation-table th {
     background-color: #f2f2f2;
     font-weight: bold;
-    text-align: center;
+}
+
+.evaluation-table td {
+    width: 60px;
+    /* ทำให้คอลัมน์คะแนนกว้างเท่ากัน */
+
+}
+
+.evaluation-table td:first-child {
+    width: auto;
+    /* ให้คอลัมน์แรกกว้างตามเนื้อหา */
 }
 
 .form-group {
@@ -706,5 +718,10 @@ onMounted(() => {
 
 .btn {
     margin-top: 20px;
+}
+
+td {
+    align-items: center;
+    padding-right: 50px;
 }
 </style>

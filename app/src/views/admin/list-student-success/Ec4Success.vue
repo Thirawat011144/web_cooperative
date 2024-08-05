@@ -100,6 +100,42 @@ const sortedUsers = computed(() => {
 });
 
 
+// ฟังก์ชันสำหรับอัปเดตสถานะของผู้ใช้ทั้งหมดเป็น 'เสร็จสิ้น'
+const updateAllStatusToCompleted = async () => {
+    try {
+        const result = await Swal.fire({
+            title: 'คุณแน่ใจหรือไม่?',
+            text: 'คุณจะอัปเดตสถานะของผู้ใช้ทั้งหมดเป็น "เสร็จสิ้น"',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'ใช่, อัปเดตเลย!',
+            cancelButtonText: 'ยกเลิก'
+        });
+
+        if (result.isConfirmed) {
+            const updatePromises = users.value.map(user => {
+                return axios.put(`${config.api_path}/user/${user.id}`, { status: 'เสร็จสิ้น', year: 'ปริญาตรีชั้นปีที่ 4' });
+            });
+            await Promise.all(updatePromises);
+            Swal.fire({
+                title: "สำเร็จ",
+                text: "สถานะของผู้ใช้ทั้งหมดได้ถูกอัปเดตเป็น 'เสร็จสิ้น'",
+                icon: "success",
+            });
+            fetchData(); // รีเฟรชข้อมูลหลังจากอัปเดตสถานะ
+        }
+    } catch (error) {
+        Swal.fire({
+            title: 'error',
+            text: (error.message, 'Cr2 Error UpdateStatus'),
+            icon: 'error'
+        });
+    }
+};
+
+
 
 const downloadExcel = () => {
     const workbook = new ExcelJS.Workbook();
@@ -278,6 +314,7 @@ onMounted(() => {
                         <router-link :to="`/admin-index/Ec4-notpass`"> <button
                                 class="btn btn-danger m-1">ไม่ผ่าน</button></router-link>
                         <button class="btn btn-info m-1" @click="downloadExcel">ดาวน์โหลด Excel</button>
+                        <button class="btn btn-info m-1" @click="updateAllStatusToCompleted">เสร็จสิ้นทั้งหมด</button>
                     </div>
                 </div>
                 <table class="table">

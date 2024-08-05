@@ -21,11 +21,12 @@ router.post("/internship", async (req, res) => {
             contactPosition,
             contactEmail,
             contactTel,
-            otherContact
+            otherContact,
+            branch
         } = req.body;
 
         // ตรวจสอบว่าข้อมูลที่จำเป็นทั้งหมดถูกส่งมา
-        if (!company || !position || !location || !tel || !mail || !vacancies || !gender || !educationLevel || !contactPerson || !contactEmail || !contactTel) {
+        if (!company || !position || !location || !tel || !mail || !vacancies || !gender || !educationLevel || !contactPerson || !contactEmail || !contactTel || !branch) {
             return res.status(400).json({ message: "กรุณากรอกข้อมูลให้ครบถ้วน" });
         }
 
@@ -46,7 +47,8 @@ router.post("/internship", async (req, res) => {
             contactPosition: contactPosition || "-",
             contactEmail: contactEmail || "-",
             contactTel: contactTel || "-",
-            otherContact: otherContact || "-"
+            otherContact: otherContact || "-",
+            branch: branch || "-",
         });
 
         res.status(201).json(newInternship);
@@ -108,7 +110,8 @@ router.put('/internship/:id', async (req, res) => {
             contactPosition,
             contactEmail,
             contactTel,
-            otherContact
+            otherContact,
+            branch
         } = req.body;
 
         // อัพเดตค่าใหม่ลงใน internship instance
@@ -128,7 +131,8 @@ router.put('/internship/:id', async (req, res) => {
             contactPosition,
             contactEmail,
             contactTel,
-            otherContact
+            otherContact,
+            branch
         });
 
         // บันทึกการเปลี่ยนแปลงลงในฐานข้อมูล

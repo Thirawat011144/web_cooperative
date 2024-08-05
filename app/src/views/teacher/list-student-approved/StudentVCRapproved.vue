@@ -7,7 +7,7 @@ import { useRoute, useRouter } from 'vue-router';
 import { RouterLink, RouterView } from 'vue-router';
 import * as XLSX from 'xlsx'; // import library
 import { makeModalDraggable } from "@/utils/draggable";
-
+import { downloadExcel } from "@/utils/downloadBeforeEvaluation";
 // const route = useRoute();
 // const router = useRouter();
 
@@ -60,28 +60,6 @@ const closeModal = () => {
 };
 // modal
 
-
-const handleStatus = async (id, newStatus) => { // ฟังก์ชันเพื่ออัพเดตสถานะ
-    try {
-        const response = await axios.put(`${config.api_path}/user/${id}`, { status: newStatus }); // ส่งข้อมูลไปที่ API
-        if (response.data.message === "Success") {
-            Swal.fire({
-                title: "สำเร็จ",
-                text: "อัปเดตสถานะสำเร็จ",
-                icon: "success",
-            });
-            fetchData(); // รีเฟรชข้อมูลหลังจากอัพเดตสถานะ
-        }
-    } catch (error) {
-        Swal.fire({
-            title: "error",
-            text: (error.message, "Cr2 Error Updating Status"),
-            icon: "error"
-        });
-    }
-};
-
-
 const removeData = async (id) => {
     // แสดงป๊อปอัพยืนยันการลบ
     const result = await Swal.fire({
@@ -126,24 +104,24 @@ const sortedUsers = computed(() => {
 });
 
 // ฟังก์ชันสำหรับการดาวน์โหลดไฟล์ Excel
-const downloadExcel = () => {
-    const data = sortedUsers.value.map(user => ({
-        'รหัสนักศึกษา': user.studentID,
-        'ชื่อ': user.firstName,
-        'นามสกุล': user.lastName,
-        'สาขา': user.branch,
-        'ชั้นปี': user.year,
-        'สถานะ': user.status,
-        'เบอร์โทรศัพท์': user.phoneNumber,
-        'อีเมล์': user.email,
-        'สถานที่ฝึกประสบการณ์': user.companyDetails.companyName
-    }));
+// const downloadExcel = () => {
+//     const data = sortedUsers.value.map(user => ({
+//         'รหัสนักศึกษา': user.studentID,
+//         'ชื่อ': user.firstName,
+//         'นามสกุล': user.lastName,
+//         'สาขา': user.branch,
+//         'ชั้นปี': user.year,
+//         'สถานะ': user.status,
+//         'เบอร์โทรศัพท์': user.phoneNumber,
+//         'อีเมล์': user.email,
+//         'สถานที่ฝึกประสบการณ์': user.companyDetails.companyName
+//     }));
 
-    const worksheet = XLSX.utils.json_to_sheet(data);
-    const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, "Students");
-    XLSX.writeFile(workbook, 'students.xlsx');
-};
+//     const worksheet = XLSX.utils.json_to_sheet(data);
+//     const workbook = XLSX.utils.book_new();
+//     XLSX.utils.book_append_sheet(workbook, worksheet, "Students");
+//     XLSX.writeFile(workbook, 'students.xlsx');
+// };
 
 
 onMounted(() => {
@@ -169,7 +147,8 @@ onMounted(() => {
                         <router-link :to="`/teacher-index/student-vcr2notpass`"> <button
                                 class="btn btn-danger m-1">ไม่ผ่าน</button>
                         </router-link>
-                        <button class="btn btn-info m-1" @click="downloadExcel">ดาวน์โหลด Excel</button>
+                        <button class="btn btn-info m-1" @click="downloadExcel('student', sortedUsers)">ดาวน์โหลด
+                            Excel</button>
                     </div>
                 </div>
                 <table class="table">
@@ -181,7 +160,7 @@ onMounted(() => {
                             <th>สาขา</th>
                             <th>ชั้นปี</th>
                             <th class="text-center">ข้อมูลสถานประกอบการ</th>
-                            <th>Tools</th>
+
                         </tr>
                     </thead>
                     <tbody>
@@ -194,17 +173,15 @@ onMounted(() => {
                             <td class="text-center">
                                 <button class="btn btn-success" @click="showModal(user.id)">ดูข้อมูล</button>
                             </td>
-                            <td>
-                                <button class="btn btn-primary"
-                                    @click="handleStatus(user.id, 'เข้ารับการฝึก')">เข้ารับการฝึก</button>
-                                &nbsp;
-                                <!-- <button class="btn btn-danger"
+                            <!-- <td> -->
+
+                            <!-- <button class="btn btn-danger"
                                     @click="handleStatus(user.id, 'ไม่ผ่าน')">ไม่ผ่าน</button> -->
-                                <!-- <router-link :to="`/edit-ec4/${user.id}`">
+                            <!-- <router-link :to="`/edit-ec4/${user.id}`">
                                     <button class="btn btn-primary m-1">Edit</button>
                                 </router-link>
                                 <button @click="removeData(user.id)" class="btn btn-danger m-1">Delete</button> -->
-                            </td>
+                            <!-- </td> -->
                         </tr>
                     </tbody>
                 </table>

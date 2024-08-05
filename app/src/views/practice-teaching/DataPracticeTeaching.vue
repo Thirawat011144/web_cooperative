@@ -97,6 +97,7 @@ const fetchJob = async () => {
     try {
         const response = await axios.get(`${config.api_path}/practice-teaching/${route.params.id}`);
         job.value = response.data;
+        console.log('Fetched job data:', job.value);
         await fetchBranchCounts(); // ดึงข้อมูลจำนวนผู้สมัคร
     } catch (error) {
         console.error('Error fetching job:', error);
@@ -108,15 +109,44 @@ const fetchBranchCounts = async () => {
     try {
         const response = await axios.get(`${config.api_path}/colleges`);
         branchCounts.value = response.data;
+        console.log('Fetched branch counts:', branchCounts.value);
     } catch (error) {
         console.error('Error fetching branch counts:', error);
     }
 };
 
-// ฟังก์ชันดึงจำนวนผู้สมัครในแต่ละสาขา
+// ฟังก์ชันดึงจำนวนผู้สมัครที่มีสถานะเป็น 'ขออนุมัติ'
 const getApplicantsCount = (branchName) => {
-    const applicants = branchCounts.value.filter(college => college.collegeName === job.value.company && college.department === branchName);
-    return applicants.length;
+    const applicants = branchCounts.value.filter(college =>
+        college.collegeName === job.value.company &&
+        college.department === branchName
+    );
+    console.log(`Applicants with status 'ขออนุมัติ' for branch '${branchName}':`, applicants);
+
+    const finishedApplicants = branchCounts.value.filter(college =>
+        college.collegeName === job.value.company &&
+        college.department === branchName &&
+        (college.userDetails.status === 'ผ่าน' || college.userDetails.status === 'ไม่อนุมัติ' || college.userDetails.status === 'ไม่ผ่าน' || college.userDetails.status === 'เสร็จสิ้น'
+        ) 
+    );
+
+    console.log(`Finished applicants for branch '${branchName}':`, finishedApplicants);
+
+    const count = applicants.length - finishedApplicants.length;
+    console.log(`Calculated count for branch '${branchName}':`, count);
+    return count;
+};
+
+// ฟังก์ชันตรวจสอบสถานะ "จบการฝึก"
+const hasFinishedApplicants = (branchName) => {
+    const finishedApplicants = branchCounts.value.filter(college =>
+        college.collegeName === job.value.company &&
+        college.department === branchName
+        &&
+        college.userDetails.status === 'ผ่าน'
+    );
+    console.log(`Has finished applicants for branch '${branchName}':`, finishedApplicants.length > 0);
+    return finishedApplicants.length > 0;
 };
 
 // ดึงข้อมูลเมื่อคอมโพเนนต์ถูกเมาท์

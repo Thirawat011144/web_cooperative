@@ -7,32 +7,20 @@ import { useRoute, useRouter } from 'vue-router';
 import { RouterLink, RouterView } from 'vue-router';
 import * as XLSX from 'xlsx'; // import library
 import { makeModalDraggable } from "@/utils/draggable";
+import { downloadExcel } from "@/utils/downloadBeforeEvaluation";
 
 // const route = useRoute();
 // const router = useRouter();
 
-// const user = ref({
-//   firstName: '',
-//   lastName: '',
-//   userName: '',
-//   password: '',
-//   phoneNumber: '',
-//   gender: '',
-//   year: '',
-//   branch: '',
-//   status: '',
-//   studentID: '',
-//   company: ''
-// });
-
 const users = ref([]); // เปลี่ยน {} เป็น []
 const isModalVisible = ref(false);
 const modalData = ref(null);
+const branch = localStorage.getItem(config.branch)
 
 const fetchData = async () => {
     try {
         const response = await axios.get(`${config.api_path}/users`);
-        users.value = response.data.filter(user => user.status === "ขออนุมัติ" && user.year === "ปวช 3");
+        users.value = response.data.filter(user => user.status === "ขออนุมัติ" && user.year === "ปวช 3" && user.branch === branch);
     } catch (error) {
         Swal.fire({
             title: "error",
@@ -50,7 +38,7 @@ const showModal = async (id) => {
         const response = await axios.get(`${config.api_path}/user/${id}`);
         modalData.value = response.data;
         makeModalDraggable();
-        
+
     } catch (error) {
         Swal.fire({
             title: "error",
@@ -65,6 +53,7 @@ const closeModal = () => {
     modalData.value = null;
 };
 // modal
+
 
 
 const removeData = async (id) => {
@@ -110,26 +99,6 @@ const sortedUsers = computed(() => {
     return users.value.slice().sort((a, b) => a.id - b.id); // เรียงลำดับตาม ID
 });
 
-// ฟังก์ชันสำหรับการดาวน์โหลดไฟล์ Excel
-const downloadExcel = () => {
-    const data = sortedUsers.value.map(user => ({
-        'รหัสนักศึกษา': user.studentID,
-        'ชื่อ': user.firstName,
-        'นามสกุล': user.lastName,
-        'สาขา': user.branch,
-        'ชั้นปี': user.year,
-        'สถานะ': user.status,
-        'เบอร์โทรศัพท์': user.phoneNumber,
-        'อีเมล์': user.email,
-        'สถานที่ฝึกประสบการณ์': user.companyDetails?.companyName || 'ไม่มีข้อมมูล'
-    }));
-
-    const worksheet = XLSX.utils.json_to_sheet(data);
-    const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, "Students");
-    XLSX.writeFile(workbook, 'students.xlsx');
-};
-
 onMounted(() => {
     fetchData();
 });
@@ -152,7 +121,8 @@ onMounted(() => {
                         <router-link :to="`/admin-index/cr2-notpass`"> <button
                                 class="btn btn-danger m-1">ไม่ผ่าน</button>
                         </router-link>
-                        <button class="btn btn-info m-1" @click="downloadExcel">ดาวน์โหลด Excel</button>
+                        <button class="btn btn-info m-1" @click="downloadExcel('student', sortedUsers)">ดาวน์โหลด
+                            Excel</button>
                     </div>
                 </div>
                 <table class="table">
@@ -179,9 +149,11 @@ onMounted(() => {
                             </td>
                             <td>
                                 <router-link :to="`/edit-cr2/${user.id}`">
-                                    <button class="btn btn-primary m-1"> <i class="fa-solid fa-pen-to-square"></i></button>
+                                    <button class="btn btn-primary m-1"> <i
+                                            class="fa-solid fa-pen-to-square"></i></button>
                                 </router-link>
-                                <button @click="removeData(user.id)" class="btn btn-danger m-1">  <i class="fa-solid fa-trash-can"></i></button>
+                                <button @click="removeData(user.id)" class="btn btn-danger m-1"> <i
+                                        class="fa-solid fa-trash-can"></i></button>
                             </td>
                         </tr>
                     </tbody>

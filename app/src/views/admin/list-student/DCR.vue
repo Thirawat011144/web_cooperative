@@ -8,6 +8,7 @@ import { RouterLink, RouterView } from 'vue-router';
 import * as XLSX from 'xlsx'; // import library
 
 import { makeModalDraggable } from "@/utils/draggable";
+import { downloadExcel } from "@/utils/downloadBeforeEvaluation";
 
 // const route = useRoute();
 // const router = useRouter();
@@ -117,24 +118,24 @@ const sortedUsers = computed(() => {
 });
 
 // ฟังก์ชันสำหรับการดาวน์โหลดไฟล์ Excel
-const downloadExcel = () => {
-  const data = sortedUsers.value.map(user => ({
-    'รหัสนักศึกษา': user.studentID,
-    'ชื่อ': user.firstName,
-    'นามสกุล': user.lastName,
-    'สาขา': user.branch,
-    'ชั้นปี': user.year,
-    'สถานะ': user.status,
-    'เบอร์โทรศัพท์': user.phoneNumber,
-    'อีเมล์': user.email,
-    'สถานที่ฝึกประสบการณ์': user.companyDetails?.companyName || 'ไม่มีข้อมมูล'
-  }));
+// const downloadExcel = () => {
+//   const data = sortedUsers.value.map(user => ({
+//     'รหัสนักศึกษา': user.studentID,
+//     'ชื่อ': user.firstName,
+//     'นามสกุล': user.lastName,
+//     'สาขา': user.branch,
+//     'ชั้นปี': user.year,
+//     'สถานะ': user.status,
+//     'เบอร์โทรศัพท์': user.phoneNumber,
+//     'อีเมล์': user.email,
+//     'สถานที่ฝึกประสบการณ์': user.companyDetails?.companyName || 'ไม่มีข้อมมูล'
+//   }));
 
-  const worksheet = XLSX.utils.json_to_sheet(data);
-  const workbook = XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(workbook, worksheet, "Students");
-  XLSX.writeFile(workbook, 'students.xlsx');
-};
+//   const worksheet = XLSX.utils.json_to_sheet(data);
+//   const workbook = XLSX.utils.book_new();
+//   XLSX.utils.book_append_sheet(workbook, worksheet, "Students");
+//   XLSX.writeFile(workbook, 'students.xlsx');
+// };
 
 
 onMounted(() => {
@@ -158,7 +159,7 @@ onMounted(() => {
             </router-link>
             <router-link :to="`/admin-index/dcr-notpass`"> <button class="btn btn-danger m-1">ไม่ผ่าน</button>
             </router-link>
-            <button class="btn btn-info m-1" @click="downloadExcel">ดาวน์โหลด Excel</button>
+            <button class="btn btn-info m-1" @click="downloadExcel('student',sortedUsers)">ดาวน์โหลด Excel</button>
           </div>
         </div>
         <table class="table">

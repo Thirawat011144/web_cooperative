@@ -14,7 +14,7 @@
               required></textarea>
           </div>
           <div class="mb-3">
-            <label for="email" class="form-label">อีเมลล์</label>
+            <label for="email" class="form-label">อีเมล</label>
             <input v-model="cooperativeEducation.email" type="email" id="email" class="form-control" required />
           </div>
           <div class="mb-3">

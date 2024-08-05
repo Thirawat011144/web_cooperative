@@ -121,6 +121,11 @@ const getUserName = computed(() => {
                                     <p>ป.ตรี ชั้นปีที่ 4</p>
                                 </router-link>
                             </li>
+                            <li class="nav-item">
+                                <router-link to="/admin-index/list-success" class="nav-link ms-4 ">
+                                    <p>รายชื่อนักศึกษาที่ฝึกสำเร็จ</p>
+                                </router-link>
+                            </li>
                         </ul>
                     </li>
                     <li class="nav-item">
@@ -161,7 +166,7 @@ const getUserName = computed(() => {
                         <ul class="nav nav-treeview">
                             <li class="nav-item ms-4">
                                 <router-link to="/admin-index/create-es" class="nav-link">
-                                    <p>ลงข้อมูลสถานประกอบการ</p>
+                                    <p>เพิ่มข้อมูลสถานประกอบการ</p>
                                     <!-- <i class="fa-solid fa-plus ms-2"></i> -->
                                 </router-link>
                             </li>
@@ -187,7 +192,7 @@ const getUserName = computed(() => {
                         <ul class="nav nav-treeview">
                             <li class="nav-item ms-4">
                                 <router-link to="/admin-index/create-practice" class="nav-link">
-                                    <p>ลงข้อมูลสถานประกอบการ</p>
+                                    <p>เพิ่มข้อมูลสถานศึกษา</p>
                                     <!-- <i class="fa-solid fa-plus ms-2"></i> -->
                                 </router-link>
                             </li>
@@ -195,7 +200,7 @@ const getUserName = computed(() => {
                         <ul class="nav nav-treeview">
                             <li class="nav-item ms-4">
                                 <router-link to="/admin-index/practice" class="nav-link">
-                                    <p>ข้อมูลสถานประกอบการ</p>
+                                    <p>ข้อมูลสถานศึกษา</p>
                                     <!-- <i class="fa-solid fa-book ms-4"></i> -->
                                 </router-link>
                             </li>
@@ -247,7 +252,7 @@ const getUserName = computed(() => {
                         <ul class="nav nav-treeview">
                             <li class="nav-item ms-4">
                                 <router-link to="/admin-index/cooperative-education" class="nav-link">
-                                    <p>รายการไฟล์</p>
+                                    <p>รายการ</p>
                                     <!-- <i class="fa-solid fa-book ms-4"></i> -->
                                 </router-link>
                             </li>

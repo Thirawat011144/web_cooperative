@@ -92,7 +92,6 @@ const fetchBranches = async (company) => {
     }
 };
 
-// ฟังก์ชันตรวจสอบการสมัคร
 const checkAvailability = async () => {
     try {
         // ดึงข้อมูลการสมัครทั้งหมด
@@ -101,15 +100,19 @@ const checkAvailability = async () => {
         // ตรวจสอบจำนวนผู้สมัครในวิทยาลัยและสาขาที่เลือก
         const applicants = response.data.filter(college =>
             college.collegeName === selectedCompany.value &&
-            college.department === selectedBranch.value
+            college.department === selectedBranch.value &&
+            (college.userDetails.status !== 'ผ่าน' && college.userDetails.status !== 'เสร็จสิ้น')
         );
+        console.log('Applicants:', applicants); // เพิ่มการตรวจสอบค่าผู้สมัคร
 
         // จำนวนที่ต้องการสมัครสำหรับสาขาที่เลือก
         const requiredCount = branchCounts.value.find(branch =>
             branch.name === selectedBranch.value
         )?.count || 0;
+        console.log('Required count:', requiredCount); // เพิ่มการตรวจสอบค่าจำนวนที่ต้องการ
 
         // เช็คว่ามีการสมัครครบตามจำนวนหรือไม่
+        console.log('Number of applicants:', applicants.length); // เพิ่มการตรวจสอบจำนวนผู้สมัคร
         if (applicants.length >= requiredCount) {
             Swal.fire({
                 title: "ไม่สามารถสมัครได้",

@@ -7,6 +7,7 @@ import { useRoute, useRouter } from 'vue-router';
 import { RouterLink, RouterView } from 'vue-router';
 import * as XLSX from 'xlsx'; // import library
 import { makeModalDraggable } from "@/utils/draggable";
+import { downloadExcel } from "@/utils/downloadBeforeEvaluation";
 
 // const route = useRoute();
 // const router = useRouter();
@@ -66,6 +67,27 @@ const closeModal = () => {
 };
 // modal
 
+const handleStatus = async (id, newStatus) => { // ฟังก์ชันเพื่ออัพเดตสถานะ
+    try {
+        const response = await axios.put(`${config.api_path}/user/${id}`, { status: newStatus }); // ส่งข้อมูลไปที่ API
+        if (response.data.message === "Success") {
+            Swal.fire({
+                title: "สำเร็จ",
+                text: "อัปเดตสถานะสำเร็จ",
+                icon: "success",
+            });
+            fetchData(); // รีเฟรชข้อมูลหลังจากอัพเดตสถานะ
+        }
+    } catch (error) {
+        Swal.fire({
+            title: "error",
+            text: (error.message, "Cr2 Error Updating Status"),
+            icon: "error"
+        });
+    }
+};
+
+
 const removeData = async (id) => {
     // แสดงป๊อปอัพยืนยันการลบ
     const result = await Swal.fire({
@@ -109,27 +131,6 @@ const sortedUsers = computed(() => {
     return users.value.slice().sort((a, b) => a.id - b.id); // เรียงลำดับตาม ID
 });
 
-// ฟังก์ชันสำหรับการดาวน์โหลดไฟล์ Excel
-const downloadExcel = () => {
-    const data = sortedUsers.value.map(user => ({
-        'รหัสนักศึกษา': user.studentID,
-        'ชื่อ': user.firstName,
-        'นามสกุล': user.lastName,
-        'สาขา': user.branch,
-        'ชั้นปี': user.year,
-        'สถานะ': user.status,
-        'เบอร์โทรศัพท์': user.phoneNumber,
-        'อีเมล์': user.email,
-        'สถานที่ฝึกประสบการณ์': user.companyDetails?.companyName || 'ไม่มีข้อมมูล'
-    }));
-
-    const worksheet = XLSX.utils.json_to_sheet(data);
-    const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, "Students");
-    XLSX.writeFile(workbook, 'students.xlsx');
-};
-
-
 onMounted(() => {
     fetchData();
 });
@@ -152,7 +153,8 @@ onMounted(() => {
                         <router-link :to="`/admin-index/dcr-notpass`"> <button
                                 class="btn btn-danger m-1">ไม่ผ่าน</button>
                         </router-link>
-                        <button class="btn btn-info m-1" @click="downloadExcel">ดาวน์โหลด Excel</button>
+                        <button class="btn btn-info m-1" @click="downloadExcel('student', sortedUsers)">ดาวน์โหลด
+                            Excel</button>
                     </div>
                 </div>
                 <table class="table">
@@ -178,7 +180,9 @@ onMounted(() => {
                                 <button class="btn btn-success" @click="showModal(user.id)">ดูข้อมูล</button>
                             </td>
                             <td>
-                                <router-link :to="`/edit-ec4/${user.id}`">
+                                <button class="btn btn-primary"
+                                    @click="handleStatus(user.id, 'เข้ารับการฝึก')">เข้ารับการฝึก</button>
+                                <router-link :to="`/edit-cr2/${user.id}`">
                                     <button class="btn btn-primary m-1"><i
                                             class="fa-solid fa-pen-to-square"></i></button>
                                 </router-link>
@@ -232,9 +236,10 @@ onMounted(() => {
                             <p>ที่ตั้งวิทยาลัย: {{ modalData.collegeDetails.collegeAddress }}</p>
 
                         </div>
-                        <div v-else>
-                            <p>ไม่มีข้อมูลสถานประกอบการ</p>
-                        </div>
+
+                    </div>
+                    <div v-else>
+                        <p>ไม่มีข้อมูลสถานประกอบการ</p>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" @click="closeModal">ปิด</button>

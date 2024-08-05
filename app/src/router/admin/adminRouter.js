@@ -27,6 +27,8 @@ import EditDownload from '../../views/downloads/EditDownload.vue'
 
 import listTeachers from '../../views/admin/list-teacher/listTeachers.vue'
 
+import StdSuccess from '../../views/admin/list-student/StdSuccess.vue'
+
 import Cr2 from '../../views/admin/list-student/Cr2.vue'
 import DCR from '../../views/admin/list-student/DCR.vue'
 import Ec2 from '../../views/admin/list-student/Ec2.vue'
@@ -148,6 +150,11 @@ const routeAdmin = [
         path: 'list-teachers',
         name: 'list-teachers',
         component: listTeachers
+      },
+      {
+        path: 'list-success',
+        name: 'list-success',
+        component: StdSuccess,
       },
       {
         path: 'list-cr2',

@@ -59,7 +59,8 @@ onMounted(() => {
                             :to="`/home-evaluation/list-evaluation-one`">
                             <button class="btn btn-primary m-1"> ครั้งที่ 1 </button>
                         </router-link>
-                        <router-link v-if="checkEvaluatorStatus === 'กรรมการบริหารสถานศึกษา/ตัวแทนชุมชน'"
+                        <router-link
+                            v-if="checkEvaluatorStatus === 'กรรมการบริหารสถานศึกษา/ตัวแทนชุมชน' || 'อาจารย์นิเทศ'"
                             :to="`/home-evaluation/list-evaluation-two`">
                             <button class="btn btn-primary m-1"> ครั้งที่ 2 </button>
                         </router-link>

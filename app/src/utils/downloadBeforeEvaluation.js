@@ -85,3 +85,48 @@ export const downloadExcel = (filename, sortedUsers) => {
         link.click();
     });
 };
+
+// ฟังก์ชันดาวน์โหลด Excel
+export const downloadExcelHight = (filename, sortedUsers) => {
+    if (!sortedUsers) {
+        console.error("sortedUsers ไม่มีค่า");
+        return;
+    }
+
+    const workbook = new ExcelJS.Workbook();
+    const worksheet = createWorksheet(workbook, 'Students', [
+        { header: 'รหัสนักศึกษา', key: 'studentID', width: 20 },
+        { header: 'เลขบัตรประชาชน', key: 'studentIdCard', width: 20 },
+        { header: 'ชื่อ', key: 'firstName', width: 30 },
+        { header: 'นามสกุล', key: 'lastName', width: 30 },
+        { header: 'สาขา', key: 'branch', width: 30 },
+        { header: 'ชั้นปี', key: 'year', width: 20 },
+        { header: 'สถานะ', key: 'status', width: 20 },
+        { header: 'เบอร์โทรศัพท์', key: 'phoneNumber', width: 20 },
+        { header: 'อีเมล์', key: 'email', width: 30 },
+        { header: 'สถานที่ฝึกสอน', key: 'collegeName', width: 50 }
+    ]);
+
+    const data = sortedUsers.map(user => ({
+        studentID: user.studentID,
+        studentIdCard: user.idCard,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        branch: user.branch,
+        year: user.year,
+        status: user.status,
+        phoneNumber: user.phoneNumber,
+        email: user.email,
+        collegeName: user.collegeDetails?.collegeName || 'ไม่มีข้อมูล'
+    }));
+
+    populateWorksheet(worksheet, data);
+
+    workbook.xlsx.writeBuffer().then((buffer) => {
+        const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = `${filename}.xlsx`;
+        link.click();
+    });
+};

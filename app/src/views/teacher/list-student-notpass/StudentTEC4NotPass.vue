@@ -7,6 +7,7 @@ import { useRoute, useRouter } from 'vue-router';
 import { RouterLink, RouterView } from 'vue-router';
 import * as XLSX from 'xlsx'; // import library
 import { makeModalDraggable } from "@/utils/draggable";
+import { downloadExcelHight } from "@/utils/downloadBeforeEvaluation";
 
 // const route = useRoute();
 // const router = useRouter();
@@ -126,24 +127,24 @@ const sortedUsers = computed(() => {
 });
 
 // ฟังก์ชันสำหรับการดาวน์โหลดไฟล์ Excel
-const downloadExcel = () => {
-  const data = sortedUsers.value.map(user => ({
-    'รหัสนักศึกษา': user.studentID,
-    'ชื่อ': user.firstName,
-    'นามสกุล': user.lastName,
-    'สาขา': user.branch,
-    'ชั้นปี': user.year,
-    'สถานะ': user.status,
-    'เบอร์โทรศัพท์': user.phoneNumber,
-    'อีเมล์': user.email,
-    'สถานที่ฝึกประสบการณ์':user.college
-  }));
+// const downloadExcel = () => {
+//   const data = sortedUsers.value.map(user => ({
+//     'รหัสนักศึกษา': user.studentID,
+//     'ชื่อ': user.firstName,
+//     'นามสกุล': user.lastName,
+//     'สาขา': user.branch,
+//     'ชั้นปี': user.year,
+//     'สถานะ': user.status,
+//     'เบอร์โทรศัพท์': user.phoneNumber,
+//     'อีเมล์': user.email,
+//     'สถานที่ฝึกประสบการณ์':user.college
+//   }));
 
-  const worksheet = XLSX.utils.json_to_sheet(data);
-  const workbook = XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(workbook, worksheet, "Students");
-  XLSX.writeFile(workbook, 'students.xlsx');
-};
+//   const worksheet = XLSX.utils.json_to_sheet(data);
+//   const workbook = XLSX.utils.book_new();
+//   XLSX.utils.book_append_sheet(workbook, worksheet, "Students");
+//   XLSX.writeFile(workbook, 'students.xlsx');
+// };
 
 
 onMounted(() => {
@@ -169,7 +170,8 @@ onMounted(() => {
                         <router-link :to="`/teacher-index/student-tec4notpass`"> <button
                                 class="btn btn-danger m-1">ไม่ผ่าน</button>
                         </router-link>
-                        <button class="btn btn-info m-1" @click="downloadExcel">ดาวน์โหลด Excel</button>
+                        <button class="btn btn-info m-1" @click="downloadExcelHight('student', sortedUsers)">ดาวน์โหลด
+                            Excel</button>
                     </div>
                 </div>
                 <table class="table">
@@ -242,7 +244,8 @@ onMounted(() => {
                         <div v-if="modalData.collegeDetails">
                             <p class="text-bold">ข้อมูลสถานที่ฝึกประสบการณ์</p>
                             <p>สถานประกอบการ: {{ modalData.collegeDetails.collegeName }}</p>
-                            <p>แผนกวิชาที่นักเรียนเข้ารับการฝึกประสบการณ์วิชาชีพ: {{ modalData.collegeDetails.department }}</p>
+                            <p>แผนกวิชาที่นักเรียนเข้ารับการฝึกประสบการณ์วิชาชีพ: {{ modalData.collegeDetails.department
+                                }}</p>
                             <p>ขนาดสถานศึกษา: {{ modalData.collegeDetails.schoolSize }}</p>
                             <p>ชื่อ-นามสกุลผู้ประสานงาน: {{ modalData.collegeDetails.contactFirstName }} {{
                                 modalData.collegeDetails.contactLastName }}</p>

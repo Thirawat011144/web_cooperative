@@ -6,6 +6,7 @@ import Swal from 'sweetalert2';
 import { useRouter } from 'vue-router';
 import * as XLSX from 'xlsx'; // import library
 import { makeModalDraggable } from "@/utils/draggable";
+import { downloadExcelHight } from "@/utils/downloadBeforeEvaluation";
 
 const router = useRouter();  // เพิ่มการประกาศตัวแปร router
 
@@ -235,24 +236,24 @@ const sortedUsers = computed(() => {
 });
 
 // ฟังก์ชันสำหรับการดาวน์โหลดไฟล์ Excel
-const downloadExcel = () => {
-    const data = sortedUsers.value.map(user => ({
-        'รหัสนักศึกษา': user.studentID,
-        'ชื่อ': user.firstName,
-        'นามสกุล': user.lastName,
-        'สาขา': user.branch,
-        'ชั้นปี': user.year,
-        'สถานะ': user.status,
-        'เบอร์โทรศัพท์': user.phoneNumber,
-        'อีเมล์': user.email,
-        'สถานที่ฝึกประสบการณ์': user.college
-    }));
+// const downloadExcel = () => {
+//     const data = sortedUsers.value.map(user => ({
+//         'รหัสนักศึกษา': user.studentID,
+//         'ชื่อ': user.firstName,
+//         'นามสกุล': user.lastName,
+//         'สาขา': user.branch,
+//         'ชั้นปี': user.year,
+//         'สถานะ': user.status,
+//         'เบอร์โทรศัพท์': user.phoneNumber,
+//         'อีเมล์': user.email,
+//         'สถานที่ฝึกประสบการณ์': user.college
+//     }));
 
-    const worksheet = XLSX.utils.json_to_sheet(data);
-    const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, "Students");
-    XLSX.writeFile(workbook, 'students.xlsx');
-};
+//     const worksheet = XLSX.utils.json_to_sheet(data);
+//     const workbook = XLSX.utils.book_new();
+//     XLSX.utils.book_append_sheet(workbook, worksheet, "Students");
+//     XLSX.writeFile(workbook, 'students.xlsx');
+// };
 
 
 onMounted(() => {
@@ -276,7 +277,8 @@ onMounted(() => {
                             <button class="btn btn-success m-1">ผ่าน</button></router-link>
                         <router-link :to="`/teacher-index/student-tec4notpass`">
                             <button class="btn btn-danger m-1">ไม่ผ่าน</button></router-link>
-                        <button class="btn btn-info m-1" @click="downloadExcel">ดาวน์โหลด Excel</button>
+                        <button class="btn btn-info m-1" @click="downloadExcelHight('student', sortedUsers)">ดาวน์โหลด
+                            Excel</button>
                     </div>
                 </div>
                 <table class="table">
@@ -300,15 +302,13 @@ onMounted(() => {
                                 <button class="btn btn-success" @click="showModal(user.id)">ดูข้อมูล</button>
                             </td>
                             <td>
-                                <button
-                                    :class="user.isEvaluated ? 'btn btn-secondary' : 'btn btn-success'"
-                                    @click="handleEvaluation(user.id)"
-                                    :disabled="user.isEvaluated"
-                                >
+                                <button :class="user.isEvaluated ? 'btn btn-secondary' : 'btn btn-success'"
+                                    @click="handleEvaluation(user.id)" :disabled="user.isEvaluated">
                                     {{ user.isEvaluated ? 'ประเมินแล้ว' : 'ประเมิน' }}
                                 </button>
                                 &nbsp;
-                                <button class="btn btn-danger" @click="handleStatus(user.id, 'ไม่ผ่าน')">ไม่ผ่าน</button>
+                                <button class="btn btn-danger"
+                                    @click="handleStatus(user.id, 'ไม่ผ่าน')">ไม่ผ่าน</button>
                             </td>
                         </tr>
                     </tbody>
@@ -321,7 +321,8 @@ onMounted(() => {
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="infoModalLabel">ข้อมูลผู้ใช้</h5>
-                        <button type="button" class="btn-close" @click="isModalVisible = false" aria-label="Close"></button>
+                        <button type="button" class="btn-close" @click="isModalVisible = false"
+                            aria-label="Close"></button>
                     </div>
                     <div class="modal-body" v-if="modalData">
                         <p>รหัสนักศึกษา: {{ modalData.studentID }}</p>
@@ -335,11 +336,14 @@ onMounted(() => {
                         <div v-if="modalData.collegeDetails">
                             <p class="text-bold">ข้อมูลสถานที่ฝึกประสบการณ์</p>
                             <p>สถานประกอบการ: {{ modalData.collegeDetails.collegeName }}</p>
-                            <p>แผนกวิชาที่นักเรียนเข้ารับการฝึกประสบการณ์วิชาชีพ: {{ modalData.collegeDetails.department }}</p>
+                            <p>แผนกวิชาที่นักเรียนเข้ารับการฝึกประสบการณ์วิชาชีพ: {{ modalData.collegeDetails.department
+                                }}</p>
                             <p>ขนาดสถานศึกษา: {{ modalData.collegeDetails.schoolSize }}</p>
-                            <p>ชื่อ-นามสกุลผู้ประสานงาน: {{ modalData.collegeDetails.contactFirstName }} {{ modalData.collegeDetails.contactLastName }}</p>
+                            <p>ชื่อ-นามสกุลผู้ประสานงาน: {{ modalData.collegeDetails.contactFirstName }} {{
+                                modalData.collegeDetails.contactLastName }}</p>
                             <p>เบอร์โทรศัพท์: {{ modalData.collegeDetails.collegePhone }}</p>
-                            <p v-if="modalData.collegeDetails.collegeEmail">Email: {{ modalData.collegeDetails.collegeEmail }}</p>
+                            <p v-if="modalData.collegeDetails.collegeEmail">Email: {{
+                                modalData.collegeDetails.collegeEmail }}</p>
                             <p v-else></p>
                             <p>ที่ตั้งวิทยาลัย: {{ modalData.collegeDetails.collegeAddress }}</p>
                         </div>
