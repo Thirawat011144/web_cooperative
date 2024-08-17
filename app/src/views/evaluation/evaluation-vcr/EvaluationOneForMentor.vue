@@ -1,19 +1,63 @@
 <template>
     <div class="evaluation-container">
-        <h1>แบบฟอร์มนิเทศนักศึกษาฝึกงาน</h1>
-        <section class="company-info" v-if="student">
-            <h2>ข้อมูลสถานประกอบการ</h2>
-            <label>ชื่อสถานประกอบการ: <span>{{ student.companyDetails.companyName }}</span></label> <br>
-            <label>สถานที่ตั้ง: <span>{{ student.companyDetails.companyAddress }}</span></label> <br>
-            <label>โทรศัพท์: <span>{{ student.companyDetails.companyPhone }}</span></label>
-        </section>
+        <h1 style="display:flex; justify-content: center">แบบฟอร์มประเมินนักศึกษาฝึกงาน</h1>
+        <table class="company-info" v-if="student">
+            <colgroup>
+                <col style="width: 30%;">
+                <col style="width: 70%;">
+            </colgroup>
+            <thead>
+                <tr>
+                    <th colspan="2">
+                        <h2>ข้อมูลสถานประกอบการ</h2>
+                    </th>
+                </tr>
+            </thead>
+            <tbody class="custom-table">
+                <tr>
+                    <th>ชื่อสถานประกอบการ</th>
+                    <td>{{ student.companyDetails.companyName }}</td>
+                </tr>
+                <tr>
+                    <th>สถานที่ตั้ง</th>
+                    <td>{{ student.companyDetails.companyAddress }}</td>
+                </tr>
+                <tr>
+                    <th>โทรศัพท์</th>
+                    <td>{{ student.companyDetails.companyPhone }}</td>
+                </tr>
+            </tbody>
+        </table>
 
-        <div v-if="student">
-            <h4>ข้อมูลนักศึกษาที่ทำการประเมิน</h4>
-            <p>ชื่อ: {{ student.firstName }} {{ student.lastName }}</p>
-            <p>รหัสนักศึกษา: {{ student.studentID }}</p>
-            <p>สาขา: {{ student.branch }}</p>
+        <table class="company-info mt-2" v-if="student">
+            <colgroup>
+                <col style="width: 30%;">
+                <col style="width: 70%;">
+            </colgroup>
+            <thead>
+                <tr>
+                    <th colspan="2">
+                        <h2>ข้อมูลนักศึกษาที่ทำการประเมิน</h2>
+                    </th>
+                </tr>
+            </thead>
+            <tbody class="custom-table">
+                <tr>
+                    <th>ชื่อ</th>
+                    <td>{{ student.firstName }} {{ student.lastName }}</td>
+                </tr>
+                <tr>
+                    <th>รหัสนักศึกษา</th>
+                    <td>{{ student.studentID }}</td>
+                </tr>
+                <tr>
+                    <th>สาขา</th>
+                    <td>{{ student.branch }}</td>
+                </tr>
+            </tbody>
+        </table>
 
+        <div v-if="student" class="mt-4">
             <div>
                 <h2>คำชี้แจง</h2>
                 <p>1. ผู้ให้ข้อมูลแบบประเมินนี้ต้องเป็นพนักงานที่ปรึกษา (Job Supervisor)
@@ -472,40 +516,40 @@ const submitEvaluation = async () => {
 
 
         // คำนวณคะแนนเฉลี่ยเป็นเปอร์เซ็นต์ของ 160
-        const averageScore = (totalScore /200) * 100;
+        const averageScore = (totalScore / 200) * 100;
 
         const payload = {
-    evaluatorStatus: evaluatorStatus,
-    time: time.value,
-    evaluatorName: evaluatorName,
-    studentId: student.value.studentID,
-    phoneNumber: phoneNumber,
-    idCard: idCard,
-    criteria: workCriteria.value,
-    qualityOfWork: qualityOfWork.value,
-    academicAbility: academicAbility.value,
-    abilityToLearn: abilityToLearn.value,
-    practicalAbility: practicalAbility.value,
-    judgmentAndDecision: judgmentAndDecision.value,
-    managementAndPlanning: managementAndPlanning.value,
-    communicationSkills: communicationSkills.value,
-    foreignLanguage: foreignLanguage.value,
-    suitabilityForJob: suitabilityForJob.value,
-    responsibilityAndDependability: responsibilityAndDependability.value,
-    interestInWork: interestInWork.value,
-    initiative: initiative.value,
-    dependability: dependability.value,
-    personality: personality.value,
-    interpersonalSkills: interpersonalSkills.value,
-    discipline: discipline.value,
-    ethicsAndMorality: ethicsAndMorality.value,
-    totalScore: totalScore,
-    averageScore: averageScore,
-    strength: strength.value,
-    improvement: improvement.value,
-    jobOffer: jobOffer.value,
-    other: other.value
-};
+            evaluatorStatus: evaluatorStatus,
+            time: time.value,
+            evaluatorName: evaluatorName,
+            studentId: student.value.studentID,
+            phoneNumber: phoneNumber,
+            idCard: idCard,
+            criteria: workCriteria.value,
+            qualityOfWork: qualityOfWork.value,
+            academicAbility: academicAbility.value,
+            abilityToLearn: abilityToLearn.value,
+            practicalAbility: practicalAbility.value,
+            judgmentAndDecision: judgmentAndDecision.value,
+            managementAndPlanning: managementAndPlanning.value,
+            communicationSkills: communicationSkills.value,
+            foreignLanguage: foreignLanguage.value,
+            suitabilityForJob: suitabilityForJob.value,
+            responsibilityAndDependability: responsibilityAndDependability.value,
+            interestInWork: interestInWork.value,
+            initiative: initiative.value,
+            dependability: dependability.value,
+            personality: personality.value,
+            interpersonalSkills: interpersonalSkills.value,
+            discipline: discipline.value,
+            ethicsAndMorality: ethicsAndMorality.value,
+            totalScore: totalScore,
+            averageScore: averageScore,
+            strength: strength.value,
+            improvement: improvement.value,
+            jobOffer: jobOffer.value,
+            other: other.value
+        };
 
         console.log(payload);
 
@@ -549,7 +593,13 @@ onMounted(() => {
 
 <style scoped>
 .evaluation-container {
+    margin: 10px;
     padding: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.473);
+    /* กำหนดขนาด, รูปแบบ, และสีของขอบ */
+    border-radius: 8px;
+    background: white;
+    /* กำหนดความโค้งมนของมุม */
 }
 
 .evaluation-table,
@@ -574,6 +624,36 @@ onMounted(() => {
     font-weight: bold;
     text-align: center;
     box-sizing: border-box;
+}
+
+.company-info {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.company-info th,
+.company-info td {
+    padding: 10px;
+    border: 1px solid black;
+    /* ขอบสีดำ */
+}
+
+.company-info th.left-cell {
+    width: 30%;
+    padding-right: 10px;
+}
+
+.company-info td.right-cell {
+    padding-left: 10px;
+}
+
+.custom-table th,
+.custom-table td {
+    padding: 10px;
+    border: 1px solid black;
+    /* ขอบสีดำ */
+    width: auto;
 }
 
 .score-cell {

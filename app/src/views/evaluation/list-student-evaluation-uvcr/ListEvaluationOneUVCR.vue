@@ -97,7 +97,7 @@ onMounted(() => {
                 <div class="card-title mb-2">ข้อมูลนักศึกษาชั้นประกาศนีบัตรวิชาชีพชั้นสูง ชั้นปีที่ 2
                     <div>
                         <router-link :to="`/home-evaluation/list-evaluation-one-uvcr`">
-                            <button class="btn btn-primary m-1"> ครั้งที่ 1 </button>
+                            <button class="btn btn-primary m-1"> ประเมิน </button>
                         </router-link>
                     </div>
                 </div>

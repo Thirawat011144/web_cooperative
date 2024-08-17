@@ -18,8 +18,24 @@ const currentStudyField = localStorage.getItem(config.currentStudyField)
 
 const fetchData = async () => {
     try {
+        const universityEvaluationResponse = await axios.get(`${config.api_path}/data-evaluation-internship`);
         const response = await axios.get(`${config.api_path}/users`);
-        users.value = response.data.filter(user => user.year === "ปวช 3" && user.branch === currentStudyField && user.status === 'เข้ารับการฝึก' );
+        users.value = response.data.filter(user => user.year === "ปวช 3" && user.branch === currentStudyField && user.status === 'เข้ารับการฝึก');
+
+
+        const universityEvaluationCounts = universityEvaluationResponse.data.reduce((counts, evaluation) => {
+            counts[evaluation.studentId] = (counts[evaluation.studentId] || 0) + 1;
+            return counts;
+        }, {});
+
+        console.log('University Evaluation Counts:', universityEvaluationCounts);
+
+        // เพิ่มสถานะการประเมินให้กับข้อมูลนักศึกษา
+        users.value.forEach(user => {
+            user.isEvaluated = universityEvaluationCounts[user.studentID] > 0;
+            console.log(`User ${user.studentID} isEvaluated: ${user.isEvaluated}`);
+        });
+
     } catch (error) {
         Swal.fire({
             title: "error",
@@ -89,6 +105,38 @@ const removeData = async (id) => {
     }
 };
 
+const handleEvaluation = (userId) => {
+    let role = localStorage.getItem(config.evaluatorStatus);
+    console.log(role);
+
+    if (role === null || role === 'null') {
+        role = 'อาจารย์นิเทศ';
+    }
+
+    localStorage.setItem(config.evaluatorStatus, role);
+    const roleTeacher = localStorage.getItem(config.role_name);
+    const roleStatus = localStorage.getItem(config.evaluatorStatus);
+
+    console.log("User ID:", userId);
+    console.log("Role Teacher:", roleTeacher);
+    console.log("Role:", roleStatus);
+
+    if (roleStatus === 'อาจารย์นิเทศ') {
+        console.log("Navigating to: /home-evaluation/evaluation-one-vcr/" + userId);
+        router.push(`/home-evaluation/evaluation-one-vcr/${userId}`);
+    } else if (roleStatus === 'ผู้ดูแล') {
+        console.log("Navigating to: /page-evaluation/" + userId);
+        router.push(`/home-evaluation/evaluation-one-mentor/${userId}`);
+    } else {
+        console.log("Invalid role");
+        Swal.fire({
+            title: "error",
+            text: "Role ไม่ถูกต้อง",
+            icon: "error"
+        });
+    }
+};
+
 
 const sortedUsers = computed(() => {
     return users.value.slice().sort((a, b) => a.id - b.id); // เรียงลำดับตาม ID
@@ -105,9 +153,9 @@ onMounted(() => {
             <div class="card-header">
                 <div class="card-title mb-2">ข้อมูลนักศึกษาชั้นประกาศนีบัตรวิชาชีพ ชั้นปีที่ 3
                     <div>
-                        <router-link :to="`/home-evaluation/list-evaluation-one-vcr`">
-                            <button class="btn btn-primary m-1"> ครั้งที่ 1 </button>
-                        </router-link>
+                        <!-- <router-link :to="`/home-evaluation/list-evaluation-one-vcr`">
+                            <button class="btn btn-primary m-1"> ประเมิน </button>
+                        </router-link> -->
                         <!-- <router-link :to="`/home-evaluation/list-evaluation-two-vcr`">
                             <button class="btn btn-primary m-1"> ครั้งที่ 2 </button>
                         </router-link>
@@ -126,7 +174,7 @@ onMounted(() => {
                             <th>สาขา</th>
                             <th>ชั้นปี</th>
                             <th class="text-center">ข้อมูลสถานประกอบการ</th>
-                            <!-- <th>Tools</th> -->
+                            <th>Tools</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -139,6 +187,10 @@ onMounted(() => {
                             <td class="text-center">
                                 <button class="btn btn-success" @click="showModal(user.id)">ดูข้อมูล</button>
                             </td>
+                            <td> <button :class="user.isEvaluated ? 'btn btn-secondary' : 'btn btn-success'"
+                                    @click="handleEvaluation(user.id)" :disabled="user.isEvaluated">
+                                    {{ user.isEvaluated ? 'ประเมินแล้ว' : 'ประเมิน' }}
+                                </button></td>
                             <!-- <td>
                 <router-link :to="`/edit-ec4/${user.id}`">
                   <button class="btn btn-primary m-1">Edit</button>

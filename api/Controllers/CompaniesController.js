@@ -76,7 +76,7 @@ const authenticateToken = require('../Middleware/Authorization');
 
 router.post('/company', async (req, res) => {
     try {
-        const { companyName, companyDepartment, contactFirstName, contactLastName, companyPhone, companyEmail, companyAddress, studentID,academicYear, status, valueStatus } = req.body;
+        const { companyName, companyDepartment, contactFirstName, contactLastName, companyPhone, companyEmail, companyAddress, studentID, academicYear, status, valueStatus } = req.body;
 
         // หา record ที่มี studentID ตรงกับค่าในตาราง Users
         const user = await UsersModel.findOne({ where: { studentID } });
@@ -92,7 +92,7 @@ router.post('/company', async (req, res) => {
             user.year = academicYear
             user.status = 'ขออนุมัติ';
             await user.save();
-            
+
 
             // หา record ที่มี studentID ตรงกับค่าในตาราง Companies
             const existingCompany = await CompaniesModel.findOne({ where: { studentID } });
@@ -143,8 +143,8 @@ router.post('/company', async (req, res) => {
                 // status
             });
             res.status(201).send({ message: "Success", newCompany });
-        } else if (status === 'ผ่าน') {
-
+        } else if (status === 'ผ่าน' || status === 'เสร็จสิ้น') {
+            res.status(200).send({ message: "มีข้อมูลการสมัครเรียบร้อยแล้ว" })
         } else {
             res.status(400).send({ message: "สถานะไม่ถูกต้อง" });
         }

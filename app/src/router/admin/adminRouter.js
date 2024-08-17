@@ -26,6 +26,7 @@ import ListDownloads from '../../views/downloads/ListDownloads.vue'
 import EditDownload from '../../views/downloads/EditDownload.vue'
 
 import listTeachers from '../../views/admin/list-teacher/listTeachers.vue'
+import listEvaluator from '../../views/admin/list-evaluator/ListEvaluator.vue'
 
 import StdSuccess from '../../views/admin/list-student/StdSuccess.vue'
 
@@ -145,6 +146,11 @@ const routeAdmin = [
         path: 'create-es',
         name: 'create-es',
         component: CreateInternship
+      },
+      {
+        path: 'list-evaluator',
+        name: 'list-evaluator',
+        component: listEvaluator
       },
       {
         path: 'list-teachers',

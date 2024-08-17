@@ -48,10 +48,10 @@ onMounted(() => {
 </script>
 
 <template>
-    <section class="content mt-4">
-        <div class="card">
-            <div class="card-header">
-                <div class="card-title mb-2">ข้อมูลนักศึกษาชั้นปริญาตรี ชั้นปีที่ 4
+    <section class="">
+        <div class="card custom-content">
+            <div class="">
+                <div class="card-title mb-2">ข้อมูลนักศึกษาชั้นปริญญาตรี ชั้นปีที่ 4
                     <div>
                         <router-link :to="`/home-evaluation/list-evaluation-one`">
                             <button class="btn btn-primary m-1"> ครั้งที่ 1 </button>
@@ -95,10 +95,15 @@ onMounted(() => {
     </section>
 </template>
 
-<style>
+<style scoped>
 @import url('https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800&family=Sarabun:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800&display=swap');
 
 body {
     font-family: 'Sarabun', sans-serif;
+}
+
+.custom-content {
+    padding: 50px;
+    border-radius: 1px solid black;
 }
 </style>

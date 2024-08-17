@@ -119,7 +119,7 @@ const updateAllStatusToCompleted = async () => {
 
         if (result.isConfirmed) {
             const updatePromises = users.value.map(user => {
-                return axios.put(`${config.api_path}/user/${user.id}`, { status: 'เสร็จสิ้น', year: 'ปริญาตรีชั้นปีที่ 2' });
+                return axios.put(`${config.api_path}/user/${user.id}`, { status: 'เสร็จสิ้น', year: 'ปริญญาตรีชั้นปีที่ 2' });
             });
             await Promise.all(updatePromises);
             Swal.fire({
@@ -420,7 +420,7 @@ const makeModalDraggable = () => {
     <section class="content">
         <div class="card">
             <div class="card-header">
-                <div class="card-title mb-2">ข้อมูลนักศึกษาชั้นปริญาตรีชั้นปีที่ 2 (ผ่าน)
+                <div class="card-title mb-2">ข้อมูลนักศึกษาชั้นปริญญาตรีชั้นปีที่ 2 (ผ่าน)
                     <div>
                         <router-link :to="`/admin-index/Ec2-req`"> <button
                                 class="btn btn-primary m-1">ขออนุมัติ</button></router-link>

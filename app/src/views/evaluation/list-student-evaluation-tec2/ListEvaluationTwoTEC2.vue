@@ -51,7 +51,7 @@ onMounted(() => {
     <section class="content mt-4">
         <div class="card">
             <div class="card-header">
-                <div class="card-title mb-2">ข้อมูลนักศึกษาชั้นปริญาตรี ชั้นปีที่ 2
+                <div class="card-title mb-2">ข้อมูลนักศึกษาชั้นปริญญาตรี ชั้นปีที่ 2
                     <div>
                         <router-link :to="`/home-evaluation/list-evaluation-one-tec2`">
                             <button class="btn btn-primary m-1"> ครั้งที่ 1 </button>

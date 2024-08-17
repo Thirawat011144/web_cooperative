@@ -1,95 +1,133 @@
 <script setup>
-import axios from 'axios'
-import { ref, computed } from 'vue'
-import config from '../../../config'
+import axios from "axios";
+import { ref, computed } from "vue";
+import config from "../../../config";
 
 const getUserName = computed(() => {
-    const firstName = localStorage.getItem(config.firstName_name);
-    if (!firstName) return '';
-    return firstName.charAt(0).toUpperCase() + firstName.slice(1);
-})
+  const firstName = localStorage.getItem(config.firstName_name);
+  if (!firstName) return "";
+  return firstName.charAt(0).toUpperCase() + firstName.slice(1);
+});
 
 const evaluatorStatus = ref(localStorage.getItem(config.evaluatorStatus));
+const fullText = localStorage.getItem(config.currentStudyField); // ดึงข้อมูลจาก Local Storage
+const searchText = "สาขาวิชา"; // คำที่ต้องการตรวจสอบและตัด
+const index = fullText.indexOf(searchText); // หาตำแหน่งที่คำว่า "สาขาวิชา" ปรากฏในข้อความ
+const extractedField =
+  index !== -1 ? fullText.substring(0, index + searchText.length) : ""; // ตัดข้อความตั้งแต่เริ่มต้นจนถึงคำว่า "สาขาวิชา"
+console.log(extractedField); // แสดงผลข้อความที่ตัดแล้ว
+
+const checkEvaluatorRole = localStorage.getItem(config.evaluatorStatus);
 </script>
 
 <template>
-    <!-- Main Sidebar Container -->
-    <aside class="main-sidebar bg-secondary sidebar-dark-primary elevation-4">
-        <!-- Brand Logo -->
-        <a href="index3.html" class="brand-link">
-            <img src="../../../dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3"
-                style="opacity: .8">
-            <span class="brand-text font-weight-light">RMUTI</span>
-        </a>
+  <!-- Main Sidebar Container -->
+  <aside class="main-sidebar bg-secondary sidebar-dark-primary elevation-4">
+    <!-- Brand Logo -->
+    <a href="index3.html" class="brand-link">
+      <img
+        src="@/assets/img/AdminLTELogo.png"
+        alt="AdminLTE Logo"
+        class="brand-image img-circle elevation-3"
+        style="opacity: 0.8"
+      />
+      <span class="brand-text font-weight-light">RMUTI</span>
+    </a>
 
-        <!-- Sidebar -->
-        <div class="sidebar">
-            <div class="user-panel mt-3 pb-3 mb-3 d-flex">
-                <div class="info">
-                    <router-link to="/home-evaluation"> <a href="#" class="d-block fw-bold">คุณ: {{ getUserName }}</a>
-                    </router-link>
-                </div>
-            </div>
-            <!-- SidebarSearch Form -->
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+        <div class="info">
+          <router-link to="/home-evaluation">
+            <a href="#" class="d-block fw-bold">คุณ: {{ getUserName }}</a>
+          </router-link>
+        </div>
+      </div>
+      <!-- SidebarSearch Form -->
 
-
-            <!-- Sidebar Menu -->
-            <nav class="mt-2">
-                <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
-                    data-accordion="false">
-                    <div class="nav-header text-white">
-                        เมนู
-                    </div>
-                    <li class="nav-item">
-                        <router-link to="/" class="nav-link">
-                            <i class="fa-solid fa-house me-2"></i>
-                            <p>หน้าแรก</p>
-                        </router-link>
-                    </li>
-                    <li v-if="evaluatorStatus" class="nav-item">
-                        <router-link to="/home-evaluation/evaluation" class="nav-link">
-                            <i class="fa-solid fa-user"></i> &nbsp;
-                            <p>ข้อมูลส่วนตัว</p>
-                        </router-link>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link">
-                            <i class="fa-solid fa-user-graduate"></i>
-                            <p>
-                                รายชื่อ
-                                <i class="right fas fa-angle-left"></i>
-                            </p>
-                        </a>
-                        <ul class="nav nav-treeview">
-                            <li class="nav-item">
-                                <router-link to="/home-evaluation/student-ev-vcr2" class="nav-link ms-4">
-                                    <p>ปวช ชั้นปีที่ 3</p>
-                                </router-link>
-                            </li>
-                            <li class="nav-item">
-                                <router-link to="/home-evaluation/student-ev-uvcr" class="nav-link ms-4">
-                                    <p>ปวส ชั้นปีที่ 2</p>
-                                </router-link>
-                            </li>
-                            <li class="nav-item">
-                                <router-link to="/home-evaluation/student-ev-tec2" class="nav-link ms-4">
-                                    <p>ป.ตรี ชั้นปีที่ 2</p>
-                                </router-link>
-                            </li>
-                            <li class="nav-item">
-                                <router-link to="/home-evaluation/student-ev-tec4" class="nav-link ms-4">
-                                    <p>ป.ตรี ชั้นปีที่ 4</p>
-                                </router-link>
-                            </li>
-                        </ul>
-                    </li>
-                    <li class="nav-item">
-                        <router-link to="/reset-password-evaluator" class="nav-link">
-                            <i class="fa-solid fa-unlock me-2"></i>
-                            <p>เปลี่ยนรหัสผ่าน</p>
-                        </router-link>
-                    </li>
-                    <!-- <li class="nav-item">
+      <!-- Sidebar Menu -->
+      <nav class="mt-2">
+        <ul
+          class="nav nav-pills nav-sidebar flex-column"
+          data-widget="treeview"
+          role="menu"
+          data-accordion="false"
+        >
+          <div class="nav-header text-white">เมนู</div>
+          <li class="nav-item">
+            <router-link to="/" class="nav-link">
+              <i class="fa-solid fa-house me-2"></i>
+              <p>หน้าแรก</p>
+            </router-link>
+          </li>
+          <li v-if="evaluatorStatus" class="nav-item">
+            <router-link to="/home-evaluation/evaluation" class="nav-link">
+              <i class="fa-solid fa-user"></i> &nbsp;
+              <p>ข้อมูลส่วนตัว</p>
+            </router-link>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link">
+              <i class="fa-solid fa-user-graduate"></i>
+              <p>
+                รายชื่อ
+                <i class="right fas fa-angle-left"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <div v-if="extractedField === 'สาขาวิชา'">
+                <li class="nav-item">
+                  <router-link
+                    to="/home-evaluation/student-ev-vcr2"
+                    class="nav-link ms-4"
+                  >
+                    <p>ปวช ชั้นปีที่ 3</p>
+                  </router-link>
+                </li>
+                <li class="nav-item">
+                  <router-link
+                    to="/home-evaluation/student-ev-uvcr"
+                    class="nav-link ms-4"
+                  >
+                    <p>ปวส ชั้นปีที่ 2</p>
+                  </router-link>
+                </li>
+              </div>
+              <div
+                v-else-if="
+                  extractedField !== 'สาขาวิชา' &&
+                  (checkEvaluatorRole === 'พี่เลี้ยง' ||
+                    checkEvaluatorRole === 'ผู้ดูแล')
+                "
+              >
+                <li class="nav-item">
+                  <router-link
+                    to="/home-evaluation/student-ev-tec2"
+                    class="nav-link ms-4"
+                  >
+                    <p>ป.ตรี ชั้นปีที่ 2</p>
+                  </router-link>
+                </li>
+              </div>
+              <div v-else>
+                <li class="nav-item">
+                  <router-link
+                    to="/home-evaluation/student-ev-tec4"
+                    class="nav-link ms-4"
+                  >
+                    <p>ป.ตรี ชั้นปีที่ 4</p>
+                  </router-link>
+                </li>
+              </div>
+            </ul>
+          </li>
+          <li v-if="evaluatorStatus !== null" class="nav-item">
+            <router-link to="/reset-password-evaluator" class="nav-link">
+              <i class="fa-solid fa-unlock me-2"></i>
+              <p>เปลี่ยนรหัสผ่าน</p>
+            </router-link>
+          </li>
+          <!-- <li class="nav-item">
                         <router-link to="/teacher-index/companies" class="nav-link">
                             <i class="fa-solid fa-building"></i> &nbsp;
                             <p>ข้อมูลสถานประกอบการ</p>
@@ -107,7 +145,7 @@ const evaluatorStatus = ref(localStorage.getItem(config.evaluatorStatus));
                             <p>DashBoard</p>
                         </router-link>
                     </li> -->
-                    <!-- <li class="nav-item">
+          <!-- <li class="nav-item">
                         <a class="nav-link">
                             <i class="fa-regular fa-newspaper"></i>
                             <p>
@@ -132,15 +170,15 @@ const evaluatorStatus = ref(localStorage.getItem(config.evaluatorStatus));
                             </li>
                         </ul>
                     </li> -->
-                </ul>
-            </nav>
-            <!-- /.sidebar-menu -->
-        </div>
+        </ul>
+      </nav>
+      <!-- /.sidebar-menu -->
+    </div>
 
-        <router-view></router-view>
+    <router-view></router-view>
 
-        <!-- /.sidebar -->
-    </aside>
+    <!-- /.sidebar -->
+  </aside>
 </template>
 
 

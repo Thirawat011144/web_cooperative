@@ -20,7 +20,7 @@ const checkEvaluatorStatus = localStorage.getItem(config.evaluatorStatus)
 const fetchData = async () => {
     try {
         const response = await axios.get(`${config.api_path}/users`);
-        users.value = response.data.filter(user => user.year === "ป.ตรี ปีที่ 4" && user.branch === currentStudyField);
+        users.value = response.data.filter(user => user.year === "ป.ตรี ปีที่ 4" && user.branch === currentStudyField && user.status === 'เข้ารับการฝึก');
     } catch (error) {
         Swal.fire({
             title: "error",
@@ -101,18 +101,24 @@ onMounted(() => {
 </script>
 
 <template>
-    <section class="content mt-4">
-        <div class="card">
-            <div class="card-header">
-                <div class="card-title mb-2">ข้อมูลนักศึกษาชั้นปริญาตรี ชั้นปีที่ 4
+    <section class="">
+        <div class="card custom-content">
+            <div class="">
+                <div class="card-title mb-2">
+                    ข้อมูลนักศึกษาชั้นปริญญาตรี ชั้นปีที่ 4
+                    (รายชื่อนักศึกษาที่เข้ารับการฝึกทั้งหมด)
                     <div>
-                        <router-link v-if="checkEvaluatorStatus !== 'กรรมการบริหารสถานศึกษา/ตัวแทนชุมชน'" :to="`/home-evaluation/list-evaluation-one`">
+                        <router-link v-if="checkEvaluatorStatus !== 'กรรมการบริหารสถานศึกษา/ตัวแทนชุมชน'"
+                            :to="`/home-evaluation/list-evaluation-one`">
                             <button class="btn btn-primary m-1"> ครั้งที่ 1 </button>
                         </router-link>
-                        <router-link v-if="checkEvaluatorStatus === 'กรรมการบริหารสถานศึกษา/ตัวแทนชุมชน' || 'อาจารย์นิเทศ'":to="`/home-evaluation/list-evaluation-two`">
+                        <router-link
+                            v-if="checkEvaluatorStatus === 'กรรมการบริหารสถานศึกษา/ตัวแทนชุมชน' || 'อาจารย์นิเทศ'"
+                            :to="`/home-evaluation/list-evaluation-two`">
                             <button class="btn btn-primary m-1"> ครั้งที่ 2 </button>
                         </router-link>
-                        <router-link v-if="checkEvaluatorStatus !=='กรรมการบริหารสถานศึกษา/ตัวแทนชุมชน'" :to="`/home-evaluation/list-evaluation-three`">
+                        <router-link v-if="checkEvaluatorStatus !== 'กรรมการบริหารสถานศึกษา/ตัวแทนชุมชน'"
+                            :to="`/home-evaluation/list-evaluation-three`">
                             <button class="btn btn-primary m-1"> ครั้งที่ 3 </button>
                         </router-link>
 
@@ -205,10 +211,18 @@ onMounted(() => {
     </section>
 </template>
 
-<style>
+<style scoped>
 @import url('https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900&family=Sarabun:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800&display=swap');
 
 body {
     font-family: 'Sarabun', sans-serif;
+    background-color: white;
+}
+
+
+
+.custom-content {
+    padding: 50px;
+    border-radius: 1px solid black;
 }
 </style>

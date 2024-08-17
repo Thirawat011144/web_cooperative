@@ -14,10 +14,12 @@ const userName = ref('');
 const password = ref('');
 
 const handleLogin = async () => {
+    const trimmedUsername = userName.value.trim() 
+    const trimmedPassword = password.value.trim()
     try {
         const payload = {
-            userName: userName.value,
-            password: password.value
+            userName: trimmedUsername,
+            password: trimmedPassword
         };
         const response = await axios.post(`${config.api_path}/login`, payload);
         if (response.data.message === "Success") {

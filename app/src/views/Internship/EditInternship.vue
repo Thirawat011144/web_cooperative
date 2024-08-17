@@ -1,7 +1,7 @@
 <template>
     <div class="content mt-4">
         <div class="card bg-white">
-            <h5 class="card-header"> แบบฟอร์มเพิ่มข้อมูลสถานที่ฝึกงาน </h5>
+            <h5 class="card-header"> แบบฟอร์มแก้ไขข้อมูลสถานประกอบการ </h5>
             <div class="card-header">
                 <form @submit.prevent="updateData">
                     <div class="mb-3">

@@ -1,6 +1,6 @@
 <script setup>
 import axios from "axios";
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import config from "../../../config";
 import Swal from 'sweetalert2';
 import { useRouter } from 'vue-router';
@@ -19,8 +19,75 @@ const idCard = ref('');
 // const courseRelation = ref('');
 const evaluatorStatus = ref('');
 const currentStudyField = ref('');
-
+const category = ref('');
+const statusStart = 'ขอยืนยันตัวตน'
 const collegeNames = ref([]);
+
+const EvaluatorCompany = [
+    { value: "ผู้ดูแล", text: "ผู้ดูแล" },
+    // { value: "ผู้จัดการ", text: "ผู้จัดการ" },
+];
+
+const EvaluatorTeaching = [
+    // { value: "อาจารย์นิเทศ", text: "อาจารย์นิเทศ" },
+    { value: "ครูพี่เลี้ยง", text: "ครูพี่เลี้ยง" },
+    { value: "หัวหน้าแผนกวิชา", text: "หัวหน้าแผนกวิชา" },
+    { value: "กรรมการบริหารสถานศึกษา/ตัวแทนชุมชน", text: "กรรมการบริหารสถานศึกษา/ตัวแทนชุมชน" },
+    { value: "ผู้บริหารสถานศึกษา/ผู้ได้รับมอบหมาย", text: "ผู้บริหารสถานศึกษา/ผู้ได้รับมอบหมาย" },
+];
+
+const branchStudent = [
+    { value: "สาขาครุศาสตร์อุตสาหกรรมโยธา", text: "สาขาครุศาสตร์อุตสาหกรรมโยธา" },
+    { value: "สาขาครุศาสตร์อุตสาหกรรมไฟฟ้า", text: "สาขาครุศาสตร์อุตสาหกรรมไฟฟ้า" },
+    { value: "สาขาครุศาสตร์อุตสาหกรรมเครื่องกล", text: "สาขาครุศาสตร์อุตสาหกรรมเครื่องกล" },
+    { value: "สาขาครุศาสตร์อุตสาหกรรมอุตสาหการ", text: "สาขาครุศาสตร์อุตสาหกรรมอุตสาหการ" },
+    { value: "สาขาครุศาสตร์อุตสาหกรรมอิเล็กทรอนิกส์และโทรคมนาคม", text: "สาขาครุศาสตร์อุตสาหกรรมอิเล็กทรอนิกส์และโทรคมนาคม" },
+    { value: "สาขาครุศาสตร์อุตสาหกรรมคอมพิวเตอร์", text: "สาขาครุศาสตร์อุตสาหกรรมคอมพิวเตอร์" },
+    { value: "สาขาครุศาสตร์อุตสาหการเชื่อมประกอบ", text: "สาขาครุศาสตร์อุตสาหการเชื่อมประกอบ" },
+];
+
+const branchStudentInternship = [
+    { value: "สาขาครุศาสตร์อุตสาหกรรมโยธา", text: "สาขาครุศาสตร์อุตสาหกรรมโยธา" },
+    { value: "สาขาครุศาสตร์อุตสาหกรรมไฟฟ้า", text: "สาขาครุศาสตร์อุตสาหกรรมไฟฟ้า" },
+    { value: "สาขาครุศาสตร์อุตสาหกรรมเครื่องกล", text: "สาขาครุศาสตร์อุตสาหกรรมเครื่องกล" },
+    { value: "สาขาครุศาสตร์อุตสาหกรรมอุตสาหการ", text: "สาขาครุศาสตร์อุตสาหกรรมอุตสาหการ" },
+    { value: "สาขาครุศาสตร์อุตสาหกรรมอิเล็กทรอนิกส์และโทรคมนาคม", text: "สาขาครุศาสตร์อุตสาหกรรมอิเล็กทรอนิกส์และโทรคมนาคม" },
+    { value: "สาขาครุศาสตร์อุตสาหกรรมคอมพิวเตอร์", text: "สาขาครุศาสตร์อุตสาหกรรมคอมพิวเตอร์" },
+    { value: "สาขาครุศาสตร์อุตสาหการเชื่อมประกอบ", text: "สาขาครุศาสตร์อุตสาหการเชื่อมประกอบ" },
+    { value: "สาขาวิชาช่างโยธา", text: "สาขาวิชาช่างโยธา" },
+    { value: "สาขาวิชาช่างก่อสร้าง", text: "สาขาวิชาช่างก่อสร้าง" },
+    { value: "สาขาวิชาช่างเครื่องมือกลอัตโนมัติ", text: "สาขาวิชาช่างเครื่องมือกลอัตโนมัติ" },
+    { value: "สาขาวิชาช่างยนต์", text: "สาขาวิชาช่างยนต์" },
+    { value: "สาขาวิชาช่างกลเกษตร", text: "สาขาวิชาช่างกลเกษตร" },
+    { value: "สาขาวิชาช่างกลโรงงาน", text: "สาขาวิชาช่างกลโรงงาน" },
+    { value: "สาขาวิชาช่างท่อและประสาน", text: "สาขาวิชาช่างท่อและประสาน" },
+    { value: "สาขาวิชาการออกแบบนวัตกรรมเครื่องจักรกล", text: "สาขาวิชาการออกแบบนวัตกรรมเครื่องจักรกล" },
+    { value: "สาขาวิชาช่างอิเล็กทรอนิกส์", text: "สาขาวิชาช่างอิเล็กทรอนิกส์" },
+    { value: "สาขาวิชาเทคโนโลยีคอมพิวเตอร์", text: "สาขาวิชาเทคโนโลยีคอมพิวเตอร์" },
+    { value: "สาขาวิชาช่างไฟฟ้ากำลัง", text: "สาขาวิชาช่างไฟฟ้ากำลัง" },
+    { value: "สาขาวิชาเทคโนโลยีการเขียนแบบเครื่องกล", text: "สาขาวิชาเทคโนโลยีการเขียนแบบเครื่องกล" },
+    { value: "สาขาวิชาช่างเทคนิคคอมพิวเตอร์", text: "สาขาวิชาช่างเทคนิคคอมพิวเตอร์" },
+]
+
+const typeEvaluator = computed(() => {
+    if (category.value === "นักศึกษาฝึกงาน") {
+        return EvaluatorCompany;
+    } else if (category.value === "นักศึกษาฝึกสอน") {
+        return EvaluatorTeaching;
+    } else {
+        return [];
+    }
+});
+
+const responseYear = computed(() => {
+    if (evaluatorStatus.value === "หัวหน้าแผนกวิชา" || evaluatorStatus.value === "กรรมการบริหารสถานศึกษา/ตัวแทนชุมชน" || evaluatorStatus.value === "ผู้บริหารสถานศึกษา/ผู้ได้รับมอบหมาย" || evaluatorStatus.value === "อาจารย์นิเทศ" || evaluatorStatus.value === "ครูพี่เลี้ยง") {
+        return branchStudent
+    } else if (evaluatorStatus.value === "พี่เลี้ยง" || evaluatorStatus.value === "ผู้จัดการ" || evaluatorStatus.value === 'ผู้ดูแล') {
+        return branchStudentInternship
+    } else {
+        [];
+    }
+})
 
 // Function to fetch college names
 const fetchCollegeNames = async () => {
@@ -53,6 +120,7 @@ const handleRegister = async () => {
             // courseRelation: courseRelation.value,
             evaluatorStatus: evaluatorStatus.value,
             currentStudyField: currentStudyField.value,
+            statusStart:statusStart
         };
 
         const response = await axios.post(`${config.api_path}/evaluation`, payload);
@@ -127,7 +195,7 @@ const handleRegister = async () => {
                                         </div>
 
                                         <div class="row">
-                                            <div class="col-md-6 mb-4">
+                                            <div class="col-md-4 mb-4">
                                                 <div class="form-outline">
                                                     <label class="form-label"
                                                         for="idCard">เลขบัตรประจำตัวประชาชน</label>
@@ -222,25 +290,31 @@ const handleRegister = async () => {
                                                     </select>
                                                 </div>
                                             </div> -->
-                                            <div class="col-md-6 mb-4">
+                                            <div class="col-md-4 mb-4">
+                                                <div class="form-outline">
+                                                    <label class="form-label" for="category">ประเภทนักศึกษา</label>
+                                                    <select id="category"
+                                                        class="form-control form-control-lg form-select"
+                                                        v-model="category" required>
+                                                        <!-- <option value="" disabled>-</option> -->
+                                                        <option value="นักศึกษาฝึกงาน">นักศึกษาฝึกงาน</option>
+                                                        <option value="นักศึกษาฝึกสอน">นักศึกษาฝึกสอน</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4 mb-4">
                                                 <div class="form-outline">
                                                     <label class="form-label"
                                                         for="evaluatorStatus">สถานะผู้ประเมิน</label>
-                                                    <select id="evaluatorStatus" class="form-control form-control-lg"
+                                                    <select id="evaluatorStatus"
+                                                        class="form-control form-control-lg form-select"
                                                         v-model="evaluatorStatus" required>
-                                                        <option value="" disabled>-</option>
-                                                        <option value="อาจารย์นิเทศ">อาจารย์นิเทศ</option>
-                                                        <option value="หัวหน้าแผนกวิชา">หัวหน้าแผนกวิชา</option>
-                                                        <option value="ครูพี่เลี้ยง">ครูพี่เลี้ยง</option>
-                                                        <option value="กรรมการบริหารสถานศึกษา/ตัวแทนชุมชน">
-                                                            กรรมการบริหารสถานศึกษา/ตัวแทนชุมชน
+                                                        <!-- <option value="" disabled>-</option> -->
+                                                        <option v-for="b in typeEvaluator" :key="b.value">{{ b.text }}
                                                         </option>
-                                                        <option value="ผู้บริหารสถานศึกษา/ผู้ได้รับมอบหมาย">
-                                                            ผู้บริหารสถานศึกษา/ผู้ได้รับมอบหมาย
-                                                        </option>
-                                                        <option value="ผู้ดูแล">
-                                                            ผู้ดูแล
-                                                        </option>
+                                                        <!-- <option v-for="b in branches" :key="b.value" :value="b.value">
+                                                            {{ b.text }}
+                                                        </option> -->
                                                     </select>
                                                 </div>
                                             </div>
@@ -249,10 +323,13 @@ const handleRegister = async () => {
                                                     <label class="form-label"
                                                         for="currentStudyField">สาขาวิชาที่นักศึกษากำลังศึกษา
                                                         (สามารถเปลี่ยนแปลงได้)</label>
-                                                    <select id="currentStudyField" class="form-control form-control-lg"
+                                                    <select id="currentStudyField"
+                                                        class="form-control form-control-lg form-select"
                                                         v-model="currentStudyField" required>
-                                                        <option value="" disabled>-</option>
-                                                        <option value="สาขาครุศาสตร์อุตสาหกรรมโยธา">
+                                                        <!-- <option value="" disabled>-</option> -->
+                                                        <option v-for="b in responseYear" :key="b.value">{{ b.text }}
+                                                        </option>
+                                                        <!-- <option value="สาขาครุศาสตร์อุตสาหกรรมโยธา">
                                                             สาขาครุศาสตร์อุตสาหกรรมโยธา</option>
                                                         <option value="สาขาครุศาสตร์อุตสาหกรรมไฟฟ้า">
                                                             สาขาครุศาสตร์อุตสาหกรรมไฟฟ้า</option>
@@ -287,15 +364,15 @@ const handleRegister = async () => {
                                                         <option value="สาขาวิชาเทคโนโลยีคอมพิวเตอร์">
                                                             สาขาวิชาเทคโนโลยีคอมพิวเตอร์</option>
 
-                                                        <!-- สาขาวิชาช่างก่อสร้าง (ซ้ำ) -->
-                                                        <option value="สาขาวิชาช่างไฟฟ้ากำลัง">สาขาวิชาช่างไฟฟ้ากำลัง
-                                                        </option>
+                                                        สาขาวิชาช่างก่อสร้าง (ซ้ำ)
+                                                         <option value="สาขาวิชาช่างไฟฟ้ากำลัง">สาขาวิชาช่างไฟฟ้ากำลัง -->
+                                                        <!-- </option> -->
                                                         <!-- สาขาวิชาช่างยนต์ (ซ้ำ) -->
-                                                        <option value="สาขาวิชาเทคโนโลยีการเขียนแบบเครื่องกล">
-                                                            สาขาวิชาเทคโนโลยีการเขียนแบบเครื่องกล</option>
+                                                        <!-- <option value="สาขาวิชาเทคโนโลยีการเขียนแบบเครื่องกล">
+                                                            สาขาวิชาเทคโนโลยีการเขียนแบบเครื่องกล</option> -->
                                                         <!-- สาขาวิชาช่างอิเล็กทรอนิกส์ (ซ้ำ) -->
-                                                        <option value="สาขาวิชาช่างเทคนิคคอมพิวเตอร์">
-                                                            สาขาวิชาช่างเทคนิคคอมพิวเตอร์</option>
+                                                        <!-- <option value="สาขาวิชาช่างเทคนิคคอมพิวเตอร์">
+                                                            สาขาวิชาช่างเทคนิคคอมพิวเตอร์</option>  -->
                                                     </select>
                                                 </div>
                                             </div>
@@ -310,8 +387,10 @@ const handleRegister = async () => {
                                         </div>
 
                                         <div class="d-flex justify-content-end pt-3">
-                                            <button type="reset" class="btn btn-light btn-lg">Reset all</button>
-                                            <button type="submit" class="btn btn-warning btn-lg ms-2">Submit
+                                            <!-- <button type="reset" class="btn btn-light btn-lg">Reset all</button> -->
+                                            <button type="submit"
+                                                style="background-color: mediumvioletred; color: white;"
+                                                class="btn  btn-lg ms-2">Submit
                                                 form</button>
                                         </div>
                                     </form>

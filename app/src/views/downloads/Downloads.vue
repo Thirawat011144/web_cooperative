@@ -19,7 +19,7 @@
                                     <th>ดาวน์โหลด (PDF)</th>
                                     <th>ดาวน์โหลด (Doc)</th>
                                     <th>ดาวน์โหลด (ลิงค์)</th>
-                                </tr>
+                                </tr> 
                             </thead>
                             <tbody>
                                 <tr v-for="(doc, index) in paginatedDocuments" :key="index">
@@ -95,11 +95,6 @@ const fetchDocuments = async () => {
 const getDownloadPath = (fileName) => {
     return fileName ? `${fileName}` : '';
 };
-
-
-
-
-
 
 // คำนวณรายการที่จะแสดงในหน้าปัจจุบัน
 const paginatedDocuments = computed(() => {

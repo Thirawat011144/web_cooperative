@@ -28,7 +28,7 @@ const fetchData = async () => {
 
         const evaluatedStudents = new Set(
             evaluationResponse.data
-                .filter(evaluation => evaluation.time === "1" && evaluation.evaluatorName === evaluatorName  )
+                .filter(evaluation => evaluation.time === "1" && evaluation.evaluatorName === evaluatorName)
                 .map(evaluation => evaluation.studentId)
         );
 
@@ -97,7 +97,7 @@ onMounted(() => {
                 <div class="card-title mb-2">ข้อมูลนักศึกษาชั้นประกาศนีบัตรวิชาชีพ ชั้นปีที่ 3
                     <div>
                         <router-link :to="`/home-evaluation/list-evaluation-one-vcr`">
-                            <button class="btn btn-primary m-1"> ครั้งที่ 1 </button>
+                            <!-- <button class="btn btn-primary m-1"> ครั้งที่ 1 </button> -->
                         </router-link>
                     </div>
                 </div>
@@ -109,7 +109,7 @@ onMounted(() => {
                             <th>ชื่อ-นามสกุล</th>
                             <th>สาขา</th>
                             <th>ชั้นปี</th>
-                            <th class="text-center">ข้อมูลสถานประกอบการ</th>
+                            <th class="text-center">Tools</th>
                         </tr>
                     </thead>
                     <tbody>

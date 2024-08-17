@@ -265,7 +265,7 @@ onMounted(() => {
     <section class="content mt-4">
         <div class="card">
             <div class="card-header">
-                <div class="card-title mb-2">ข้อมูลนักศึกษาชั้นปริญาตรีชั้นปีที่ 4 (เข้ารับการฝึก)
+                <div class="card-title mb-2">ข้อมูลนักศึกษาชั้นปริญญาตรีชั้นปีที่ 4 (เข้ารับการฝึก)
                     <div>
                         <router-link :to="`/teacher-index/student-tec4req`">
                             <button class="btn btn-primary m-1">ขออนุมัติ</button></router-link>
@@ -277,8 +277,11 @@ onMounted(() => {
                             <button class="btn btn-success m-1">ผ่าน</button></router-link>
                         <router-link :to="`/teacher-index/student-tec4notpass`">
                             <button class="btn btn-danger m-1">ไม่ผ่าน</button></router-link>
+
                         <button class="btn btn-info m-1" @click="downloadExcelHight('student', sortedUsers)">ดาวน์โหลด
                             Excel</button>
+                        <router-link :to="`/home-evaluation/student-ev-tec4`">
+                            <button class="btn btn-secondary m-1">ประเมิน</button></router-link>
                     </div>
                 </div>
                 <table class="table">
@@ -302,10 +305,10 @@ onMounted(() => {
                                 <button class="btn btn-success" @click="showModal(user.id)">ดูข้อมูล</button>
                             </td>
                             <td>
-                                <button :class="user.isEvaluated ? 'btn btn-secondary' : 'btn btn-success'"
+                                <!-- <button :class="user.isEvaluated ? 'btn btn-secondary' : 'btn btn-success'"
                                     @click="handleEvaluation(user.id)" :disabled="user.isEvaluated">
                                     {{ user.isEvaluated ? 'ประเมินแล้ว' : 'ประเมิน' }}
-                                </button>
+                                </button> -->
                                 &nbsp;
                                 <button class="btn btn-danger"
                                     @click="handleStatus(user.id, 'ไม่ผ่าน')">ไม่ผ่าน</button>

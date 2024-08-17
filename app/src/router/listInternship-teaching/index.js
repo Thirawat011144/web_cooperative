@@ -1,3 +1,5 @@
+import JobListing from '../../views/listInternship-teaching/list-branch/JobListing.vue'
+
 
 import InternshipOrTeaching from '../../views/listInternship-teaching/InternshipOrTeaching.vue'
 import ListInternshiped from '../../views/listInternship-teaching/ListInternshiped.vue'
@@ -19,9 +21,10 @@ const routeInternshipAndTeaching = [
         component: Welder
     },
     {
-        path: '/computer',
-        name: 'computer',
-        component: Computer
+        path: '/branch/:branchName',
+        name: 'job-listing',
+        component: JobListing,
+        props: true
     },
     {
         path: '/electronics-telecommunications',

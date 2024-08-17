@@ -7,6 +7,8 @@ import Companies from '../../views/teacher/Companies.vue'
 import CollegeTeacher from '../../views/teacher/College.vue'
 import Dashboard from '../../views/teacher/Dashboard.vue'
 
+import StdSuccessT from '../../views/teacher/list-student/StdSuccessT.vue'
+
 import Cr2 from '../../views/teacher/list-student/Cr2.vue';
 import Dcr2 from '../../views/teacher/list-student/Dcr2.vue'
 import Ec2 from '../../views/teacher/list-student/Ec2.vue';
@@ -83,6 +85,11 @@ const routeTeacher = [
                 path: 'information',
                 name: 'information',
                 component: information
+            },
+            {
+                path: 'list-success-t',
+                name: 'list-success-t',
+                component: StdSuccessT
             },
             {
                 path: 'list-cr2',

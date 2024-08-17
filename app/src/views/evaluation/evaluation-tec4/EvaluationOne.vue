@@ -248,7 +248,8 @@
           </thead>
           <tbody>
             <tr>
-              <td>มุ่งมั่นพัฒนาผู้เรียนให้เกิดการเรียนรู้ ทักษะปฏิบัติ และคุณลักษณะที่ดีงาม อย่างเต็มความสามารถด้วยวิธีการที่เหมาะสมกับระดับ ความสามารถและช่วงวัย</td>
+              <td>มุ่งมั่นพัฒนาผู้เรียนให้เกิดการเรียนรู้ ทักษะปฏิบัติ และคุณลักษณะที่ดีงาม
+                อย่างเต็มความสามารถด้วยวิธีการที่เหมาะสมกับระดับ ความสามารถและช่วงวัย</td>
               <td><input type="radio" :value="5" v-model.number="studentGrowth" required></td>
               <td><input type="radio" :value="4" v-model.number="studentGrowth"></td>
               <td><input type="radio" :value="3" v-model.number="studentGrowth"></td>
@@ -296,7 +297,8 @@
               <td><input type="radio" :value="1" v-model.number="creativeExpression"></td>
             </tr>
             <tr>
-              <td>ติดตามข้อมูลข่าวสารการศึกษา สังคม การเมือง การปกครอง และเศรษฐกิจ โดยสามารถนำมาประยุกต์ เชื่อมโยงกับเนื้อหาในการจัดการเรียนรู้ได้อย่างมีประสิทธิภาพ</td>
+              <td>ติดตามข้อมูลข่าวสารการศึกษา สังคม การเมือง การปกครอง และเศรษฐกิจ โดยสามารถนำมาประยุกต์
+                เชื่อมโยงกับเนื้อหาในการจัดการเรียนรู้ได้อย่างมีประสิทธิภาพ</td>
               <td><input type="radio" :value="5" v-model.number="currentAffairsIntegration" required></td>
               <td><input type="radio" :value="4" v-model.number="currentAffairsIntegration"></td>
               <td><input type="radio" :value="3" v-model.number="currentAffairsIntegration"></td>
@@ -304,7 +306,8 @@
               <td><input type="radio" :value="1" v-model.number="currentAffairsIntegration"></td>
             </tr>
             <tr>
-              <td>นำแนวคิด เทคนิควิธีการ หรือความรู้ใหม่ๆ ที่น่าสนใจ มาประยุกต์ใช้เป็นส่วนหนึ่งในการออกแบบการจัดกิจกรรรมการเรียนรู้ได้อย่างเหมาะสม</td>
+              <td>นำแนวคิด เทคนิควิธีการ หรือความรู้ใหม่ๆ ที่น่าสนใจ
+                มาประยุกต์ใช้เป็นส่วนหนึ่งในการออกแบบการจัดกิจกรรรมการเรียนรู้ได้อย่างเหมาะสม</td>
               <td><input type="radio" :value="5" v-model.number="innovativeTeaching" required></td>
               <td><input type="radio" :value="4" v-model.number="innovativeTeaching"></td>
               <td><input type="radio" :value="3" v-model.number="innovativeTeaching"></td>
@@ -328,7 +331,8 @@
               <td><input type="radio" :value="1" v-model.number="fairnessAndHarmony"></td>
             </tr>
             <tr>
-              <td>ปฏิบัติตนตามข้อตกลง กฎกติกาของโรงเรียนด้วยความสมัครใจ ทั้งในด้านการปฏิบัติการสอนและการปฏิบัติหน้าที่อื่นในโรงเรียน</td>
+              <td>ปฏิบัติตนตามข้อตกลง กฎกติกาของโรงเรียนด้วยความสมัครใจ
+                ทั้งในด้านการปฏิบัติการสอนและการปฏิบัติหน้าที่อื่นในโรงเรียน</td>
               <td><input type="radio" :value="5" v-model.number="complianceAndCommitment" required></td>
               <td><input type="radio" :value="4" v-model.number="complianceAndCommitment"></td>
               <td><input type="radio" :value="3" v-model.number="complianceAndCommitment"></td>
@@ -336,7 +340,8 @@
               <td><input type="radio" :value="1" v-model.number="complianceAndCommitment"></td>
             </tr>
             <tr>
-              <td>ติดตามข้อมูลและปรับเปลี่ยนตนเองให้สอดคล้องการเปลี่ยนแปลง          ทางวิชาชีพ วิทยาการ เศรษฐกิจ สังคม และการเมือง</td>
+              <td>ติดตามข้อมูลและปรับเปลี่ยนตนเองให้สอดคล้องการเปลี่ยนแปลง ทางวิชาชีพ วิทยาการ เศรษฐกิจ สังคม
+                และการเมือง</td>
               <td><input type="radio" :value="5" v-model.number="adaptiveProfessional" required></td>
               <td><input type="radio" :value="4" v-model.number="adaptiveProfessional"></td>
               <td><input type="radio" :value="3" v-model.number="adaptiveProfessional"></td>
@@ -392,7 +397,8 @@
               <td><input type="radio" :value="1" v-model.number="teamHarmony"></td>
             </tr>
             <tr>
-              <td>ริเริ่ม วางแผน หรือ เป็นผู้น่าในการทำกิจกรรมเกี่ยวกับอนุรักษ์และพัฒนา เศรษฐกิจ สังคม ศาสนา ศิลปวัฒนธรรม ภูมิปัญญา หรือ สิ่งแวดล้อมโดยคำนึงถึงผลประโยชน์ของส่วนรวมเป็นสำคัญ</td>
+              <td>ริเริ่ม วางแผน หรือ เป็นผู้น่าในการทำกิจกรรมเกี่ยวกับอนุรักษ์และพัฒนา เศรษฐกิจ สังคม ศาสนา
+                ศิลปวัฒนธรรม ภูมิปัญญา หรือ สิ่งแวดล้อมโดยคำนึงถึงผลประโยชน์ของส่วนรวมเป็นสำคัญ</td>
               <td><input type="radio" :value="5" v-model.number="communityLeadership" required></td>
               <td><input type="radio" :value="4" v-model.number="communityLeadership"></td>
               <td><input type="radio" :value="3" v-model.number="communityLeadership"></td>
@@ -576,6 +582,7 @@ const submitEvaluation = async () => {
         icon: "success",
         timer: 2000
       });
+      const checkRole = localStorage.getItem(config.evaluatorStatus)
       const userYear = student.value.year;
       if (userYear === "ป.ตรี ปีที่ 4") {
         router.push('/home-evaluation/student-ev-tec4');
@@ -620,6 +627,7 @@ onMounted(() => {
   background-color: #f2f2f2;
   font-weight: bold;
 }
+
 
 .form-group {
   margin-bottom: 20px;

@@ -64,11 +64,17 @@ const handleSubmit = async () => {
                 console.log(response.data.newCompany);
                 localStorage.setItem('companyData', JSON.stringify(response.data.newCompany));
                 router.push('/user-index/data-student');
+            } else if(response.data.message === 'มีข้อมูลการสมัครเรียบร้อยแล้ว'){
+                Swal.fire({
+                    title: "ผิดพลาด",
+                    text: "มีข้อมูลการสมัครแล้ว",
+                    icon: "warning",
+                });
             }
         } catch (error) {
             Swal.fire({
                 title: "error",
-                text: "Creating Data Company Error: " + error.message,
+                text: error.message,
                 icon: "error"
             });
             console.log(error);

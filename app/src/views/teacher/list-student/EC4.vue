@@ -129,7 +129,7 @@ onMounted(() => {
     <div class="card">
       <div class="card-header">
         <div class="card-title mb-2">
-          ข้อมูลนักศึกษาชั้นปริญาตรี ชั้นปีที่ 4
+          ข้อมูลนักศึกษาชั้นปริญญาตรี ชั้นปีที่ 4
           <div>
             <router-link :to="`/teacher-index/student-tec4req`">
               <button class="btn btn-primary m-1"> ขออนุมัติ</button>

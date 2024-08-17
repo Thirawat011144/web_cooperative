@@ -1,19 +1,18 @@
 <script setup>
 import axios from "axios";
-import { ref, onMounted, computed } from 'vue';
+import { ref, onMounted, computed } from "vue";
 import config from "../../../../config";
-import Swal from 'sweetalert2';
-import { useRoute, useRouter } from 'vue-router';
-import * as XLSX from 'xlsx'; // import library
+import Swal from "sweetalert2";
+import { useRoute, useRouter } from "vue-router";
+import * as XLSX from "xlsx"; // import library
 import { makeModalDraggable } from "@/utils/draggable";
-import { downloadExcel } from "@/utils/downloadBeforeEvaluation"
-
+import { downloadExcel } from "@/utils/downloadBeforeEvaluation";
 
 const route = useRoute();
 const router = useRouter();
 
-const teacherStatus = ref('/admin-index/Ec2-req');
-const companyStatus = ref('/admin-index/Ec2-active');
+const teacherStatus = ref("/admin-index/Ec2-req");
+const companyStatus = ref("/admin-index/Ec2-active");
 
 const navigate = (status) => {
   router.push(status);
@@ -22,17 +21,19 @@ const navigate = (status) => {
 const users = ref([]); // เปลี่ยน {} เป็น []
 const isModalVisible = ref(false);
 const modalData = ref(null);
-const branch = localStorage.getItem(config.branch)
+const branch = localStorage.getItem(config.branch);
 
 const fetchData = async () => {
   try {
     const response = await axios.get(`${config.api_path}/users`);
-    users.value = response.data.filter(user => user.year === "ป.ตรี ปีที่ 2" && user.branch === branch);
+    users.value = response.data.filter(
+      (user) => user.year === "ป.ตรี ปีที่ 2" && user.branch === branch
+    );
   } catch (error) {
     Swal.fire({
       title: "error",
       text: (error.message, "Cr2 Error"),
-      icon: "error"
+      icon: "error",
     });
   }
 };
@@ -48,7 +49,7 @@ const showModal = async (id) => {
     Swal.fire({
       title: "error",
       text: (error.message, "Cr2 Error Fetching Data"),
-      icon: 'error'
+      icon: "error",
     });
   }
 };
@@ -62,25 +63,25 @@ const closeModal = () => {
 const removeData = async (id) => {
   // แสดงป๊อปอัพยืนยันการลบ
   const result = await Swal.fire({
-    title: 'คุณแน่ใจหรือไม่?',
-    text: 'คุณจะไม่สามารถย้อนกลับได้!',
-    icon: 'warning',
+    title: "คุณแน่ใจหรือไม่?",
+    text: "คุณจะไม่สามารถย้อนกลับได้!",
+    icon: "warning",
     showCancelButton: true,
-    confirmButtonColor: '#3085d6',
-    cancelButtonColor: '#d33',
-    confirmButtonText: 'ใช่, ลบเลย!',
-    cancelButtonText: 'ยกเลิก'
+    confirmButtonColor: "#3085d6",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "ใช่, ลบเลย!",
+    cancelButtonText: "ยกเลิก",
   });
 
   // ตรวจสอบว่าผู้ใช้กดยืนยันการลบหรือไม่
   if (result.isConfirmed) {
     try {
       const response = await axios.delete(`${config.api_path}/users/${id}`);
-      users.value = users.value.filter(user => user.id !== id);
+      users.value = users.value.filter((user) => user.id !== id);
       Swal.fire({
-        title: 'สำเร็จ',
-        text: 'ลบข้อมูลผู้ใช้สำเร็จ',
-        icon: 'success',
+        title: "สำเร็จ",
+        text: "ลบข้อมูลผู้ใช้สำเร็จ",
+        icon: "success",
       }).then((result) => {
         if (result.value) {
           fetchData(); // รีเฟรชข้อมูลหลังจากการลบ
@@ -88,20 +89,18 @@ const removeData = async (id) => {
       });
     } catch (error) {
       Swal.fire({
-        title: 'error',
-        text: (error.message, 'Cr2 Error DeleteData'),
-        icon: 'error'
+        title: "error",
+        text: (error.message, "Cr2 Error DeleteData"),
+        icon: "error",
       });
       console.log(error);
     }
   }
 };
 
-
 const sortedUsers = computed(() => {
   return users.value.slice().sort((a, b) => a.id - b.id); // เรียงลำดับตาม ID
 });
-
 
 // ฟังก์ชันสำหรับการดาวน์โหลดไฟล์ Excel
 // const downloadExcel = () => {
@@ -132,19 +131,34 @@ onMounted(() => {
   <section class="content">
     <div class="card">
       <div class="card-header">
-        <div class="card-title mb-2">ข้อมูลนักศึกษาชั้นปริญาตรี ชั้นปีที่ 2
+        <div class="card-title mb-2">
+          ข้อมูลนักศึกษาชั้นปริญญาตรี ชั้นปีที่ 2
           <div>
-            <router-link :to="`/admin-index/Ec2-req`"> <button
-                class="btn btn-primary m-1">ขออนุมัติ</button></router-link>
-            <router-link :to="`/admin-index/Ec2-approved`"> <button
-                class="btn btn-success m-1">อนุมัติ</button></router-link>
-            <router-link :to="`/admin-index/Ec2-active`"> <button
-                class="btn btn-warning m-1">เข้ารับการฝึก</button></router-link>
-            <router-link :to="`/admin-index/Ec2-success`"> <button class="btn btn-success m-1">ผ่าน</button>
+            <router-link :to="`/admin-index/Ec2-req`">
+              <button class="btn btn-primary m-1">
+                ขออนุมัติ
+              </button></router-link
+            >
+            <router-link :to="`/admin-index/Ec2-approved`">
+              <button class="btn btn-success m-1">อนุมัติ</button></router-link
+            >
+            <router-link :to="`/admin-index/Ec2-active`">
+              <button class="btn btn-warning m-1">
+                เข้ารับการฝึก
+              </button></router-link
+            >
+            <router-link :to="`/admin-index/Ec2-success`">
+              <button class="btn btn-success m-1">ผ่าน</button>
             </router-link>
-            <router-link :to="`/admin-index/Ec2-notpass`"> <button class="btn btn-danger m-1">ไม่ผ่าน</button>
+            <router-link :to="`/admin-index/Ec2-notpass`">
+              <button class="btn btn-danger m-1">ไม่ผ่าน</button>
             </router-link>
-            <button class="btn btn-info m-1" @click="downloadExcel('std', sortedUsers)">ดาวน์โหลด Excel</button>
+            <button
+              class="btn btn-info m-1"
+              @click="downloadExcel('std', sortedUsers)"
+            >
+              ดาวน์โหลด Excel
+            </button>
           </div>
         </div>
         <table class="table">
@@ -167,14 +181,19 @@ onMounted(() => {
               <td>{{ user.branch }}</td>
               <td>{{ user.year }}</td>
               <td class="text-center">
-                <button class="btn btn-success" @click="showModal(user.id)">ดูข้อมูล</button>
+                <button class="btn btn-success" @click="showModal(user.id)">
+                  ดูข้อมูล
+                </button>
               </td>
               <td>
                 <router-link :to="`/edit-ec2/${user.id}`">
-                  <button class="btn btn-primary m-1"><i class="fa-solid fa-pen-to-square"></i></button>
+                  <button class="btn btn-primary m-1">
+                    <i class="fa-solid fa-pen-to-square"></i>
+                  </button>
                 </router-link>
-                <button @click="removeData(user.id)" class="btn btn-danger m-1"><i
-                    class="fa-solid fa-trash-can"></i></button>
+                <button @click="removeData(user.id)" class="btn btn-danger m-1">
+                  <i class="fa-solid fa-trash-can"></i>
+                </button>
               </td>
             </tr>
           </tbody>
@@ -182,16 +201,28 @@ onMounted(() => {
       </div>
     </div>
     <!-- Modal -->
-    <div v-if="isModalVisible" class="modal fade show" tabindex="-1" style="display: block;">
+    <div
+      v-if="isModalVisible"
+      class="modal fade show"
+      tabindex="-1"
+      style="display: block"
+    >
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title" id="infoModalLabel">ข้อมูลผู้ใช้</h5>
-            <button type="button" class="btn-close" @click="isModalVisible = false" aria-label="Close"></button>
+            <button
+              type="button"
+              class="btn-close"
+              @click="isModalVisible = false"
+              aria-label="Close"
+            ></button>
           </div>
           <div class="modal-body" v-if="modalData">
             <p>รหัสนักศึกษา: {{ modalData.studentID }}</p>
-            <p>ชื่อ-นามสกุล: {{ modalData.firstName }} {{ modalData.lastName }}</p>
+            <p>
+              ชื่อ-นามสกุล: {{ modalData.firstName }} {{ modalData.lastName }}
+            </p>
             <p>สาขา: {{ modalData.branch }}</p>
             <p>ชั้นปี: {{ modalData.year }}</p>
             <p>สถานะ: {{ modalData.status }}</p>
@@ -202,12 +233,20 @@ onMounted(() => {
               <p class="text-bold">ข้อมูลสถานที่ฝึกประสบการณ์</p>
               <p>สถานประกอบการ: {{ modalData.companyDetails.companyName }}</p>
               <p>แผนก: {{ modalData.companyDetails.companyDepartment }}</p>
-              <p>ชื่อ-นามสกุลผู้ประสานงาน: {{ modalData.companyDetails.contactFirstName }} {{
-                modalData.companyDetails.contactLastName }}</p>
+              <p>
+                ชื่อ-นามสกุลผู้ประสานงาน:
+                {{ modalData.companyDetails.contactFirstName }}
+                {{ modalData.companyDetails.contactLastName }}
+              </p>
               <p>เบอร์โทรศัพท์: {{ modalData.companyDetails.companyPhone }}</p>
-              <p v-if="modalData.companyDetails.companyEmail">Email: {{ modalData.companyDetails.companyEmail }}</p>
+              <p v-if="modalData.companyDetails.companyEmail">
+                Email: {{ modalData.companyDetails.companyEmail }}
+              </p>
               <p v-else></p>
-              <p>ที่ตั้งสถานประกอบการ: {{ modalData.companyDetails.companyAddress }}</p>
+              <p>
+                ที่ตั้งสถานประกอบการ:
+                {{ modalData.companyDetails.companyAddress }}
+              </p>
             </div>
             <!-- <div v-else-if="modalData.collegeDetails">
               <p class="text-bold">ข้อมูลสถานที่ฝึกประสบการณ์</p>
@@ -225,7 +264,9 @@ onMounted(() => {
             </div>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" @click="closeModal">ปิด</button>
+            <button type="button" class="btn btn-secondary" @click="closeModal">
+              ปิด
+            </button>
           </div>
         </div>
       </div>
@@ -234,9 +275,9 @@ onMounted(() => {
 </template>
 
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900&family=Sarabun:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900&family=Sarabun:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800&display=swap");
 
 body {
-  font-family: 'Sarabun', sans-serif;
+  font-family: "Sarabun", sans-serif;
 }
 </style>

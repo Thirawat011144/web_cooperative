@@ -32,6 +32,10 @@
                             <div class="circle">{{ failCount }}</div>
                             <p>ไม่ผ่าน</p>
                         </div>
+                        <div class="status-circle" @click="filterStatus('เสร็จสิ้น')">
+                            <div class="circle">{{ finish }}</div>
+                            <p>เสร็จสิ้น</p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -72,6 +76,7 @@ const trainCount = computed(() => students.value.filter(student => student.statu
 const trainCountInternship = computed(() => students.value.filter(student => student.status === 'เข้ารับการฝึก').length);
 const passCount = computed(() => students.value.filter(student => student.status === 'ผ่าน').length);
 const failCount = computed(() => students.value.filter(student => student.status === 'ไม่ผ่าน' || student.status === 'ไม่อนุมัติ').length);
+const finish = computed(() => students.value.filter(student => student.status === 'เสร็จสิ้น').length);
 
 const filterStatus = (status) => {
     statusFilter.value = status;

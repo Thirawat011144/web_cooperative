@@ -72,7 +72,7 @@ const removeData = async (id) => {
       jobs.value = jobs.value.filter(internship => internship.id !== id);
       Swal.fire({
         title: 'สำเร็จ',
-        text: 'ลบข้อมูลผู้ใช้สำเร็จ',
+        text: 'ลบข้อมูลสถานประกอบการสำเร็จ',
         icon: 'success',
       }).then((result) => {
         if (result.value) {

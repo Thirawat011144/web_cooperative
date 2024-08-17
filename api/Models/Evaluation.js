@@ -56,6 +56,10 @@ const EvaluationModel = connect.define("evaluation", {
         type: DataTypes.STRING(255),
         allowNull: false,
     },
+    statusStart: {
+        type: DataTypes.STRING(255),
+        // allowNull: false,
+    },
 
 
 });

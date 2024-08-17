@@ -1,5 +1,5 @@
 import { checkAuth } from './authRouteFunction'
-
+import AuthEvaluator from '../../views/auth/AuthEvaluator.vue'
 import HomeEvaluation from '../../views/evaluation/HomeEvaluation.vue'
 import InformationEvaluation from '../../views/evaluation/InformationEvaluation.vue'
 
@@ -38,12 +38,18 @@ import EvaluationOneForMentor from '../../views/evaluation/evaluation-vcr/Evalua
 
 const routeEvaluation = [
     {
+            path:'/auth-evaluator',
+            name:'auth-evaluator',
+            component:AuthEvaluator
+    },
+    {
         path: '/home-evaluation',
         name: 'home-evaluation',
         component: HomeEvaluation,
         beforeEnter: checkAuth,
         children: [
 
+            
             // {
             //     path: 'data-tec4/:id',
             //     name: 'data-tec4/:id',

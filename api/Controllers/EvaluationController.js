@@ -31,7 +31,8 @@ router.post("/evaluation", async (req, res) => {
             // schoolSize: req.body.schoolSize,
             // courseRelation: req.body.courseRelation,
             evaluatorStatus: req.body.evaluatorStatus,
-            currentStudyField: req.body.currentStudyField
+            currentStudyField: req.body.currentStudyField,
+            statusStart : req.body.statusStart
         });
 
         await result.save();
@@ -70,7 +71,8 @@ router.post("/evaluation/login", async (req, res) => {
             // courseRelation: user.courseRelation,
             evaluatorStatus: user.evaluatorStatus,
             currentStudyField: user.currentStudyField,
-            role: 'evaluator'
+            role: 'evaluator',
+            statusStart:user.statusStart
         };
 
         const token = jwt.sign(data, process.env.SECRET_KEY, { expiresIn: '1h' });
@@ -85,6 +87,21 @@ router.post("/evaluation/login", async (req, res) => {
     }
 });
 
+
+// Get user data by ID
+router.get("/evaluation", async (req, res) => {
+    try {
+        const user = await Evaluation.findAll({
+            attributes: { exclude: ['password'] } // Exclude password from response
+        });
+        if (!user) {
+            return res.status(404).send({ message: "User not found" });
+        }
+        res.json(user);
+    } catch (error) {
+        res.status(500).send({ message: error.message });
+    }
+});
 
 // Get user data by ID
 router.get("/evaluation/:id", async (req, res) => {
@@ -117,5 +134,30 @@ router.put("/evaluation/:id", async (req, res) => {
         res.status(500).send({ message: error.message });
     }
 });
+
+// API สำหรับอัพเดทเฉพาะ statusStart
+router.put("/evaluation/status-start/:id", async (req, res) => {
+    try {
+        const { statusStart } = req.body;
+
+        // ตรวจสอบว่ามีการส่ง statusStart มาใน request body หรือไม่
+        if (statusStart === undefined) {
+            return res.status(400).send({ message: "statusStart is required" });
+        }
+
+        const user = await Evaluation.findByPk(req.params.id);
+        if (!user) {
+            return res.status(404).send({ message: "User not found" });
+        }
+        
+        user.statusStart = statusStart;
+        await user.save();
+
+        res.json({ message: "Status start updated successfully", user });
+    } catch (error) {
+        res.status(500).send({ message: error.message });
+    }
+});
+
 
 module.exports = router;

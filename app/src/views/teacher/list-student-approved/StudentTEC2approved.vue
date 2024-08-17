@@ -156,7 +156,7 @@ onMounted(() => {
     <section class="content mt-4">
         <div class="card">
             <div class="card-header">
-                <div class="card-title mb-2">ข้อมูลนักศึกษาชั้นปริญาตรีชั้นปีที่ 2 (อนุมัติ)
+                <div class="card-title mb-2">ข้อมูลนักศึกษาชั้นปริญญาตรีชั้นปีที่ 2 (อนุมัติ)
                     <div>
                         <router-link :to="`/teacher-index/student-tec2req`"> <button
                                 class="btn btn-primary m-1">ขออนุมัติ</button></router-link>
@@ -170,7 +170,8 @@ onMounted(() => {
                         <router-link :to="`/teacher-index/student-tec2notpass`"> <button
                                 class="btn btn-danger m-1">ไม่ผ่าน</button>
                         </router-link>
-                        <button class="btn btn-info m-1" @click="downloadExcel('student',sortedUsers)">ดาวน์โหลด Excel</button>
+                        <button class="btn btn-info m-1" @click="downloadExcel('student', sortedUsers)">ดาวน์โหลด
+                            Excel</button>
                     </div>
                 </div>
                 <table class="table">
@@ -182,7 +183,7 @@ onMounted(() => {
                             <th>สาขา</th>
                             <th>ชั้นปี</th>
                             <th class="text-center">ข้อมูลสถานประกอบการ</th>
-                            <th>Tools</th>
+                            <!-- <th>Tools</th> -->
                         </tr>
                     </thead>
                     <tbody>
@@ -195,17 +196,17 @@ onMounted(() => {
                             <td class="text-center">
                                 <button class="btn btn-success" @click="showModal(user.id)">ดูข้อมูล</button>
                             </td>
-                            <td>
+                            <!-- <td>
                                 <button class="btn btn-primary"
                                     @click="handleStatus(user.id, 'เข้ารับการฝึก')">เข้ารับการฝึก</button>
                                 &nbsp;
-                                <!-- <button class="btn btn-danger"
-                                    @click="handleStatus(user.id, 'ไม่ผ่าน')">ไม่ผ่าน</button> -->
-                                <!-- <router-link :to="`/edit-ec4/${user.id}`">
+                                <button class="btn btn-danger"
+                                    @click="handleStatus(user.id, 'ไม่ผ่าน')">ไม่ผ่าน</button>
+                                <router-link :to="`/edit-ec4/${user.id}`">
                                     <button class="btn btn-primary m-1">Edit</button>
                                 </router-link>
-                                <button @click="removeData(user.id)" class="btn btn-danger m-1">Delete</button> -->
-                            </td>
+                                <button @click="removeData(user.id)" class="btn btn-danger m-1">Delete</button>
+                            </td> -->
                         </tr>
                     </tbody>
                 </table>

@@ -5,6 +5,15 @@ import Swal from 'sweetalert2';
 import { useRouter } from 'vue-router';
 
 const router = useRouter();
+const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+let year = null
+
+if (userData.year) {
+    year = userData.year;
+} else {
+    console.log('No userData found in localStorage');
+}
+
 
 const getUserName = computed(() => {
     const firstName = localStorage.getItem(config.firstName_name);
@@ -51,13 +60,13 @@ const handleSignOut = () => {
                                 <p>ข้อมูลนักศึกษา</p>
                             </router-link>
                         </li>
-                        <li class="nav-item">
+                        <li v-if="year === 'ปวช 3' || year === 'ปวส 2' || year === 'ป.ตรี ปีที่ 2' || year === 'ประกาศนียบัตรวิชาชีพชั้นปีที่ 3' || year === 'ประกาศนียบัตรวิชาชีพชั้นสูงชั้นปีที่ 2'" class="nav-item">
                             <router-link to="/user-index/form" class="nav-link">
                                 <i class="fa-solid fa-comment me-2"></i>
                                 <p>ลงทะเบียนขอออกฝึก</p>
                             </router-link>
                         </li>
-                        <li class="nav-item">
+                        <li v-else class="nav-item">
                             <router-link to="/user-index/form-teaching" class="nav-link">
                                 <i class="fa-solid fa-comment me-2"></i>
                                 <p>ลงทะเบียนขอออกฝึกสอน</p>
