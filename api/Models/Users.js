@@ -30,6 +30,7 @@ const UsersModel = connect.define("users", {
     },
     idCard: {
         type: DataTypes.STRING(50),
+        unique: true
     },
     gender: {
         type: DataTypes.STRING(50)

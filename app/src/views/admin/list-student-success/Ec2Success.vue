@@ -119,7 +119,7 @@ const updateAllStatusToCompleted = async () => {
 
         if (result.isConfirmed) {
             const updatePromises = users.value.map(user => {
-                return axios.put(`${config.api_path}/user/${user.id}`, { status: 'เสร็จสิ้น', year: 'ปริญญาตรีชั้นปีที่ 2' });
+                return axios.put(`${config.api_path}/user/${user.id}`, { status: 'เสร็จสิ้น'});
             });
             await Promise.all(updatePromises);
             Swal.fire({

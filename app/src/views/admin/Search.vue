@@ -5,7 +5,8 @@ import * as XLSX from "xlsx"; // import library
 import axios from "axios";
 import Swal from "sweetalert2";
 import config from "../../../config";
-import { downloadExcel } from "@/utils/downloadBeforeEvaluation";
+import { downloadExcel, downloadExcelHight as downloadSearchHight, downloadExcelHightEvaluation } from "@/utils/downloadSearch";
+import { downloadExcel as downloadExcelBefore, downloadExcelHight } from "@/utils/downloadBeforeEvaluation";
 
 const searchStore = useSearchStore();
 const searchResults = ref([]);
@@ -80,9 +81,32 @@ watch(
             <div class="card-header">
                 <div class="card-title">
                     ผลการค้นหา
-                    <button class="btn btn-info m-1" @click="downloadExcel('student', sortedUsers)">
-                        ดาวน์โหลด Excel
-                    </button>
+                    <div>
+                        <button class="btn btn-info m-1" v-if="sortedUsers.some((user) => user.collegeDetails)"
+                            @click="downloadExcelHight('student', sortedUsers)">
+                            ดาวน์โหลดเฉพาะข้อมูลส่วนตัว [Hight]
+                        </button>
+
+                        <button class="btn btn-info m-1" v-else @click="downloadExcelBefore('student', sortedUsers)">
+                            ดาวน์โหลดเฉพาะข้อมูลส่วนตัว
+                        </button>
+                        <button class="btn btn-info m-1" v-if="
+                            sortedUsers.some(
+                                (user) =>
+                                    user.evaluationDetails && user.evaluationDetails.length > 0
+                            )
+                        " @click="downloadExcel('student', sortedUsers)">
+                            ดาวน์โหลดข้อมูลการประเมินจากสถานประกอบการ
+                        </button>
+                        <button class="btn btn-info m-1"
+                            v-if="sortedUsers.some((user) => user.evaluationUniversityDetails && user.evaluationUniversityDetails.length > 0)"
+                            @click="downloadSearchHight('student', sortedUsers)">ดาวน์โหลดข้อมูลการประเมินจากอาจารย์นิเทศ</button>
+                        <button class="btn btn-info m-1"
+                            v-if="sortedUsers.some((user) => user.evaluationHightDetails && user.evaluationHightDetails.length > 0)"
+                            @click="downloadExcelHightEvaluation('student', sortedUsers)">
+                            ดาวน์โหลดข้อมูลการประเมิน
+                        </button>
+                    </div>
                 </div>
                 <table class="table">
                     <thead>
@@ -111,8 +135,12 @@ watch(
                             </td>
                             <!-- ใช้ company ตามฟิลด์ในตาราง -->
                             <td>
-                                <button class="btn btn-primary m-1">Edit</button>
-                                <button class="btn btn-danger m-1">Delete</button>
+                                <button class="btn btn-primary m-1">
+                                    <i class="fa-solid fa-pen-to-square"></i>
+                                </button>
+                                <button class="btn btn-danger m-1">
+                                    <i class="fa-solid fa-trash-can"></i>
+                                </button>
                             </td>
                         </tr>
                     </tbody>
@@ -140,17 +168,18 @@ watch(
                         <p>เบอร์โทรศัพท์: {{ modalData.phoneNumber }}</p>
                         <p v-if="modalData.email">Email: {{ modalData.email }}</p>
                         <p v-else></p>
-                        <!-- <div v-if="modalData.companyDetails">
-              <p class="text-bold">ข้อมูลสถานที่ฝึกประสบการณ์</p>
-              <p>สถานประกอบการ: {{ modalData.companyDetails.companyName }}</p>
-              <p>แผนก: {{ modalData.companyDetails.companyDepartment }}</p>
-              <p>ชื่อ-นามสกุลผู้ประสานงาน: {{ modalData.companyDetails.contactFirstName }} {{
-                modalData.companyDetails.contactLastName }}</p>
-              <p>เบอร์โทรศัพท์: {{ modalData.companyDetails.companyPhone }}</p>
-              <p v-if="modalData.companyDetails.companyEmail">Email: {{ modalData.companyDetails.companyEmail }}</p>
-              <p v-else></p>
-              <p>ที่ตั้งสถานประกอบการ: {{ modalData.companyDetails.companyAddress }}</p>
-            </div> -->
+                        <div v-if="modalData.companyDetails">
+                            <p class="text-bold">ข้อมูลสถานที่ฝึกประสบการณ์</p>
+                            <p>สถานประกอบการ: {{ modalData.companyDetails.companyName }}</p>
+                            <p>แผนก: {{ modalData.companyDetails.companyDepartment }}</p>
+                            <p>ชื่อ-นามสกุลผู้ประสานงาน: {{ modalData.companyDetails.contactFirstName }} {{
+                                modalData.companyDetails.contactLastName }}</p>
+                            <p>เบอร์โทรศัพท์: {{ modalData.companyDetails.companyPhone }}</p>
+                            <p v-if="modalData.companyDetails.companyEmail">Email: {{
+                                modalData.companyDetails.companyEmail }}</p>
+                            <p v-else></p>
+                            <p>ที่ตั้งสถานประกอบการ: {{ modalData.companyDetails.companyAddress }}</p>
+                        </div>
                         <div v-if="modalData.collegeDetails">
                             <p class="text-bold">ข้อมูลสถานที่ฝึกประสบการณ์</p>
                             <p>
@@ -170,9 +199,7 @@ watch(
                                 ที่ตั้งวิทยาลัย: {{ modalData.collegeDetails.collegeAddress }}
                             </p>
                         </div>
-                        <div v-else>
-                            <p>ไม่มีข้อมูลสถานประกอบการ</p>
-                        </div>
+
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" @click="closeModal">

@@ -72,11 +72,19 @@ const handleSubmit = async () => {
                 });
             }
         } catch (error) {
+            if(error.response.data.message === "Validation error"){
             Swal.fire({
-                title: "error",
-                text: error.message,
-                icon: "error"
-            });
+            title: "error",
+            text: ("มีข้อมูลนี้ในระบบแล้ว"),
+            icon: "error"
+        })
+        }else{
+            Swal.fire({
+            title: "error",
+            text: (error.response.data.message),
+            icon: "error"
+        })
+        }
             console.log(error);
         }
     }

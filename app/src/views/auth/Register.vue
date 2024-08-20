@@ -20,6 +20,10 @@ const studentID = ref('');
 const email = ref('');
 const idCard = ref('');
 
+const phoneNumberWarning = ref('');
+const emailWarning = ref('');
+const idCardWarning = ref('')
+
 const vocationalBranches = [
     { value: "สาขาวิชาช่างก่อสร้าง", text: "สาขาวิชาช่างก่อสร้าง" },
     { value: "สาขาวิชาช่างไฟฟ้ากำลัง", text: "สาขาวิชาช่างไฟฟ้ากำลัง" },
@@ -52,6 +56,37 @@ const bachelorBranches = [
     { value: "สาขาครุศาสตร์อุตสาหการเชื่อมประกอบ", text: "สาขาครุศาสตร์อุตสาหการเชื่อมประกอบ" },
 ];
 
+const validatePhoneNumber = () => {
+    const originalValue = phoneNumber.value;
+    phoneNumber.value = phoneNumber.value.replace(/[^0-9]/g, '');
+
+    if (originalValue !== phoneNumber.value) {
+        phoneNumberWarning.value = 'คุณสามารถใส่ได้เฉพาะตัวเลขเท่านั้น';
+    } else {
+        phoneNumberWarning.value = ''; // ล้างข้อความแจ้งเตือนหากไม่มีการเปลี่ยนแปลง
+    }
+};
+
+const validateEmail = () => {
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailPattern.test(email.value)) {
+        emailWarning.value = 'กรุณาใส่อีเมลในรูปแบบที่ถูกต้อง';
+    } else {
+        emailWarning.value = ''; // ล้างข้อความแจ้งเตือนหากรูปแบบถูกต้อง
+    }
+};
+
+const validateIdCard = () => {
+    // ลบอักขระที่ไม่ใช่ตัวเลขออก
+    idCard.value = idCard.value.replace(/[^0-9]/g, '');
+
+    // ตรวจสอบความยาวของเลขบัตรประชาชน
+    if (idCard.value.length !== 13) {
+        idCardWarning.value = 'กรุณาใส่เลขบัตรประชาชนให้ครบ 13 หลัก';
+    } else {
+        idCardWarning.value = ''; // ล้างข้อความแจ้งเตือนหากรูปแบบถูกต้อง
+    }
+};
 const branches = computed(() => {
     if (year.value === "ปวช 3" || year.value === "ปวช 2" || year.value === "ปวช 1") {
         return vocationalBranches;
@@ -91,11 +126,20 @@ const handleRegister = async () => {
             router.push('/login')
         }
     } catch (error) {
-        Swal.fire({
+    
+        if(error.response.data.message === "Validation error"){
+            Swal.fire({
             title: "error",
-            text: (error.message, "Register Error"),
+            text: ("มีข้อมูลนี้ในระบบแล้ว"),
             icon: "error"
         })
+        }else{
+            Swal.fire({
+            title: "error",
+            text: (error.response.data.message),
+            icon: "error"
+        })
+        }
         console.log(error)
     }
 }
@@ -154,14 +198,17 @@ const handleRegister = async () => {
                                         <div class="form-outline mb-4">
                                             <label class="form-label" for="form3Example8">อีเมล</label>
                                             <input type="email" id="form3Example8" class="form-control form-control-lg"
-                                                v-model="email" required placeholder="example@example.com" />
+                                                v-model="email" @input="validateEmail" required
+                                                placeholder="example@example.com" />
+                                            <small v-if="emailWarning" class="text-danger">{{ emailWarning }}</small>
                                         </div>
-
                                         <div class="form-outline mb-4">
                                             <label class="form-label" for="form3Example8">เบอร์ติดต่อ</label>
                                             <input type="text" id="form3Example8" class="form-control form-control-lg"
-                                                v-model="phoneNumber" required minlength="10" maxlength="10"
-                                                placeholder="Ex. 0987654321" />
+                                                v-model="phoneNumber" @input="validatePhoneNumber" required
+                                                minlength="10" maxlength="10" placeholder="Example 0987654321" />
+                                            <small v-if="phoneNumberWarning" class="text-danger">{{ phoneNumberWarning
+                                                }}</small>
                                         </div>
 
                                         <div class="d-md-flex justify-content-start align-items-center mb-4 py-2">
@@ -191,13 +238,12 @@ const handleRegister = async () => {
                                                 <option value="ป.ตรี ปีที่ 2">ปริญญาตรี ปีที่ 2</option>
                                                 <option value="ป.ตรี ปีที่ 3">ปริญญาตรี ปีที่ 3</option>
                                                 <option value="ป.ตรี ปีที่ 4">ปริญญาตรี ปีที่ 4</option>
-                                                <option value="ป.ตรี ปีที่ 5">ปริญญาตรี ปีที่ 5</option>
-                                                <option value="ป.ตรี ปีที่ 6">ปริญญาตรี ปีที่ 6</option>
+
                                             </select>
                                         </div>
 
-                                         <!-- <input v-model="branch.name" @input="logBranchData(branch, index)" :id="'branchName_' + index" type="text" -->
-            <!-- class="form-control" required> -->
+                                        <!-- <input v-model="branch.name" @input="logBranchData(branch, index)" :id="'branchName_' + index" type="text" -->
+                                        <!-- class="form-control" required> -->
 
                                         <div class="row">
                                             <div class="col mb-4">
@@ -227,13 +273,16 @@ const handleRegister = async () => {
                                                 )</label>
                                             <input v-model="studentID" type="text" id="form3Example9"
                                                 class="form-control form-control-lg" required maxlength="13"
-                                                minlength="13" placeholder="Ex. 64322110094-5" />
+                                                minlength="13" placeholder="Example. 64322110094-5" />
                                         </div>
 
                                         <div class="form-outline mb-4">
                                             <label class="form-label" for="form3Example9">เลขบัตรประชาชน</label>
                                             <input type="text" id="form3Example9" class="form-control form-control-lg"
-                                                v-model="idCard" maxlength="13" pattern="[0-9]{13}" required />
+                                                v-model="idCard" maxlength="13" @input="validateIdCard"
+                                                pattern="[0-9]{13}" required
+                                                placeholder="กรุณาใส่เฉพาะตัวเลข 13 หลัก" />
+                                            <small v-if="idCardWarning" class="text-danger">{{ idCardWarning }}</small>
                                         </div>
 
                                         <div class="d-flex justify-content-end pt-3">

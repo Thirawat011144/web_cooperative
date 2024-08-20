@@ -1,17 +1,45 @@
 <script setup>
-import { ref, onMounted, watch } from "vue";
-import { useSearchStore } from '../../store/Search';
-import config from "../../../config";
-import Swal from "sweetalert2";
+import { ref, onMounted, watch, computed } from "vue"; // นำเข้า computed
+import { useSearchStore } from "../../store/Search";
+import * as XLSX from "xlsx"; // import library
 import axios from "axios";
+import Swal from "sweetalert2";
+import config from "../../../config";
+import { downloadExcel, downloadExcelHight as downloadSearchHight, downloadExcelHightEvaluation } from "@/utils/downloadSearch";
+import { downloadExcel as downloadExcelBefore, downloadExcelHight } from "@/utils/downloadBeforeEvaluation";
 
 const searchStore = useSearchStore();
 const searchResults = ref([]);
+
 const isModalVisible = ref(false);
 const modalData = ref(null);
 
-// const userData = JSON.parse(localStorage.getItem('userData') || '{}');
-// let branch = null
+const updateSearchResults = () => {
+    searchResults.value = searchStore.searchResults;
+};
+
+const sortedUsers = computed(() => {
+    return searchResults.value.slice().sort((a, b) => a.id - b.id); // ใช้ computed เพื่อจัดเรียงข้อมูล
+});
+
+// const downloadExcel = () => {
+//     const data = sortedUsers.value.map(user => ({ // ใช้ sortedUsers.value
+//         'รหัสนักศึกษา': user.studentID,
+//         'ชื่อ': user.firstName,
+//         'นามสกุล': user.lastName,
+//         'สาขา': user.branch,
+//         'ชั้นปี': user.year,
+//         'สถานะ': user.status,
+//         'เบอร์โทรศัพท์': user.phoneNumber,
+//         'อีเมล์': user.email,
+//         'สถานที่ฝึกประสบการณ์': user.college // เปลี่ยน college เป็น company
+//     }));
+
+//     const worksheet = XLSX.utils.json_to_sheet(data);
+//     const workbook = XLSX.utils.book_new();
+//     XLSX.utils.book_append_sheet(workbook, worksheet, "Students");
+//     XLSX.writeFile(workbook, 'students.xlsx');
+// };
 
 // modal
 const showModal = async (id) => {
@@ -23,8 +51,9 @@ const showModal = async (id) => {
         Swal.fire({
             title: "error",
             text: (error.message, "Cr2 Error Fetching Data"),
-            icon: 'error'
+            icon: "error",
         });
+        console.log(error);
     }
 };
 
@@ -34,15 +63,9 @@ const closeModal = () => {
 };
 // modal
 
-
-const updateSearchResults = () => {
-    searchResults.value = searchStore.searchResults;
-};
-
 onMounted(() => {
     updateSearchResults();
 });
-
 
 watch(
     () => searchStore.searchResults,
@@ -53,11 +76,37 @@ watch(
 </script>
 
 <template>
-    <section class="content mt-4">
+    <section class="content">
         <div class="card">
             <div class="card-header">
                 <div class="card-title">
                     ผลการค้นหา
+                    <div>
+                        <button class="btn btn-info m-1" v-if="sortedUsers.some((user) => user.collegeDetails)"
+                            @click="downloadExcelHight('student', sortedUsers)">
+                            ดาวน์โหลดเฉพาะข้อมูลส่วนตัว [Hight]
+                        </button>
+
+                        <button class="btn btn-info m-1" v-else @click="downloadExcelBefore('student', sortedUsers)">
+                            ดาวน์โหลดเฉพาะข้อมูลส่วนตัว
+                        </button>
+                        <button class="btn btn-info m-1" v-if="
+                            sortedUsers.some(
+                                (user) =>
+                                    user.evaluationDetails && user.evaluationDetails.length > 0
+                            )
+                        " @click="downloadExcel('student', sortedUsers)">
+                            ดาวน์โหลดข้อมูลการประเมินจากสถานประกอบการ
+                        </button>
+                        <button class="btn btn-info m-1"
+                            v-if="sortedUsers.some((user) => user.evaluationUniversityDetails && user.evaluationUniversityDetails.length > 0)"
+                            @click="downloadSearchHight('student', sortedUsers)">ดาวน์โหลดข้อมูลการประเมินจากอาจารย์นิเทศ</button>
+                        <button class="btn btn-info m-1"
+                            v-if="sortedUsers.some((user) => user.evaluationHightDetails && user.evaluationHightDetails.length > 0)"
+                            @click="downloadExcelHightEvaluation('student', sortedUsers)">
+                            ดาวน์โหลดข้อมูลการประเมิน
+                        </button>
+                    </div>
                 </div>
                 <table class="table">
                     <thead>
@@ -66,31 +115,41 @@ watch(
                             <th>รหัสนักศึกษา</th>
                             <th>ชื่อ-นามสกุล</th>
                             <th>ชั้นปี</th>
-                            <th class="text-center">สาขา</th>
-                            <th class="text-center">ข้อมูลสถานประกอบการ</th>
-                            <!-- <th>Tools</th> -->
+                            <th>สาขา</th>
+                            <th>สถานที่ฝึกงาน</th>
+                            <th>Tools</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="(user, index) in searchResults" :key="user.id">
+                        <tr v-for="(user, index) in sortedUsers" :key="user.id">
+                            <!-- ใช้ sortedUsers ใน v-for -->
                             <td>{{ index + 1 }}</td>
                             <td>{{ user.studentID }}</td>
                             <td>{{ user.firstName }} {{ user.lastName }}</td>
                             <td>{{ user.year }}</td>
-                            <td class="text-center">{{ user.branch }}</td>
-                            <td class="text-center"><button class="btn btn-success"
-                                    @click="showModal(user.id)">ดูข้อมูล</button></td>
-                            <!-- <td>
-                                <button class="btn btn-primary m-1">Edit</button>
-                                <button class="btn btn-danger m-1">Delete</button>
-                            </td> -->
+                            <td>{{ user.branch }}</td>
+                            <td>
+                                <button class="btn btn-success" @click="showModal(user.id)">
+                                    ดูข้อมูล
+                                </button>
+                            </td>
+                            <!-- ใช้ company ตามฟิลด์ในตาราง -->
+                            <td>
+                                <button class="btn btn-primary m-1">
+                                    <i class="fa-solid fa-pen-to-square"></i>
+                                </button>
+                                <button class="btn btn-danger m-1">
+                                    <i class="fa-solid fa-trash-can"></i>
+                                </button>
+                            </td>
                         </tr>
                     </tbody>
                 </table>
             </div>
         </div>
+
         <!-- Modal -->
-        <div v-if="isModalVisible" class="modal fade show" tabindex="-1" style="display: block;">
+        <div v-if="isModalVisible" class="modal fade show" tabindex="-1" style="display: block">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -100,25 +159,52 @@ watch(
                     </div>
                     <div class="modal-body" v-if="modalData">
                         <p>รหัสนักศึกษา: {{ modalData.studentID }}</p>
-                        <p>ชื่อ-นามสกุล: {{ modalData.firstName }} {{ modalData.lastName }}</p>
+                        <p>
+                            ชื่อ-นามสกุล: {{ modalData.firstName }} {{ modalData.lastName }}
+                        </p>
                         <p>สาขา: {{ modalData.branch }}</p>
                         <p>ชั้นปี: {{ modalData.year }}</p>
                         <p>สถานะ: {{ modalData.status }}</p>
+                        <p>เบอร์โทรศัพท์: {{ modalData.phoneNumber }}</p>
+                        <p v-if="modalData.email">Email: {{ modalData.email }}</p>
+                        <p v-else></p>
                         <div v-if="modalData.companyDetails">
+                            <p class="text-bold">ข้อมูลสถานที่ฝึกประสบการณ์</p>
                             <p>สถานประกอบการ: {{ modalData.companyDetails.companyName }}</p>
-                            <p>ประเภทหน่วยงาน: {{ modalData.companyDetails.companyType }}</p>
+                            <p>แผนก: {{ modalData.companyDetails.companyDepartment }}</p>
+                            <p>ชื่อ-นามสกุลผู้ประสานงาน: {{ modalData.companyDetails.contactFirstName }} {{
+                                modalData.companyDetails.contactLastName }}</p>
                             <p>เบอร์โทรศัพท์: {{ modalData.companyDetails.companyPhone }}</p>
                             <p v-if="modalData.companyDetails.companyEmail">Email: {{
                                 modalData.companyDetails.companyEmail }}</p>
                             <p v-else></p>
                             <p>ที่ตั้งสถานประกอบการ: {{ modalData.companyDetails.companyAddress }}</p>
                         </div>
-                        <div v-else>
-                            <p>ไม่มีข้อมูลสถานประกอบการ</p>
+                        <div v-if="modalData.collegeDetails">
+                            <p class="text-bold">ข้อมูลสถานที่ฝึกประสบการณ์</p>
+                            <p>
+                                โรงเรียน/วิทยาลัย: {{ modalData.collegeDetails.collegeName }}
+                            </p>
+                            <p>
+                                ชื่อ-นามสกุลผู้ประสานงาน:
+                                {{ modalData.collegeDetails.contactFirstName }}
+                                {{ modalData.collegeDetails.contactLastName }}
+                            </p>
+                            <p>เบอร์โทรศัพท์: {{ modalData.collegeDetails.collegePhone }}</p>
+                            <p v-if="modalData.collegeDetails.collegeEmail">
+                                Email: {{ modalData.collegeDetails.collegeEmail }}
+                            </p>
+                            <p v-else></p>
+                            <p>
+                                ที่ตั้งวิทยาลัย: {{ modalData.collegeDetails.collegeAddress }}
+                            </p>
                         </div>
+
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" @click="closeModal">ปิด</button>
+                        <button type="button" class="btn btn-secondary" @click="closeModal">
+                            ปิด
+                        </button>
                     </div>
                 </div>
             </div>

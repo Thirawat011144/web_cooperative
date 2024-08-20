@@ -2,7 +2,7 @@
     <div class="content mt-4">
         <div class="card">
             <div class="card-header">
-                <div class="card-title">ข้อมูลอาจารย์</div>
+                <div class="card-title">ข้อมูลผู้ประเมิน</div>
                 <table class="table">
                     <thead>
                         <tr>
@@ -18,8 +18,8 @@
                             <td>{{ user.firstName }} {{ user.lastName }}</td>
                             <td>{{ user.evaluatorStatus }}</td>
                             <td>
-                                <select @change="(e) => handleChangRole(user, e)" v-model="user.statusStart" class="w-100"
-                                    style="border-color: seashell;">
+                                <select @change="(e) => handleChangRole(user, e)" v-model="user.statusStart"
+                                    class="w-100" style="border-color: seashell;">
                                     <option v-for="roleItem in role" :key="roleItem">{{ roleItem }}</option>
                                 </select>
                             </td>
@@ -39,7 +39,7 @@ import config from "../../../../config";
 import Swal from 'sweetalert2';
 
 const users = ref([]);
-const role = [ "ยืนยัน","ขอยืนยันตัวตน"];
+const role = ["ยืนยัน", "ขอยืนยันตัวตน"];
 
 const fetchData = async () => {
     try {

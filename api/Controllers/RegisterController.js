@@ -8,10 +8,10 @@ const router = express.Router();
 router.post("/register", async (req, res) => {
   try {
     const existingUser = await UsersModel.findOne({
-      where: { userName: req.body.userName },
+      where: { userName: req.body.userName, idCard:req.body.idCard },
     });
     if (existingUser) {
-      res.status(400).send({ message: "Username already exists" });
+      res.status(400).send({ message: "ชื่อผู้ใช้นี้ถูกใช้งานไปแล้ว" });
     } else {
       const salt = await bcrypt.genSalt(10);
       const hashedPassword = await bcrypt.hash(req.body.password, salt);

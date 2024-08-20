@@ -1,6 +1,6 @@
 const express = require("express");
 const { Op, Sequelize } = require('sequelize');
-const { UsersModel, CompaniesModel, CollegesModel } = require("../Models/index");
+const { UsersModel, CompaniesModel, CollegesModel, dataEvaluationInternshipForUniversity,dataEvaluation } = require("../Models/index");
 const dataEvaluationInternshipModel =require("../Models/DataEvaluationInternship")
 // const authenticateToken = require('../Middleware/Authorization');
 
@@ -88,7 +88,7 @@ router.get("/users/search", async (req, res) => {
         }
 
         if (status) {
-            whereClause.status = { [Op.like]: `%${status}%` };
+            whereClause.status = { [Op.eq]: status };
         }
 
         console.log(whereClause);
@@ -102,8 +102,23 @@ router.get("/users/search", async (req, res) => {
                     // attributes: ['companyName']
                 },
                 {
+                    model: CollegesModel,
+                    as: 'collegeDetails',
+                    // attributes: ['companyName']
+                },
+                {
                     model: dataEvaluationInternshipModel,
                     as: 'evaluationDetails',
+                    // attributes: ['score', 'comments'] // เลือกฟิลด์ที่ต้องการส่งออก
+                },
+                {
+                    model: dataEvaluationInternshipForUniversity,
+                    as: 'evaluationUniversityDetails',
+                    // attributes: ['score', 'comments'] // เลือกฟิลด์ที่ต้องการส่งออก
+                },
+                {
+                    model: dataEvaluation,
+                    as: 'evaluationHightDetails',
                     // attributes: ['score', 'comments'] // เลือกฟิลด์ที่ต้องการส่งออก
                 }
             ]
