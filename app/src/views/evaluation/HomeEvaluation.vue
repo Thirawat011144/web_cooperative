@@ -28,13 +28,21 @@
 import NavbarEvaluation from '../../components/evaluation/NavbarEvaluation.vue';
 import SidebarEvaluation from '../../components/evaluation/SidebarEvaluation.vue';
 import config from '../../../config';
+import { onMounted } from 'vue';
+
+onMounted(() => {
+  // เช็คว่าหน้านี้ถูกรีเฟรชแล้วหรือยัง
+  if (!window.location.hash) {
+    window.location.hash = 'reloaded';
+    window.location.reload();
+  }
+});
 
 const checkEvaluatorStatus = localStorage.getItem(config.evaluatorStatus);
 console.log(checkEvaluatorStatus);
 </script>
 
 <style scoped>
-
 /* ยกเลิกการขีดเส้นใต้สำหรับลิงก์ */
 .no-underline {
   text-decoration: none;

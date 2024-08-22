@@ -16,9 +16,9 @@ const getUserName = computed(() => {
     <aside class="main-sidebar sidebar-dark-primary elevation-4">
         <!-- Brand Logo -->
         <a href="/admin-index" class="brand-link">
-            <img src="@/assets/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3"
-                style="opacity: .8">
-            <span class="brand-text font-weight-light">RMUTI</span>
+            <!-- <img src="@/assets/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3"
+                style="opacity: .8"> -->
+            <span class="brand-text font-weight-light ms-2">RMUTI</span>
         </a>
 
         <!-- Sidebar -->
@@ -29,7 +29,7 @@ const getUserName = computed(() => {
                     <img src="../../../dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
                 </div> -->
                 <div class="info">
-                    <router-link to="/admin-index"> <a href="#" class="d-block fw-bold">Admin: {{ getUserName }}</a>
+                    <router-link to="/admin-index/information-admin"> <a href="#" class="d-block fw-bold">Admin: {{ getUserName }}</a>
                     </router-link>
                 </div>
             </div>
@@ -116,11 +116,11 @@ const getUserName = computed(() => {
                                 </router-link>
                             </li>
 
-                             <li class="nav-item">
+                            <li class="nav-item">
                                 <router-link :to="{ name: 'list-ec2' }" class="nav-link ms-4">
                                     <p>ป.ตรี ชั้นปีที่ 2</p>
                                 </router-link>
-                            </li> 
+                            </li>
                             <li class="nav-item">
                                 <router-link to="/admin-index/list-ec4" class="nav-link ms-4 ">
                                     <p>ป.ตรี ชั้นปีที่ 4</p>

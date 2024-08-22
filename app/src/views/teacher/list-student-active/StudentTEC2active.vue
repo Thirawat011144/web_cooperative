@@ -59,7 +59,7 @@ const fetchData = async () => {
 
 
                 const hasHighAverageScore = userEvaluations.some(
-                    evaluation => evaluation.averageScore >= 80
+                    evaluation => evaluation.averageScore >= 70
                 );
 
 

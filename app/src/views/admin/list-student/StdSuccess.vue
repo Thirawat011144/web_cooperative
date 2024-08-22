@@ -6,17 +6,24 @@ import Swal from 'sweetalert2';
 import { useRoute, useRouter } from 'vue-router';
 import * as XLSX from 'xlsx';
 import { makeModalDraggable } from "@/utils/draggable";
-import { downloadExcel } from "@/utils/downloadBeforeEvaluation";
+import { downloadExcel, downloadExcelHight } from "@/utils/downloadBeforeEvaluation";
 
 const users = ref([]);
 const isModalVisible = ref(false);
 const modalData = ref(null);
 const branch = localStorage.getItem(config.branch);
+const changYears = ref(null)
+
+
+const changYear = (year) => {
+    changYears.value = year;
+    fetchData();
+}
 
 const fetchData = async () => {
     try {
         const response = await axios.get(`${config.api_path}/users`);
-        users.value = response.data.filter(user => user.status === "เสร็จสิ้น" && user.branch === branch);
+        users.value = response.data.filter(user => user.status === "เสร็จสิ้น" && user.branch === branch && user.year === changYears.value);
     } catch (error) {
         Swal.fire({
             title: "error",
@@ -131,8 +138,17 @@ onMounted(() => {
                         <router-link :to="`/admin-index/cr2-notpass`">
                             <button class="btn btn-danger m-1">ไม่ผ่าน</button>
                         </router-link> -->
-                        <button class="btn btn-info m-1" @click="downloadExcel('student', sortedUsers)">ดาวน์โหลด
+
+                        <button class="btn btn-info m-1" v-if="changYears !== 'ป.ตรี ปีที่ 4'"
+                            @click="downloadExcel('student', sortedUsers)">ดาวน์โหลด
                             Excel</button>
+                        <button class="btn btn-info m-1" v-if="changYears === 'ป.ตรี ปีที่ 4'"
+                            @click="downloadExcelHight('student', sortedUsers)">ดาวน์โหลด Excel</button>
+
+                        <button @click="changYear('ปวช 3')" class="btn btn-primary ms-2">ปวช 3</button>
+                        <button @click="changYear('ปวส 2')" class="btn btn-primary ms-2">ปวส 2</button>
+                        <button @click="changYear('ป.ตรี ปีที่ 2')" class="btn btn-primary ms-2">ป.ตรี ปีที่ 2</button>
+                        <button @click="changYear('ป.ตรี ปีที่ 4')" class="btn btn-primary ms-2">ป.ตรี ปีที่ 4</button>
                     </div>
                 </div>
                 <table class="table">

@@ -17,8 +17,11 @@ const studentID = ref(""); // กรอกได้เฉพาะ 2 ตัว�
 const searchStore = useSearchStore();
 const status = ref("");
 
-const branchOptions = ref([
-  { value: "สาขาครุศาสตร์อุตสาหกรรมโยธา", text: "สาขาครุศาสตร์อุตสาหกรรมโยธา" },
+const branchOptions1 = ref([
+  {
+    value: "สาขาครุศาสตร์อุตสาหกรรมโยธา",
+    text: "สาขาครุศาสตร์อุตสาหกรรมโยธา"
+  },
   {
     value: "สาขาครุศาสตร์อุตสาหกรรมไฟฟ้า",
     text: "สาขาครุศาสตร์อุตสาหกรรมไฟฟ้า",
@@ -45,12 +48,38 @@ const branchOptions = ref([
   },
 ]);
 
+const branchOptions2 = ref([
+  { value: "สาขาวิชาช่างโยธา", text: "สาขาวิชาช่างโยธา" },
+  { value: "สาขาวิชาช่างก่อสร้าง", text: "สาขาวิชาช่างก่อสร้าง" },
+  { value: "สาขาวิชาช่างเครื่องมือกลอัตโนมัติ", text: "สาขาวิชาช่างเครื่องมือกลอัตโนมัติ" },
+  { value: "สาขาวิชาช่างยนต์", text: "สาขาวิชาช่างยนต์" },
+  { value: "สาขาวิชาช่างกลเกษตร", text: "สาขาวิชาช่างกลเกษตร" },
+  { value: "สาขาวิชาช่างกลโรงงาน", text: "สาขาวิชาช่างกลโรงงาน" },
+  { value: "สาขาวิชาช่างท่อและประสาน", text: "สาขาวิชาช่างท่อและประสาน" },
+  { value: "สาขาวิชาการออกแบบนวัตกรรมเครื่องจักรกล", text: "สาขาวิชาการออกแบบนวัตกรรมเครื่องจักรกล" },
+  { value: "สาขาวิชาช่างอิเล็กทรอนิกส์", text: "สาขาวิชาช่างอิเล็กทรอนิกส์" },
+  { value: "สาขาวิชาเทคโนโลยีคอมพิวเตอร์", text: "สาขาวิชาเทคโนโลยีคอมพิวเตอร์" },
+]);
+
+const branchOptions3 = ref([{ value: "สาขาวิชาช่างก่อสร้าง", text: "สาขาวิชาช่างก่อสร้าง" },
+  { value: "สาขาวิชาช่างไฟฟ้ากำลัง", text: "สาขาวิชาช่างไฟฟ้ากำลัง" },
+  { value: "สาขาวิชาช่างยนต์", text: "สาขาวิชาช่างยนต์" },
+  { value: "สาขาวิชาเทคโนโลยีการเขียนแบบเครื่องกล", text: "สาขาวิชาเทคโนโลยีการเขียนแบบเครื่องกล" },
+  { value: "สาขาวิชาช่างอิเล็กทรอนิกส์", text: "สาขาวิชาช่างอิเล็กทรอนิกส์" },
+  { value: "สาขาวิชาช่างเทคนิคคอมพิวเตอร์", text: "สาขาวิชาช่างเทคนิคคอมพิวเตอร์" },])
+
 const availableBranches = computed(() => {
   if (
     searchYear.value === "ป.ตรี ปีที่ 2" ||
     searchYear.value === "ป.ตรี ปีที่ 4"
   ) {
-    return branchOptions.value;
+    return branchOptions1.value;
+  }
+  if (searchYear.value === "ปวส 2") {
+    return branchOptions2.value;
+  }
+  if(searchYear.value === 'ปวช 3'){
+    return branchOptions3.value;
   }
   return [];
 });
@@ -140,10 +169,7 @@ const searchUsers = async () => {
             <div class="input-group input-group-sm custom-search-input me-5">
               <!-- ปุ่มสำหรับเปิด Modal การค้นหา -->
               <div class="input-group-append">
-                <button
-                  class="bg-primary btn btn-navbar btn-primary"
-                  type="submit"
-                >
+                <button class="bg-primary btn btn-navbar btn-primary" type="submit">
                   <i class="fas fa-search"></i>
                 </button>
               </div>
@@ -172,64 +198,36 @@ const searchUsers = async () => {
           <div class="modal-body">
             <!-- ชื่อ -->
             <div class="row mb-3">
-              <label for="searchFirstName" class="col-sm-3 col-form-label"
-                >ชื่อ</label
-              >
+              <label for="searchFirstName" class="col-sm-3 col-form-label">ชื่อ</label>
               <div class="col-sm-9">
-                <input
-                  type="text"
-                  class="form-control"
-                  id="searchFirstName"
-                  v-model="searchFirstName"
-                  placeholder="Firstname"
-                />
+                <input type="text" class="form-control" id="searchFirstName" v-model="searchFirstName"
+                  placeholder="Firstname" />
               </div>
             </div>
 
             <!-- นามสกุล -->
             <div class="row mb-3">
-              <label for="searchLastName" class="col-sm-3 col-form-label"
-                >นามสกุล</label
-              >
+              <label for="searchLastName" class="col-sm-3 col-form-label">นามสกุล</label>
               <div class="col-sm-9">
-                <input
-                  type="text"
-                  class="form-control"
-                  id="searchLastName"
-                  v-model="searchLastName"
-                  placeholder="Lastname"
-                />
+                <input type="text" class="form-control" id="searchLastName" v-model="searchLastName"
+                  placeholder="Lastname" />
               </div>
             </div>
 
             <!-- รหัสนักศึกษา -->
             <div class="row mb-3">
-              <label for="studentID" class="col-sm-3 col-form-label"
-                >รหัสนักศึกษา</label
-              >
+              <label for="studentID" class="col-sm-3 col-form-label">รหัสนักศึกษา</label>
               <div class="col-sm-9">
-                <input
-                  type="text"
-                  class="form-control"
-                  id="studentID"
-                  v-model="studentID"
-                  placeholder="Format 1 [64] or Format 2 [64322110094-5]"
-                  maxlength="13"
-                />
+                <input type="text" class="form-control" id="studentID" v-model="studentID"
+                  placeholder="Format 1 [64] or Format 2 [64322110094-5]" maxlength="13" />
               </div>
             </div>
 
             <!-- ชั้นปี -->
             <div class="row mb-3">
-              <label for="searchYear" class="col-sm-3 col-form-label"
-                >ชั้นปี</label
-              >
+              <label for="searchYear" class="col-sm-3 col-form-label">ชั้นปี</label>
               <div class="col-sm-9">
-                <select
-                  class="form-control"
-                  id="searchYear"
-                  v-model="searchYear"
-                >
+                <select class="form-control" id="searchYear" v-model="searchYear">
                   <option value="">Year</option>
                   <option value="ปวช 3">ประกาศนีบัตรวิชาชีพชั้นปีที่ 3</option>
                   <option value="ปวส 2">
@@ -243,21 +241,11 @@ const searchUsers = async () => {
 
             <!-- สาขา -->
             <div class="row mb-3">
-              <label for="searchBranch" class="col-sm-3 col-form-label"
-                >สาขา</label
-              >
+              <label for="searchBranch" class="col-sm-3 col-form-label">สาขา</label>
               <div class="col-sm-9">
-                <select
-                  class="form-control"
-                  id="searchBranch"
-                  v-model="searchBranch"
-                >
+                <select class="form-control" id="searchBranch" v-model="searchBranch">
                   <option value="">Faculty</option>
-                  <option
-                    v-for="branch in availableBranches"
-                    :key="branch.value"
-                    :value="branch.value"
-                  >
+                  <option v-for="branch in availableBranches" :key="branch.value" :value="branch.value">
                     {{ branch.text }}
                   </option>
                 </select>
@@ -284,11 +272,7 @@ const searchUsers = async () => {
             <button type="button" class="btn btn-warning" @click="clearFields">
               ล้างค่า
             </button>
-            <button
-              type="button"
-              class="btn btn-secondary"
-              @click="closeSearchModal"
-            >
+            <button type="button" class="btn btn-secondary" @click="closeSearchModal">
               ปิด
             </button>
             <button type="button" class="btn btn-primary" @click="searchUsers">

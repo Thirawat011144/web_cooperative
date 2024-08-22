@@ -14,7 +14,7 @@ const userName = ref('');
 const password = ref('');
 
 const handleLogin = async () => {
-    const trimmedUsername = userName.value.trim() 
+    const trimmedUsername = userName.value.trim()
     const trimmedPassword = password.value.trim()
     try {
         const payload = {
@@ -41,9 +41,9 @@ const handleLogin = async () => {
             searchData.setDataResults(response.data.data);
 
             if (response.data.data.role === "admin") {
-                router.push('/admin-index/list-teachers')
+                router.push('/admin-index')
             } else if (response.data.data.role === "teacher") {
-                router.push('/teacher-index/dashboard')
+                router.push('/')
             }
             else {
                 router.push('/')

@@ -1,28 +1,28 @@
 <template>
-  <div class="form-container">
-    <p v-if="userName.length > 0">
-      <label for="Username">Username:</label>
-      <input type="text" v-model="userName[0].userName" disabled />
-    </p>
-    <!-- แสดงชื่อผู้ใช้ -->
-    <form @submit.prevent="handleSubmit">
-      <label for="newPassword">New Password:</label>
-      <input type="password" v-model="newPassword" id="newPassword" required />
-      <label for="confirmPassword">Confirm Password:</label>
-      <input
-        type="password"
-        v-model="confirmPassword"
-        id="confirmPassword"
-        required
-      />
-      <!-- แสดง input hidden ถ้าใช้การรีเซ็ตรหัสผ่านจาก URL -->
-      <input v-if="isReset" type="hidden" v-model="idCard" />
-      <button type="submit">Reset Password</button>
-    </form>
+  <div class="reset-password-container">
+    <div class="form-wrapper">
+      <p v-if="userName.length > 0">
+        <label for="Username">Username:</label>
+        <input type="text" v-model="userName[0].userName" disabled class="full-width-input" />
+      </p>
+      <form @submit.prevent="handleSubmit" class="styled-form">
+        <h2>Reset Your Password</h2>
+        <div class="input-group">
+          <label for="newPassword">New Password:</label>
+          <input type="password" v-model="newPassword" id="newPassword" required class="full-width-input" />
+        </div>
+        <div class="input-group">
+          <label for="confirmPassword">Confirm Password:</label>
+          <input type="password" v-model="confirmPassword" id="confirmPassword" required class="full-width-input" />
+        </div>
+        <input v-if="isReset" type="hidden" v-model="idCard" />
+        <button type="submit" class="submit-button">Reset Password</button>
+      </form>
+    </div>
   </div>
 </template>
-  
-  <script setup>
+
+<script setup>
 import { ref, onMounted } from "vue";
 import axios from "axios";
 import config from "../../../config";
@@ -105,7 +105,70 @@ const handleSubmit = async () => {
   }
 };
 </script>
-  
+
 <style scoped>
-@import url("https://fonts.googleapis.com/css2?family=TH+Sarabun+New:wght@400;700&display=swap");
+.reset-password-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #f0f4f8;
+}
+
+.form-wrapper {
+  background: #ffffff;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+  max-width: 400px;
+  width: 100%;
+}
+
+.styled-form h2 {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  font-size: 1.5rem;
+  color: #333;
+}
+
+.input-group {
+  margin-bottom: 1.5rem;
+}
+
+.input-group label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  color: #555;
+}
+
+.full-width-input {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 1rem;
+  transition: border-color 0.3s;
+}
+
+.full-width-input:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+.submit-button {
+  width: 100%;
+  padding: 0.75rem;
+  background-color: #007bff;
+  color: #ffffff;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.submit-button:hover {
+  background-color: #0056b3;
+}
 </style>

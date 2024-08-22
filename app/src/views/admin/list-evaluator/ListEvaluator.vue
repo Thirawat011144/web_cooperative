@@ -17,11 +17,12 @@
                             <td>{{ index + 1 }}</td>
                             <td>{{ user.firstName }} {{ user.lastName }}</td>
                             <td>{{ user.evaluatorStatus }}</td>
-                            <td>
+                            <td style="display: flex;">
                                 <select @change="(e) => handleChangRole(user, e)" v-model="user.statusStart"
-                                    class="w-100" style="border-color: seashell;">
+                                    class="w-100" style="border-color: black; border-radius: 3px ">
                                     <option v-for="roleItem in role" :key="roleItem">{{ roleItem }}</option>
                                 </select>
+                                <button @click="deleteUser(user.id)" class="btn btn-danger btn-sm ml-2">ลบ</button>
                             </td>
                         </tr>
                     </tbody>
@@ -77,6 +78,38 @@ const updateUserRole = async (user) => {
         });
     }
 };
+
+const deleteUser = async (id) => {
+    try {
+        const confirmation = await Swal.fire({
+            title: "คุณแน่ใจหรือไม่?",
+            text: "คุณต้องการลบผู้ประเมินใช่หรือไม่?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'ใช่, ลบเลย!',
+            cancelButtonText: 'ยกเลิก'
+        });
+
+        if (confirmation.isConfirmed) {
+            await axios.delete(`${config.api_path}/evaluation/${id}`);
+            users.value = users.value.filter(user => user.id !== id); // อัปเดตตารางหลังจากลบ
+            Swal.fire({
+                title: "Deleted",
+                text: "ลบข้อมูลผู้ใข้งานเรียบร้อย.",
+                icon: "success"
+            });
+        }
+    } catch (error) {
+        Swal.fire({
+            title: "Error",
+            text: "ไม่สามารถลบได้",
+            icon: "error"
+        });
+    }
+};
+
 
 onMounted(() => {
     fetchData();

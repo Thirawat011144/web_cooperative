@@ -17,12 +17,14 @@
                             <td>{{ index + 1 }}</td>
                             <td>{{ user.firstName }} {{ user.lastName }}</td>
                             <td>{{ user.branch }}</td>
-                            <td>
+                            <td style="display: flex; align-items: center;">
                                 <select @change="(e) => handleChangRole(user, e)" v-model="user.role" class="w-100"
-                                    style="border-color: seashell;">
+                                    style="border-color:black ; border-radius: 3px">
                                     <option v-for="roleItem in role" :key="roleItem">{{ roleItem }}</option>
                                 </select>
+                                <button @click="deleteUser(user.id)" class="btn btn-danger btn-sm ml-2">ลบ</button>
                             </td>
+
                         </tr>
                     </tbody>
                 </table>
@@ -73,6 +75,37 @@ const updateUserRole = async (user) => {
         Swal.fire({
             title: "Error",
             text: "Failed to update user role",
+            icon: "error"
+        });
+    }
+};
+
+const deleteUser = async (id) => {
+    try {
+        const confirmation = await Swal.fire({
+            title: "คุณแน่ใจหรือไม่?",
+            text: "คุณต้องการลบผู้ใช้งานนี้หรือไม่?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'ใช่, ลบเลย!',
+            cancelButtonText: 'ยกเลิก'
+        });
+
+        if (confirmation.isConfirmed) {
+            await axios.delete(`${config.api_path}/users/${id}`);
+            users.value = users.value.filter(user => user.id !== id); // อัปเดตตารางหลังจากลบ
+            Swal.fire({
+                title: "Deleted",
+                text: "ลบข้อมูลเรียบร้อยแล้ว",
+                icon: "success"
+            });
+        }
+    } catch (error) {
+        Swal.fire({
+            title: "Error",
+            text: "ไม่สามารถลบข้อมูลได้",
             icon: "error"
         });
     }

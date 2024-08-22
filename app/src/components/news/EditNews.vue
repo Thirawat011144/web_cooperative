@@ -9,20 +9,23 @@
             <input v-model="news.title" type="text" id="title" class="form-control" required>
           </div>
           <div class="mb-3">
-            <label for="detail" class="form-label">Link</label>
-            <input v-model="news.detail" type="text" id="detail" class="form-control" >
+            <label for="detail" class="form-label">รายละเอียด</label>
+            <input v-model="news.detail" type="text" id="detail" class="form-control">
           </div>
           <div class="mb-3">
             <label for="pdfFile" class="form-label">Upload PDF</label>
-            <input @change="handleFileUpload('pdfFile', $event)" type="file" id="pdfFile" class="form-control" accept=".pdf">
+            <input @change="handleFileUpload('pdfFile', $event)" type="file" id="pdfFile" class="form-control"
+              accept=".pdf">
           </div>
           <div class="mb-3">
             <label for="docFile" class="form-label">Upload DOC</label>
-            <input @change="handleFileUpload('docFile', $event)" type="file" id="docFile" class="form-control" accept=".doc,.docx">
+            <input @change="handleFileUpload('docFile', $event)" type="file" id="docFile" class="form-control"
+              accept=".doc,.docx">
           </div>
           <div class="mb-3">
             <label for="imageFile" class="form-label">Upload Image</label>
-            <input @change="handleFileUpload('imageFile', $event)" type="file" id="imageFile" class="form-control" accept="image/*">
+            <input @change="handleFileUpload('imageFile', $event)" type="file" id="imageFile" class="form-control"
+              accept="image/*">
           </div>
           <button type="submit" class="btn btn-primary">แก้ไข</button>
         </form>

@@ -5,7 +5,7 @@ import information from '../../components/teacher/information.vue'
 import SearchTeacher from '../../views/teacher/SearchTeacher.vue'
 import Companies from '../../views/teacher/Companies.vue'
 import CollegeTeacher from '../../views/teacher/College.vue'
-import Dashboard from '../../views/teacher/Dashboard.vue'
+import Dashboard from '../../views/teacher/Dashboard/Dashboard.vue'
 
 import StdSuccessT from '../../views/teacher/list-student/StdSuccessT.vue'
 

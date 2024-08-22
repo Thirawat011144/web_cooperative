@@ -5,21 +5,13 @@
       <div class="footer-container">
         <div class="logo-section">
           <!-- <img src="../../assets//img/rmuti3.png" alt="Ridgeview Middle School Logo" /> -->
-          <span class="fs-6"
-            >Rajamangala University of Technology Isan Khonkaen Campus</span
-          >
-          <span class="mt-1"
-            >มหาวิทยาลัยเทคโนโลยีราชมงคลอีสาน วิทยาเขตขอนแก่น</span
-          >
+          <span class="fs-6">Rajamangala University of Technology Isan Khonkaen Campus</span>
+          <span class="mt-1">มหาวิทยาลัยเทคโนโลยีราชมงคลอีสาน วิทยาเขตขอนแก่น</span>
           <span style="font-size: 15px" class="m-3">ติดต่อมหาวิทยาลัย</span>
-          <span style="font-size: 12px" class="fw-lighter"
-            >150 ถ.ศรีจันทร์ อ.เมือง จ.ขอนแก่น 40000 โทรศัพท์ 043-283703
-            (ฝ่ายบริหารงานทั่วไป)</span
-          >
-          <span style="font-size: 12px" class="fw-lighter mt-1"
-            >043-283704 (งานบริการการศึกษา) แฟ็กซ์ 043-234756
-            www.fte.rmuti.ac.th</span
-          >
+          <span style="font-size: 12px" class="fw-lighter">150 ถ.ศรีจันทร์ อ.เมือง จ.ขอนแก่น 40000 โทรศัพท์ 043-283703
+            (ฝ่ายบริหารงานทั่วไป)</span>
+          <span style="font-size: 12px" class="fw-lighter mt-1">043-283704 (งานบริการการศึกษา) แฟ็กซ์ 043-234756
+            www.fte.rmuti.ac.th</span>
         </div>
         <div class="footer-columns">
           <div class="footer-column">
@@ -28,7 +20,7 @@
         </div>
       </div>
       <div class="footer-bottom">
-        <div class="social-links">
+        <!-- <div class="social-links">
           <a href="https://facebook.com"
             ><i class="fa-brands fa-facebook"></i
           ></a>
@@ -37,8 +29,8 @@
           ></a>
           <a href="https://instagram.com"><i class="fa-brands fa-line"></i></a>
           <a href="https://youtube.com"><i class="fa-solid fa-x"></i></a>
-        </div>
-        <p>
+        </div> -->
+        <p style="margin: 0 auto;">
           คณะครุศาสตร์อุตสาหกรรม มหาวิทยาลัยเทคโนโลยีราชมงคลอีสาน
           วิทยาเขตขอนแก่น
         </p>

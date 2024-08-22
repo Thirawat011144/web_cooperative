@@ -5,7 +5,7 @@ import config from '../../../config'
 
 const getUserName = computed(() => {
     const firstName = localStorage.getItem(config.firstName_name);
-    if(!firstName) return '';
+    if (!firstName) return '';
     return firstName.charAt(0).toUpperCase() + firstName.slice(1);
 })
 
@@ -15,17 +15,19 @@ const getUserName = computed(() => {
     <!-- Main Sidebar Container -->
     <aside class="main-sidebar bg-secondary sidebar-dark-primary elevation-4">
         <!-- Brand Logo -->
-        <a href="index3.html" class="brand-link">
-            <img src="@/assets/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3"
-                style="opacity: .8">
-            <span class="brand-text font-weight-light">RMUTI</span>
+        <a class="brand-link">
+            <!-- <img src="@/assets/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3"
+                style="opacity: .8"> -->
+            <span class="brand-text font-weight-light ms-2">RMUTI</span>
         </a>
 
         <!-- Sidebar -->
         <div class="sidebar">
             <div class="user-panel mt-3 pb-3 mb-3 d-flex">
                 <div class="info">
-                    <router-link to="/teacher-index"> <a href="#" class="d-block fw-bold">อาจารย์: {{ getUserName }}</a>
+                    <router-link to="/teacher-index/information"> <a href="#" class="d-block fw-bold">คุณ: {{
+                        getUserName
+                            }}</a>
                     </router-link>
                 </div>
             </div>
@@ -49,6 +51,12 @@ const getUserName = computed(() => {
                         <router-link to="/teacher-index/information" class="nav-link">
                             <i class="fa-solid fa-user"></i> &nbsp;
                             <p>ข้อมูลส่วนตัว</p>
+                        </router-link>
+                    </li>
+                    <li class="nav-item">
+                        <router-link to="/teacher-index/dashboard" class="nav-link">
+                            <i class="fa-solid fa-chart-column"></i> &nbsp;
+                            <p>DashBoard</p>
                         </router-link>
                     </li>
                     <li class="nav-item">
@@ -99,12 +107,7 @@ const getUserName = computed(() => {
                             <p>ข้อมูลสถานที่ฝึกสอน</p>
                         </router-link>
                     </li>
-                    <li class="nav-item">
-                        <router-link to="/teacher-index/dashboard" class="nav-link">
-                            <i class="fa-solid fa-dashboard"></i> &nbsp;
-                            <p>DashBoard</p>
-                        </router-link>
-                    </li>
+
                     <!-- <li class="nav-item">
                         <router-link to="/home-evaluation" class="nav-link">
                             <i class="fa-solid fa-dashboard"></i> &nbsp;

@@ -10,41 +10,25 @@
           </router-link>
         </div>
         <div class="content">
-          <img
-            v-if="announcement.imageFile"
-            :src="getFileTypeUrl(announcement.imageFile)"
-            alt="Announcement Image"
-            class="announcement-image"
-          />
-          <img
-            v-else
-            class="announcement-image"
-            src="../../assets/img/917.png"
-          />
+          <img v-if="announcement.imageFile" :src="getFileTypeUrl(announcement.imageFile)" alt="Announcement Image"
+            class="announcement-image" />
+          <img v-else class="announcement-image" src="../../assets/img/917.png" />
+          <!-- <h5>{{ announcement.title }}</h5> -->
           <div class="announcement-details">
+
             <div v-html="announcement.detail"></div>
-            <a
-              v-if="announcement.pdfFile"
-              :href="getFileTypeUrl(announcement.pdfFile)"
-              target="_blank"
-              class="news-link"
-              >ดาวน์โหลด PDF</a
-            >
-            <a
-              v-if="announcement.docFile"
-              :href="getFileTypeUrl(announcement.docFile)"
-              target="_blank"
-              class="news-link"
-              >ดาวน์โหลด DOC</a
-            >
+
           </div>
+          <a v-if="announcement.pdfFile" :href="getFileTypeUrl(announcement.pdfFile)" target="_blank"
+            class="news-link">ดาวน์โหลดเอกสารที่แนบมากับไฟล์ [PDF]</a>
+          <a v-if="announcement.docFile" :href="getFileTypeUrl(announcement.docFile)" target="_blank"
+            class="news-link">ดาวน์โหลดเอกสารที่แนบมากับไฟล์ [Doc]</a>
         </div>
       </div>
     </div>
     <Footer />
   </div>
 </template>
-
 <script setup>
 import { ref, onMounted } from "vue";
 import { useRoute } from "vue-router";
@@ -120,7 +104,8 @@ onMounted(() => {
 .header {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
+  /* จัดตำแหน่งปุ่มที่มุมบนขวา */
   padding: 10px 20px;
   background-color: #fff;
   border-bottom: 1px solid #ddd;
@@ -129,6 +114,13 @@ onMounted(() => {
 .header h1 {
   margin: 0;
   font-size: 24px;
+  flex-grow: 1;
+  white-space: normal;
+  /* อนุญาตให้ข้อความห่อบรรทัด */
+  word-wrap: break-word;
+  /* อนุญาตให้ห่อคำหากคำยาวเกินไป */
+  overflow: visible;
+  /* ป้องกันการซ่อนข้อความ */
 }
 
 .post-news-button {
@@ -138,18 +130,33 @@ onMounted(() => {
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  width: 200px; /* กำหนดความกว้างคงที่ */
-}
-
-.content {
-  padding: 20px;
+  width: 200px;
+  margin-left: 20px;
+  /* เพิ่มระยะห่างระหว่างหัวข้อและปุ่ม */
+  flex-shrink: 0;
+  /* ป้องกันไม่ให้ปุ่มถูกบีบ */
 }
 
 .announcement-details {
   margin-top: 20px;
   font-size: 16px;
   line-height: 1.6;
+  text-indent: 2em;
+  /* กำหนดย่อหน้า 2em */
+  /* text-align: center; */
+  /* จัดกลางเนื้อหา */
 }
+
+
+.content {
+  padding: 20px;
+}
+
+/* .announcement-details {
+  margin-top: 20px;
+  font-size: 16px;
+  line-height: 1.6;
+} */
 
 .announcement-image {
   margin-top: 20px;
@@ -159,7 +166,7 @@ onMounted(() => {
 }
 
 .news-link {
-  border: 1px solid black;
+  /* border: 1px solid black; */
   display: block;
   margin-top: 10px;
   text-decoration: none;

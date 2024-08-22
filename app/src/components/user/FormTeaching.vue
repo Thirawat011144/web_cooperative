@@ -45,8 +45,8 @@ const fetchProvinces = async () => {
         const response = await axios.get(`${config.api_path}/practice-teaching`);
         const locations = response.data.map(item => item.location);
         provinces.value = [...new Set(locations.map(location => {
-            const match = location.match(/จังหวัด(.+?)$/);
-            return match ? match[1].trim() : '';
+            const match = location.match(/จังหวัด[^\d]+/);
+            return match ? match[0].trim() : ''; // ใช้ match[0] เพื่อดึงข้อมูลที่จับได้
         }))]; // ลบข้อมูลที่ซ้ำออกโดยใช้ Set
         console.log('Provinces fetched:', provinces.value);
     } catch (error) {

@@ -25,6 +25,7 @@
 </template>
 
 <script setup>
+import { onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import Navbar from "../../components/admin/Navbar.vue";
 import Sidebar from "../../components/admin/Sidebar.vue";
@@ -34,6 +35,14 @@ const route = useRoute();
 const getButtonClass = (path) => {
   return route.path === path ? 'btn-outline-secondary' : 'btn-secondary';
 };
+
+onMounted(() => {
+  // เช็คว่าหน้านี้ถูกรีเฟรชแล้วหรือยัง
+  if (!window.location.hash) {
+    window.location.hash = 'reloaded';
+    window.location.reload();
+  }
+});
 </script>
 
 <style scoped>

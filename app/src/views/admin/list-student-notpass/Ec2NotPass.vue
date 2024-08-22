@@ -1,6 +1,6 @@
 <script setup>
 import axios from "axios";
-import { ref, onMounted, computed } from 'vue';
+import { ref, onMounted, computed, watch } from 'vue';
 import config from "../../../../config";
 import Swal from 'sweetalert2';
 import { useRoute, useRouter } from 'vue-router';
@@ -8,6 +8,7 @@ import { RouterLink, RouterView } from 'vue-router';
 import * as XLSX from 'xlsx'; // import library
 import { makeModalDraggable } from "@/utils/draggable";
 import { downloadExcel } from "@/utils/downloadBeforeEvaluation";
+import { downloadExcel as downloadInternship } from "@/utils/downloadInternship";
 
 // const route = useRoute();
 // const router = useRouter();
@@ -16,6 +17,9 @@ const users = ref([]); // เปลี่ยน {} เป็น []
 const isModalVisible = ref(false);
 const modalData = ref(null);
 const branch = localStorage.getItem(config.branch)
+const changeStatus = ref('ไม่ผ่าน'); // ตั้งค่าเริ่มต้น
+const evaluationData = ref([]);
+const universityEvaluationData = ref([]);
 // const userData = JSON.parse(localStorage.getItem('userData') || '{}');
 // let branch = null
 
@@ -28,8 +32,20 @@ const branch = localStorage.getItem(config.branch)
 
 const fetchData = async () => {
     try {
-        const response = await axios.get(`${config.api_path}/users`);
-        users.value = response.data.filter(user => (user.status === "ไม่อนุมัติ" || user.status === "ไม่ผ่าน") && user.year === "ป.ตรี ปีที่ 2" && user.branch === branch);
+        const [userResponse, evaluationResponse, universityEvaluationResponse] = await Promise.all([
+            axios.get(`${config.api_path}/users`),
+            axios.get(`${config.api_path}/data-evaluation-internship`),
+            axios.get(`${config.api_path}/data-evaluation-internship-university`) // เพิ่มการดึงข้อมูลจาก API
+        ]);
+
+        // กรองข้อมูลจาก userResponse ตามเงื่อนไขที่ต้องการ
+        users.value = userResponse.data.filter(user => user.status === changeStatus.value && user.year === "ป.ตรี ปีที่ 2" && user.branch === branch);
+
+        // คุณสามารถจัดเก็บข้อมูลจาก API อื่นๆ ตามที่คุณต้องการ
+        evaluationData.value = evaluationResponse.data;
+        universityEvaluationData.value = universityEvaluationResponse.data;
+
+        console.log(users.value); // ตรวจสอบผลลัพธ์
     } catch (error) {
         Swal.fire({
             title: "error",
@@ -38,6 +54,7 @@ const fetchData = async () => {
         });
     }
 };
+
 
 // modal
 const showModal = async (id) => {
@@ -147,6 +164,15 @@ const sortedUsers = computed(() => {
 //     XLSX.writeFile(workbook, 'students.xlsx');
 // };
 
+const exportExcel = () => {
+    downloadInternship(sortedUsers, evaluationData);
+};
+
+
+watch(changeStatus, () => {
+    fetchData(); // รีเฟรชข้อมูลเมื่อสถานะถูกเปลี่ยน
+});
+
 onMounted(() => {
     fetchData();
 });
@@ -169,9 +195,20 @@ onMounted(() => {
                         <router-link :to="`/admin-index/Ec2-notpass`"> <button
                                 class="btn btn-danger m-1">ไม่ผ่าน</button>
                         </router-link>
-                        <button class="btn btn-info m-1" @click="downloadExcel('student',sortedUsers)">ดาวน์โหลด Excel</button>
+                        <button class="btn btn-info m-1" @click="downloadExcel('student', sortedUsers)">ดาวน์โหลด
+                            Excel</button>
+                        <button class="btn btn-info m-1" @click="exportExcel">ดาวน์โหลด
+                            Excel</button>
+                    </div>
+                    <div class="d-flex align-items-center mt-2">
+                        <p for="" class="me-2 nowrap-label">รายชื่อนักศึกษา</p>
+                        <select style="width: 120px" class="form-select" v-model="changeStatus">
+                            <option value="ไม่ผ่าน">ไม่ผ่าน</option>
+                            <option value="ไม่อนุมัติ">ไม่อนุมัติ</option>
+                        </select>
                     </div>
                 </div>
+
                 <table class="table">
                     <thead>
                         <tr>

@@ -12,19 +12,19 @@
         <div class="content">
           <div class="announcement-listing" v-for="announcement in paginatedAnnouncements" :key="announcement.id">
             <div class="announcement-header">
-              <h6>{{ announcement.title }}</h6>
+              <h5>{{ announcement.title }}</h5>
               <span class="announcement-date">
                 <span class="icon">🕒</span>{{ formatDate(announcement.createdAt) }}
               </span>
             </div>
-            <div class="announcement-details mt-4">
-              <router-link to="/news-detail/:id">
-                <p><router-link :to="`/news-detail/${announcement.id}`">
-                    <p v-if="announcement.title">ดูรายละเอียด</p>
-                  </router-link></p>
+            <div class="announcement-preview mt-2">
+              {{ getPreviewText(announcement.detail) }}
+            </div>
+            <div class="announcement-details mt-2">
+              <router-link :to="`/news-detail/${announcement.id}`">
+                <span class="details-link">ดูรายละเอียด</span>
               </router-link>
             </div>
-   
           </div>
         </div>
         <div class="pagination">
@@ -47,7 +47,7 @@ import config from '../../../config';
 
 const announcements = ref([]);
 const currentPage = ref(1);
-const perPage = ref(4); // จำนวนข่าวประชาสัมพันธ์ต่อหน้า
+const perPage = ref(4);
 
 const fetchAnnouncements = async () => {
   try {
@@ -63,11 +63,18 @@ const formatDate = (dateString) => {
   return new Date(dateString).toLocaleDateString('th-TH', options);
 };
 
+const getPreviewText = (content) => {
+  // ใช้ Regular Expression ในการลบ HTML tags เพื่อให้ได้ข้อความธรรมดา
+  const plainText = content.replace(/<\/?[^>]+(>|$)/g, "");
 
-const getFileTypeUrl = (fileUrl) => {
-  return fileUrl ? `${config.api_path}/uploads/${fileUrl}` : '#';
+  // ตรวจสอบว่าข้อความธรรมดาที่ได้มาว่างหรือไม่
+  if (!plainText.trim()) {
+    return "[..]"; // ข้อความแสดงเมื่อไม่มีเนื้อหา
+  }
+
+  // ตัดข้อความให้ยาวไม่เกิน 100 ตัวอักษร
+  return plainText.length > 80 ? plainText.substring(0, 80) + '[..]' : plainText;
 };
-
 
 const paginatedAnnouncements = computed(() => {
   const start = (currentPage.value - 1) * perPage.value;
@@ -93,6 +100,10 @@ onMounted(() => {
   fetchAnnouncements();
 });
 </script>
+
+<style scoped>
+/* Your existing styles */
+</style>
 
 <style scoped>
 .bg {
@@ -141,6 +152,7 @@ onMounted(() => {
   padding: 10px 20px;
   background-color: #fff;
   border-bottom: 1px solid #ddd;
+
 }
 
 .header h1 {
@@ -175,6 +187,28 @@ onMounted(() => {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-wrap: wrap;
+  /* เพิ่มเพื่อให้แถวรองรับการห่อ */
+}
+
+.announcement-header h5 {
+  margin: 0;
+  flex: 1;
+  /* ให้พื้นที่ที่เหลือแก่ชื่อข่าว */
+  margin-right: 10px;
+  /* เพิ่มระยะห่างระหว่างชื่อข่าวและเวลาที่แสดง */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.5;
+  /* เพิ่ม line-height */
+}
+
+.announcement-date {
+  flex-shrink: 0;
+  /* ป้องกันไม่ให้วันที่หดตัวเมื่อชื่อข่าวยาว */
+  color: #555;
+  white-space: nowrap;
 }
 
 .announcement-date {

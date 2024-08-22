@@ -6,24 +6,36 @@ import Swal from 'sweetalert2';
 import { useRoute, useRouter } from 'vue-router';
 import * as XLSX from 'xlsx';
 import { makeModalDraggable } from "@/utils/draggable";
-import { downloadExcel } from "@/utils/downloadBeforeEvaluation";
+import { downloadExcel, downloadExcelHight } from "@/utils/downloadBeforeEvaluation";
 
 const users = ref([]);
 const isModalVisible = ref(false);
 const modalData = ref(null);
 const userData = JSON.parse(localStorage.getItem('userData') || '{}');
 let branch = null;
+const changYears = ref(null);  // ใช้รับค่าชั้นปีที่เลือก
 
 if (userData.branch) {
     branch = userData.branch;
 } else {
     console.log('No userData found in localStorage');
 }
+
+// ฟังก์ชันที่รับค่าชั้นปีจากปุ่มที่ถูกคลิก
+const changYear = (year) => {
+    changYears.value = year;  // กำหนดค่าชั้นปี
+    fetchData();  // เรียกใช้ฟังก์ชัน fetchData เพื่อกรองข้อมูลใหม่ตามชั้นปี
+}
+
 const fetchData = async () => {
     try {
         const response = await axios.get(`${config.api_path}/users`);
-        users.value = response.data.filter(user => user.status === "เสร็จสิ้น" && user.branch === branch);
-        console.log(branch)
+        users.value = response.data.filter(user =>
+            user.status === "เสร็จสิ้น" &&
+            user.branch === branch &&
+            user.year === changYears.value  // กรองตามชั้นปีที่เลือก
+        );
+        console.log(users.value)
     } catch (error) {
         Swal.fire({
             title: "error",
@@ -93,27 +105,8 @@ const sortedUsers = computed(() => {
     return users.value.slice().sort((a, b) => a.id - b.id);
 });
 
-// const downloadExcel = () => {
-//   const data = sortedUsers.value.map(user => ({
-//     'รหัสนักศึกษา': user.studentID,
-//     'ชื่อ': user.firstName,
-//     'นามสกุล': user.lastName,
-//     'สาขา': user.branch,
-//     'ชั้นปี': user.year,
-//     'สถานะ': user.status,
-//     'เบอร์โทรศัพท์': user.phoneNumber,
-//     'อีเมล์': user.email,
-//     'สถานที่ฝึกประสบการณ์': user.companyDetails?.companyName || 'ไม่มีข้อมูล'
-//   }));
-
-//   const worksheet = XLSX.utils.json_to_sheet(data);
-//   const workbook = XLSX.utils.book_new();
-//   XLSX.utils.book_append_sheet(workbook, worksheet, "Students");
-//   XLSX.writeFile(workbook, 'students.xlsx');
-// };
-
 onMounted(() => {
-    fetchData();
+    changYear('ปวช 3'); // เริ่มต้นด้วยการแสดงข้อมูล ปวช 3
 });
 </script>
 
@@ -123,25 +116,19 @@ onMounted(() => {
             <div class="card-header">
                 <div class="card-title mb-2">
                     <div>
-                        <!-- <router-link :to="`/admin-index/cr2-req`">
-                            <button class="btn btn-primary m-1">ขออนุมัติ</button>
-                        </router-link>
-                        <router-link :to="`/admin-index/vcr2-approved`">
-                            <button class="btn btn-success m-1">อนุมัติ</button>
-                        </router-link>
-                        <router-link :to="`/admin-index/cr2-active`">
-                            <button class="btn btn-warning m-1">เข้ารับการฝึก</button>
-                        </router-link>
-                        <router-link :to="`/admin-index/cr2-success`">
-                            <button class="btn btn-success m-1">ผ่าน</button>
-                        </router-link>
-                        <router-link :to="`/admin-index/cr2-notpass`">
-                            <button class="btn btn-danger m-1">ไม่ผ่าน</button>
-                        </router-link> -->
-                        <button class="btn btn-info m-1" @click="downloadExcel('student', sortedUsers)">ดาวน์โหลด
+                        <button @click="changYear('ปวช 3')" class="btn btn-primary ms-2">ปวช 3</button>
+                        <button @click="changYear('ปวส 2')" class="btn btn-primary ms-2">ปวส 2</button>
+                        <button @click="changYear('ป.ตรี ปีที่ 2')" class="btn btn-primary ms-2">ป.ตรี ปีที่ 2</button>
+                        <button @click="changYear('ป.ตรี ปีที่ 4')" class="btn btn-primary ms-2">ป.ตรี ปีที่ 4</button>
+                        <button class="btn btn-info m-2" v-if="changYears === 'ป.ตรี ปีที่ 4'"
+                            @click="downloadExcelHight('student', sortedUsers)">ดาวน์โหลด
+                            Excel</button>
+                        <button class="btn btn-info m-2" v-if="changYears !== 'ป.ตรี ปีที่ 4'"
+                            @click="downloadExcel('student', sortedUsers)">ดาวน์โหลด
                             Excel</button>
                     </div>
                 </div>
+                <!-- ตารางแสดงข้อมูล -->
                 <table class="table">
                     <thead>
                         <tr>
@@ -179,6 +166,7 @@ onMounted(() => {
                 </table>
             </div>
         </div>
+        <!-- Modal -->
         <div v-if="isModalVisible" class="modal fade show" tabindex="-1" style="display: block;">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -231,6 +219,7 @@ onMounted(() => {
         </div>
     </section>
 </template>
+
 
 <style scoped>
 @import url('https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900&family=Sarabun:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800&display=swap');

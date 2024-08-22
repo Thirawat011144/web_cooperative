@@ -2,11 +2,12 @@
 import { ref, onMounted } from "vue";
 import axios from "axios";
 import Swal from "sweetalert2";
+import ExcelJS from "exceljs";
 import { jsPDF } from "jspdf";
 import "jspdf-autotable";
 import { saveAs } from "file-saver";
 import config from "../../../config";
-import THSarabunNewFont from "../../../THSarabunNew-normal"; // ไฟล์ฟอนต์ Base64 ที่คุณแปลงแล้ว
+import { createWorksheet } from "@/utils/download"; // Assuming the createWorksheet function is in this file
 
 // สร้างตัวแปรเพื่อเก็บข้อมูล
 const companies = ref([]);
@@ -30,6 +31,7 @@ const fetchData = async () => {
 
     // อัพเดตตัวแปร companies ด้วยข้อมูลที่ไม่ซ้ำกัน
     companies.value = Array.from(uniqueCompanies.values());
+    console.log(companies.value)
   } catch (error) {
     Swal.fire({
       title: "Error",
@@ -37,6 +39,43 @@ const fetchData = async () => {
       icon: "error",
     });
   }
+};
+
+
+// ฟังก์ชันสำหรับการดาวน์โหลดข้อมูลเป็นไฟล์ Excel
+const downloadExcel = () => {
+  const workbook = new ExcelJS.Workbook();
+  const columns = [
+    { header: "ลำดับ", key: "index", width: 10 },
+    // { header: "ชื่อ-นามสกุล", key: "fullName", width: 30 },
+    { header: "ชื่อวิทยาลัย", key: "companyName", width: 30 },
+    { header: "ที่อยู่", key: "companyAddress", width: 30 },
+    { header: "เบอร์โทรศัพท์", key: "companyPhone", width: 30 },
+  ];
+
+  const worksheet = createWorksheet(workbook, "ข้อมูลวิทยาลัย", columns);
+
+  // เติมข้อมูลลงใน worksheet
+  companies.value.forEach((company, index) => {
+    const row = worksheet.addRow({
+      index: index + 1,
+      // fullName: `${college.userDetails.firstName} ${college.userDetails.lastName}`,
+      companyName: company.companyName,
+      companyAddress: company.companyAddress,
+      companyPhone: company.companyPhone
+    });
+
+    // ตั้งค่าแบบอักษรและการจัดตำแหน่งสำหรับแต่ละเซลล์ในแถวนี้
+    row.eachCell({ includeEmpty: true }, (cell) => {
+      cell.font = { name: 'TH Sarabun New', size: 16 }; // ตั้งค่าแบบอักษรเป็น TH Sarabun New
+      cell.alignment = { horizontal: 'center', vertical: 'middle' };
+    });
+  });
+
+  // สร้างไฟล์ Excel และบันทึก
+  workbook.xlsx.writeBuffer().then((buffer) => {
+    saveAs(new Blob([buffer]), "company_data.xlsx");
+  });
 };
 
 // เรียกใช้ฟังก์ชั่น fetchData เมื่อ component ถูกสร้างขึ้น
@@ -49,7 +88,12 @@ onMounted(() => {
   <div class="content mt-4">
     <div class="card">
       <div class="card-header">
-        <div class="card-title">ข้อมูลสถานประกอบการ</div>
+        <div class="card-title"
+          style="display: flex; justify-content: space-between; align-items: center;  width: 100%;">
+          <h2> ข้อมูลสถานประกอบการ </h2>
+          <button class="btn btn-secondary m-2" style="margin-left: auto" @click="downloadExcel">ดาวน์โหลดข้อมูล
+            📥</button>
+        </div>
         <!-- <button @click="downloadPDF">Download PDF</button>
                 <button @click="downloadCSV">Download CSV</button> -->
         <table class="table">
@@ -58,6 +102,7 @@ onMounted(() => {
               <th>ลำดับ</th>
               <!-- <th>ชื่อ-นามสกุล</th> -->
               <th>ชื่อสถานประกอบการ</th>
+              <th>ที่อยู่</th>
             </tr>
           </thead>
           <tbody>
@@ -68,6 +113,7 @@ onMounted(() => {
                 {{ company.userDetails.lastName }}
               </td> -->
               <td>{{ company.companyName }}</td>
+              <td>{{ company.companyAddress }}</td>
             </tr>
           </tbody>
         </table>
