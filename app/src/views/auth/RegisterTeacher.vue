@@ -13,7 +13,8 @@
                                         <div class="row">
                                             <div class="col-md-4 mb-4">
                                                 <div class="form-outline">
-                                                    <label class="form-label" for="form3ExamplePrefix">คำนำหน้า</label>
+                                                    <label class="form-label" for="form3ExamplePrefix">คำนำหน้า <span
+                                                            class="text-red">*</span></label>
                                                     <select id="form3ExamplePrefix" class="form-control-lg"
                                                         v-model="prefix" required>
                                                         <!-- <option value="" disabled selected>-</option> -->
@@ -31,7 +32,8 @@
                                             </div>
                                             <div class="col-md-4 mb-4">
                                                 <div class="form-outline">
-                                                    <label class="form-label" for="form3Example1m">ชื่อ</label>
+                                                    <label class="form-label" for="form3Example1m">ชื่อ <span
+                                                            class="text-red">*</span></label>
                                                     <input type="text" id="form3Example1m"
                                                         class="form-control form-control-lg" v-model="firstName"
                                                         required />
@@ -39,7 +41,8 @@
                                             </div>
                                             <div class="col-md-4 mb-4">
                                                 <div class="form-outline">
-                                                    <label class="form-label" for="form3Example1n">นามสกุล</label>
+                                                    <label class="form-label" for="form3Example1n">นามสกุล
+                                                        <span>*</span></label>
                                                     <input type="text" id="form3Example1n"
                                                         class="form-control form-control-lg" v-model="lastName"
                                                         required />
@@ -50,7 +53,8 @@
                                         <div class="row">
                                             <div class="col-md-6 mb-4">
                                                 <div class="form-outline">
-                                                    <label class="form-label" for="form3Example1m1">ชื่อผู้ใช้</label>
+                                                    <label class="form-label" for="form3Example1m1">ชื่อผู้ใช้
+                                                        <span>*</span></label>
                                                     <input type="text" id="form3Example1m1"
                                                         class="form-control form-control-lg" v-model="userName"
                                                         required />
@@ -58,7 +62,8 @@
                                             </div>
                                             <div class="col-md-6 mb-4">
                                                 <div class="form-outline">
-                                                    <label class="form-label" for="form3Example1n1">รหัสผ่าน</label>
+                                                    <label class="form-label" for="form3Example1n1">รหัสผ่าน
+                                                        <span>*</span></label>
                                                     <input type="password" id="form3Example1n1"
                                                         class="form-control form-control-lg" v-model="password"
                                                         required />
@@ -67,19 +72,28 @@
                                         </div>
 
                                         <div class="form-outline mb-4">
-                                            <label class="form-label" for="form3Example8">เบอร์โทร</label>
-                                            <input type="tel" id="form3Example8" class="form-control form-control-lg"
-                                                v-model="phoneNumber" maxlength="10" pattern="[0-9]{10}" required />
+                                            <label class="form-label" for="form3Example8">เบอร์ติดต่อ
+                                                <span>*</span></label>
+                                            <input type="text" id="form3Example8" class="form-control form-control-lg"
+                                                v-model="phoneNumber" @input="validatePhoneNumber" required
+                                                minlength="10" maxlength="10" placeholder="Example 0987654321" />
+                                            <small v-if="phoneNumberWarning" class="text-danger">{{ phoneNumberWarning
+                                                }}</small>
                                         </div>
 
                                         <div class="form-outline mb-4">
-                                            <label class="form-label" for="form3Example9">เลขบัตรประชาชน</label>
+                                            <label class="form-label" for="form3Example9">เลขบัตรประชาชน
+                                                <span>*</span></label>
                                             <input type="text" id="form3Example9" class="form-control form-control-lg"
-                                                v-model="idCard" maxlength="13" pattern="[0-9]{13}" required />
+                                                v-model="idCard" maxlength="13" @input="validateIdCard"
+                                                pattern="[0-9]{13}" required
+                                                placeholder="กรุณาใส่เฉพาะตัวเลข 13 หลัก" />
+                                            <small v-if="idCardWarning" class="text-danger">{{ idCardWarning }}</small>
                                         </div>
 
+
                                         <div class="d-md-flex justify-content-start align-items-center mb-4 py-2">
-                                            <label class="mb-0 me-4">เพศ: </label>
+                                            <label class="mb-0 me-4">เพศ: <span>*</span> </label>
                                             <div class="form-check form-check-inline mb-0 me-4">
                                                 <input class="form-check-input" type="radio" name="inlineRadioOptions"
                                                     id="femaleGender" value="Female" v-model="gender" required />
@@ -93,7 +107,7 @@
                                         </div>
 
                                         <div class="row">
-                                            <label for="">สาขาวิชาที่ดูแล(สามารถเปลี่ยนได้)</label>
+                                            <label for="">สาขาวิชาที่ดูแล(สามารถเปลี่ยนได้) <span>*</span></label>
                                             <div class="col mb-4">
                                                 <select v-model="branch" class="form-select" required>
                                                     <option value="" disabled>-</option>
@@ -111,6 +125,33 @@
                                                         สาขาครุศาสตร์อุตสาหกรรมคอมพิวเตอร์</option>
                                                     <option value="สาขาครุศาสตร์อุตสาหการเชื่อมประกอบ">
                                                         สาขาครุศาสตร์อุตสาหการเชื่อมประกอบ</option>
+                                                    <option value="สาขาวิชาช่างโยธา">สาขาวิชาช่างโยธา</option>
+                                                    <option value="สาขาวิชาช่างก่อสร้าง">สาขาวิชาช่างก่อสร้าง</option>
+                                                    <option value="สาขาวิชาช่างเครื่องมือกลอัตโนมัติ">
+                                                        สาขาวิชาช่างเครื่องมือกลอัตโนมัติ</option>
+                                                    <option value="สาขาวิชาช่างยนต์">สาขาวิชาช่างยนต์</option>
+                                                    <option value="สาขาวิชาช่างกลเกษตร">สาขาวิชาช่างกลเกษตร</option>
+                                                    <option value="สาขาวิชาช่างกลโรงงาน">สาขาวิชาช่างกลโรงงาน</option>
+                                                    <option value="สาขาวิชาช่างท่อและประสาน">สาขาวิชาช่างท่อและประสาน
+                                                    </option>
+                                                    <option value="สาขาวิชาการออกแบบนวัตกรรมเครื่องจักรกล">
+                                                        สาขาวิชาการออกแบบนวัตกรรมเครื่องจักรกล
+                                                    </option>
+                                                    <option value="สาขาวิชาช่างอิเล็กทรอนิกส์">
+                                                        สาขาวิชาช่างอิเล็กทรอนิกส์</option>
+                                                    <option value="สาขาวิชาเทคโนโลยีคอมพิวเตอร์">
+                                                        สาขาวิชาเทคโนโลยีคอมพิวเตอร์</option>
+
+                                                    <!-- สาขาวิชาช่างก่อสร้าง (ซ้ำ) -->
+                                                    <option value="สาขาวิชาช่างไฟฟ้ากำลัง">สาขาวิชาช่างไฟฟ้ากำลัง
+                                                    </option>
+                                                    <!-- สาขาวิชาช่างยนต์ (ซ้ำ) -->
+                                                    <option value="สาขาวิชาเทคโนโลยีการเขียนแบบเครื่องกล">
+                                                        สาขาวิชาเทคโนโลยีการเขียนแบบเครื่องกล
+                                                    </option>
+                                                    <!-- สาขาวิชาช่างอิเล็กทรอนิกส์ (ซ้ำ) -->
+                                                    <option value="สาขาวิชาช่างเทคนิคคอมพิวเตอร์">
+                                                        สาขาวิชาช่างเทคนิคคอมพิวเตอร์</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -155,6 +196,35 @@ const phoneNumber = ref('');
 const idCard = ref('');  // เพิ่มตัวแปร idCard
 const gender = ref('');
 const branch = ref('');
+
+const phoneNumberWarning = ref('');
+const emailWarning = ref('');
+const idCardWarning = ref('')
+
+
+const validatePhoneNumber = () => {
+    const originalValue = phoneNumber.value;
+    phoneNumber.value = phoneNumber.value.replace(/[^0-9]/g, '');
+
+    if (originalValue !== phoneNumber.value) {
+        phoneNumberWarning.value = 'คุณสามารถใส่ได้เฉพาะตัวเลขเท่านั้น';
+    } else {
+        phoneNumberWarning.value = ''; // ล้างข้อความแจ้งเตือนหากไม่มีการเปลี่ยนแปลง
+    }
+};
+
+const validateIdCard = () => {
+    // ลบอักขระที่ไม่ใช่ตัวเลขออก
+    idCard.value = idCard.value.replace(/[^0-9]/g, '');
+
+    // ตรวจสอบความยาวของเลขบัตรประชาชน
+    if (idCard.value.length !== 13) {
+        idCardWarning.value = 'กรุณาใส่เลขบัตรประชาชนให้ครบ 13 หลัก';
+    } else {
+        idCardWarning.value = ''; // ล้างข้อความแจ้งเตือนหากรูปแบบถูกต้อง
+    }
+};
+
 
 const handleRegister = async () => {
     try {
@@ -258,5 +328,9 @@ const handleRegister = async () => {
 .btn-primary:hover {
     background-color: #0056b3;
     border-color: #0056b3;
+}
+
+span {
+    color: red;
 }
 </style>

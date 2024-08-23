@@ -27,17 +27,13 @@ const dataEvaluationInternshipForUniversity = require('./DataEvaluationInternshi
 const dataEvaluation = require('./DataEvaluation')
 
 // กำหนดความสัมพันธ์
-UsersModel.hasOne(CompaniesModel, { foreignKey: 'studentID', sourceKey: 'studentID', as: 'companyDetails' });
+UsersModel.hasOne(CompaniesModel, { foreignKey: 'studentID', sourceKey: 'studentID', as: 'companyDetails', onDelete: 'CASCADE' });
 CompaniesModel.belongsTo(UsersModel, { foreignKey: 'studentID', targetKey: 'studentID', as: 'userDetails' });
 
-UsersModel.hasOne(CollegesModel, { foreignKey: 'studentID', sourceKey: 'studentID', as: 'collegeDetails' });
+UsersModel.hasOne(CollegesModel, { foreignKey: 'studentID', sourceKey: 'studentID', as: 'collegeDetails', onDelete: 'CASCADE' });
 CollegesModel.belongsTo(UsersModel, { foreignKey: 'studentID', targetKey: 'studentID', as: 'userDetails' });
 
-UsersModel.hasMany(dataEvaluationInternshipModel, {
-    foreignKey: 'studentId', // ใช้ studentId ที่อยู่ใน dataEvaluationInternshipModel
-    sourceKey: 'studentID', // ใช้ studentID ที่อยู่ใน UsersModel
-    as: 'evaluationDetails'
-});
+UsersModel.hasMany(dataEvaluationInternshipModel, { foreignKey: 'studentId', sourceKey: 'studentID', as: 'evaluationDetails', onDelete: 'CASCADE' });
 
 dataEvaluationInternshipModel.belongsTo(UsersModel, {
     foreignKey: 'studentId', // ใช้ studentId ที่อยู่ใน dataEvaluationInternshipModel
@@ -45,11 +41,7 @@ dataEvaluationInternshipModel.belongsTo(UsersModel, {
     as: 'userDetails'
 });
 
-UsersModel.hasMany(dataEvaluationInternshipForUniversity, {
-    foreignKey: 'studentId', // ใช้ studentId ที่อยู่ใน dataEvaluationInternshipModel
-    sourceKey: 'studentID', // ใช้ studentID ที่อยู่ใน UsersModel
-    as: 'evaluationUniversityDetails'
-});
+UsersModel.hasMany(dataEvaluationInternshipForUniversity, { foreignKey: 'studentId', sourceKey: 'studentID', as: 'evaluationUniversityDetails', onDelete: 'CASCADE' });
 
 dataEvaluationInternshipForUniversity.belongsTo(UsersModel, {
     foreignKey: 'studentId', // ใช้ studentId ที่อยู่ใน dataEvaluationInternshipModel
@@ -57,11 +49,7 @@ dataEvaluationInternshipForUniversity.belongsTo(UsersModel, {
     as: 'userDetails'
 });
 
-UsersModel.hasMany(dataEvaluation, {
-    foreignKey: 'studentId', // ใช้ studentId ที่อยู่ใน dataEvaluationInternshipModel
-    sourceKey: 'studentID', // ใช้ studentID ที่อยู่ใน UsersModel
-    as: 'evaluationHightDetails'
-});
+UsersModel.hasMany(dataEvaluation, { foreignKey: 'studentId', sourceKey: 'studentID', as: 'evaluationHightDetails', onDelete: 'CASCADE' });
 
 dataEvaluation.belongsTo(UsersModel, {
     foreignKey: 'studentId', // ใช้ studentId ที่อยู่ใน dataEvaluationInternshipModel

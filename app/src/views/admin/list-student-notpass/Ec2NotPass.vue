@@ -8,7 +8,7 @@ import { RouterLink, RouterView } from 'vue-router';
 import * as XLSX from 'xlsx'; // import library
 import { makeModalDraggable } from "@/utils/draggable";
 import { downloadExcel } from "@/utils/downloadBeforeEvaluation";
-import { downloadExcel as downloadInternship } from "@/utils/downloadInternship";
+import { downloadExcel as downloadInternship, downloadExcelUniversity } from "@/utils/downloadInternship";
 
 // const route = useRoute();
 // const router = useRouter();
@@ -45,7 +45,7 @@ const fetchData = async () => {
         evaluationData.value = evaluationResponse.data;
         universityEvaluationData.value = universityEvaluationResponse.data;
 
-        console.log(users.value); // ตรวจสอบผลลัพธ์
+        console.log(evaluationData.value); // ตรวจสอบผลลัพธ์
     } catch (error) {
         Swal.fire({
             title: "error",
@@ -55,6 +55,26 @@ const fetchData = async () => {
     }
 };
 
+// คำนวณการประเมินมหาวิทยาลัยที่เกี่ยวข้อง
+const relevantUniversityEvaluations = computed(() => {
+    return universityEvaluationData.value.filter(evaluation =>
+        users.value.some(user => user.studentID === evaluation.studentId)
+    );
+});
+
+const isUniversityEvaluationAvailable = computed(() => {
+    return relevantUniversityEvaluations.value.length > 0;
+});
+
+const relevantEvaluations = computed(() => {
+    return evaluationData.value.filter(evaluation =>
+        users.value.some(user => user.studentID === evaluation.studentId)
+    );
+});
+
+const isEvaluationAvailable = computed(() => {
+    return relevantEvaluations.value.length > 0;
+});
 
 // modal
 const showModal = async (id) => {
@@ -168,6 +188,10 @@ const exportExcel = () => {
     downloadInternship(sortedUsers, evaluationData);
 };
 
+const exportExcelUniverSity = () => {
+    downloadExcelUniversity(sortedUsers, universityEvaluationData);
+}
+
 
 watch(changeStatus, () => {
     fetchData(); // รีเฟรชข้อมูลเมื่อสถานะถูกเปลี่ยน
@@ -195,10 +219,12 @@ onMounted(() => {
                         <router-link :to="`/admin-index/Ec2-notpass`"> <button
                                 class="btn btn-danger m-1">ไม่ผ่าน</button>
                         </router-link>
-                        <button class="btn btn-info m-1" @click="downloadExcel('student', sortedUsers)">ดาวน์โหลด
-                            Excel</button>
-                        <button class="btn btn-info m-1" @click="exportExcel">ดาวน์โหลด
-                            Excel</button>
+                        <button class="btn btn-info m-1" v-if="changeStatus === 'ไม่อนุมัติ'"
+                            @click="downloadExcel('student', sortedUsers)">ดาวน์โหลด[ก่อนการประเมิน]</button>
+                        <button class="btn btn-info m-1" v-if="isUniversityEvaluationAvailable"
+                            @click="exportExcelUniverSity">ดาวน์โหลด [การประเมินจากมหาลัย]</button>
+                        <button class="btn btn-info m-1" v-if="isEvaluationAvailable" @click="exportExcel">ดาวน์โหลด
+                            [การประเมินจากสถานประกอบการ]</button>
                     </div>
                     <div class="d-flex align-items-center mt-2">
                         <p for="" class="me-2 nowrap-label">รายชื่อนักศึกษา</p>

@@ -59,7 +59,7 @@
 //                 collegeEmail,
 //                 collegeAddress,
 //                 studentID
-            
+
 //             });
 //             res.status(201).send({ message: "Success", newCollege });
 //         }
@@ -126,8 +126,8 @@ const authenticateToken = require('../Middleware/Authorization');
 
 router.post('/college', async (req, res) => {
     try {
-        const { collegeName, contactFirstName, contactLastName, collegePhone, collegeEmail, collegeAddress, studentID, department,schoolSize,academicYear, status } = req.body;
-
+        const { collegeName, contactFirstName, contactLastName, collegePhone, collegeEmail, collegeAddress, studentID, department, schoolSize, academicYear, status } = req.body;
+        console.log(status)
         // หา record ที่มี studentID ตรงกับค่าในตาราง Users
         const user = await UsersModel.findOne({ where: { studentID } });
 
@@ -136,60 +136,59 @@ router.post('/college', async (req, res) => {
             return;
         }
 
-        // ตรวจสอบค่า status
-        if (status === 'ไม่อนุมัติ') {
-            // อัปเดต status ใน Users table
-            user.year = academicYear
+        // ตรวจสอบสถานะปัจจุบันใน UsersModel
+        // if (user.status !== 'ไม่อนุมัติ' && user.status !== 'ไม่ผ่าน') {
+        //     res.status(403).send({ message: "นักศึกษาที่มีสถานะนี้ไม่สามารถสมัครซ้ำได้" });
+        //     return;
+        // }
+
+        // ดำเนินการต่อเฉพาะถ้าสถานะปัจจุบันเป็น 'ไม่อนุมัติ' หรือ 'ไม่ผ่าน'
+        if (status === 'ไม่อนุมัติ' || status === 'ไม่ผ่าน') {
+            // อัปเดต status และข้อมูลอื่นๆ ใน Users table
+            user.year = academicYear;
             user.status = 'ขออนุมัติ';
             user.college = collegeName;
             await user.save();
 
-            // หา record ที่มี studentID ตรงกับค่าในตาราง Colleges
+            // ตรวจสอบว่ามี record ในตาราง Colleges หรือไม่
             const existingCollege = await CollegesModel.findOne({ where: { studentID } });
 
             if (existingCollege) {
-                // อัปเดตข้อมูลในฐานข้อมูล
+                // อัปเดตข้อมูลในตาราง Colleges
                 existingCollege.collegeName = collegeName;
                 existingCollege.contactFirstName = contactFirstName;
                 existingCollege.contactLastName = contactLastName;
                 existingCollege.collegePhone = collegePhone;
                 existingCollege.collegeEmail = collegeEmail;
                 existingCollege.collegeAddress = collegeAddress;
-                existingCollege.department = department; // อัปเดต department
-                existingCollege.schoolSize = schoolSize; 
+                existingCollege.department = department;
+                existingCollege.schoolSize = schoolSize;
                 await existingCollege.save();
 
                 res.status(200).send({ message: "Success", existingCollege });
             } else {
-                res.status(404).send({ message: "ไม่พบข้อมูล studentID ในตาราง Colleges" });
+                // สร้าง record ใหม่ในตาราง Colleges
+                const newCollege = await CollegesModel.create({
+                    collegeName,
+                    contactFirstName,
+                    contactLastName,
+                    collegePhone,
+                    collegeEmail,
+                    collegeAddress,
+                    studentID,
+                    department,
+                    schoolSize
+                });
+                res.status(201).send({ message: "Success", newCollege });
             }
         } else if (status === 'ขออนุมัติ') {
             const existingCollege = await CollegesModel.findOne({ where: { studentID } });
             if (existingCollege) {
-
-                     // อัปเดต status ใน Users table
-                     user.year = academicYear
-                     user.status = status;
-                     user.college = collegeName;
-                     await user.save();
-
-                  // อัปเดตข้อมูลในฐานข้อมูล
-                  existingCollege.collegeName = collegeName;
-                  existingCollege.contactFirstName = contactFirstName;
-                  existingCollege.contactLastName = contactLastName;
-                  existingCollege.collegePhone = collegePhone;
-                  existingCollege.collegeEmail = collegeEmail;
-                  existingCollege.collegeAddress = collegeAddress;
-                  existingCollege.department = department; // อัปเดต department
-                  existingCollege.schoolSize = schoolSize; 
-                  await existingCollege.save();
-  
-                  res.status(200).send({ message: "Success", existingCollege });
-                // res.status(409).send({ message: "studentID นี้มีอยู่แล้วในตาราง Colleges" });
+                res.status(409).send({ message: "มีข้อมูลการสมัครที่อยู่ระหว่างการอนุมัติอยู่แล้ว" });
             } else {
                 // อัปเดต status ใน Users table
-                user.year = academicYear
-                user.status = status;
+                user.year = academicYear;
+                user.status = 'ขออนุมัติ';
                 user.college = collegeName;
                 await user.save();
 
@@ -202,30 +201,13 @@ router.post('/college', async (req, res) => {
                     collegeEmail,
                     collegeAddress,
                     studentID,
-                    department ,// เพิ่ม department ในการสร้าง record ใหม่
+                    department,
                     schoolSize
                 });
                 res.status(201).send({ message: "Success", newCollege });
             }
-        } else if (status === 'ผ่าน') {
-            // เปลี่ยน status และ year ใน Users table
-            user.status = 'ขออนุมัติ';
-            user.year = 'ป.ตรี ปีที่ 4';
-            await user.save();
-            
-            // สร้าง record ใหม่
-            const newCollege = await CollegesModel.create({
-                collegeName,
-                contactFirstName,
-                contactLastName,
-                collegePhone,
-                collegeEmail,
-                collegeAddress,
-                studentID,
-                department, // เพิ่ม department ในการสร้าง record ใหม่
-                schoolSize
-            });
-            res.status(201).send({ message: "Success", newCollege });
+        } else if (status === 'ผ่าน' || status === 'เสร็จสิ้น' || status === 'เข้ารับการฝึก') {
+            res.status(200).send({ message: "มีข้อมูลการสมัครเรียบร้อยแล้ว" });
         } else {
             res.status(400).send({ message: "สถานะไม่ถูกต้อง" });
         }

@@ -77,7 +77,7 @@ const searchUsers = async () => {
                 <!-- Navbar Search -->
                 <li class="nav-item mr-2">
                     <form class="form-inline" @submit.prevent="searchUsers">
-                        <div class="input-group input-group-sm custom-search-input me-5">
+                        <!-- <div class="input-group input-group-sm custom-search-input me-5">
                             <input class="form-control form-control-navbar " type="search" placeholder="Search"
                                 aria-label="Search" v-model="searchQuery" />
 
@@ -86,7 +86,7 @@ const searchUsers = async () => {
                                     <i class="fas fa-search"></i>
                                 </button>
                             </div>
-                        </div>
+                        </div> -->
                     </form>
                 </li>
                 <!-- Sign Out Button -->

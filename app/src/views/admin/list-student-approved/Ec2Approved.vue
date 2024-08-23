@@ -203,7 +203,7 @@ onMounted(() => {
                             </td>
                             <td>
                                 <button class="btn btn-primary"
-                                    @click="handleStatus(user.id, 'เข้ารับการฝึก')">เข้ารับการฝึก</button> <br>
+                                    @click="handleStatus(user.id, 'เข้ารับการฝึก')">เข้ารับการฝึก</button>
                                 <router-link :to="`/edit-ec2/${user.id}`">
                                     <button class="btn btn-primary m-1"><i
                                             class="fa-solid fa-pen-to-square"></i></button>

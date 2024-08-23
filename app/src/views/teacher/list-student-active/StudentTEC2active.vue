@@ -30,8 +30,8 @@ const fetchData = async () => {
         const universityEvaluationResponse = await axios.get(`${config.api_path}/data-evaluation-internship-university`);
 
         evaluationData.value = evaluationResponse.data;
-        universityEvaluationData.value = universityEvaluationResponse.data
-        console.log(evaluationData)
+        universityEvaluationData.value = universityEvaluationResponse.data;
+        console.log(evaluationData);
         const evaluationCounts = evaluationResponse.data.reduce((counts, evaluation) => {
             counts[evaluation.studentId] = (counts[evaluation.studentId] || 0) + 1;
             return counts;
@@ -57,16 +57,18 @@ const fetchData = async () => {
                     evaluation => evaluation.studentId === user.studentID
                 );
 
+                if (userEvaluations.length > 0 && userUniversityEvaluations.length > 0) {
+                    const hasHighAverageScore = userEvaluations.some(
+                        evaluation => evaluation.averageScore >= 70
+                    );
 
-                const hasHighAverageScore = userEvaluations.some(
-                    evaluation => evaluation.averageScore >= 70
-                );
-
-
-
-                if (hasHighAverageScore && userUniversityEvaluations.length > 0) {
-                    await axios.put(`${config.api_path}/user/${user.id}`, { status: 'ผ่าน' });
-                    user.status = 'ผ่าน';
+                    if (hasHighAverageScore) {
+                        await axios.put(`${config.api_path}/user/${user.id}`, { status: 'ผ่าน' });
+                        user.status = 'ผ่าน';
+                    } else {
+                        await axios.put(`${config.api_path}/user/${user.id}`, { status: 'ไม่ผ่าน' });
+                        user.status = 'ไม่ผ่าน';
+                    }
                 }
             }
             return user;
@@ -93,6 +95,8 @@ const fetchData = async () => {
         });
     }
 };
+
+
 
 // modal
 const showModal = async (id) => {
@@ -126,35 +130,8 @@ const handleStatus = async (id, newStatus) => {
                     text: "อัปเดตสถานะสำเร็จ",
                     icon: "success",
                 });
-
-                const studentID = response.data.data.studentID;
-                await axios.delete(`${config.api_path}/companies`, { data: { studentID: studentID } });
-                await axios.delete(`${config.api_path}/data-evaluation-internship-university`, { data: { studentID: studentID } });
-                await axios.delete(`${config.api_path}/data-evaluation-internship`, { data: { studentID: studentID } });
-                Swal.fire({
-                    title: "สำเร็จ",
-                    text: "ลบข้อมูลการประเมินสำเร็จ",
-                    icon: "success",
-                });
-                fetchData();
+                fetchData(); // เพียงแค่รีเฟรชข้อมูลโดยไม่ลบข้อมูลที่เกี่ยวข้อง
             }
-            return;
-        }
-
-        const evaluationResponse = await axios.get(`${config.api_path}/data-evaluation-internship`);
-        const evaluationCounts = evaluationResponse.data.reduce((counts, evaluation) => {
-            counts[evaluation.studentId] = (counts[evaluation.studentId] || 0) + 1;
-            return counts;
-        }, {});
-
-        const userEvaluations = evaluationCounts[id] || 0;
-
-        if (userEvaluations < 3 && newStatus === 'ผ่าน') {
-            Swal.fire({
-                title: "ไม่สามารถอนุมัติได้",
-                text: "จำนวนนักศึกษาที่ได้รับการประเมินยังไม่ครบ 3 ครั้ง",
-                icon: "warning"
-            });
             return;
         }
 
@@ -175,6 +152,7 @@ const handleStatus = async (id, newStatus) => {
         });
     }
 };
+
 
 const handleEvaluation = (userId) => {
     let role = localStorage.getItem(config.evaluatorStatus);

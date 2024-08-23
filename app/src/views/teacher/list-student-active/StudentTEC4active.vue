@@ -110,46 +110,9 @@ const handleStatus = async (id, newStatus) => {
                     icon: "success",
                 });
 
-                const studentID = response.data.data.studentID; // แก้ไขการเข้าถึง studentID
-                // console.log(studentID);
-
-                // ยิง API ไปที่ data-evaluation เพื่อลบข้อมูลที่มี studentID ตรงกับ id นี้
-                await axios.delete(`${config.api_path}/data-evaluation`, { data: { studentID: studentID } });
-                Swal.fire({
-                    title: "สำเร็จ",
-                    text: "ลบข้อมูลการประเมินสำเร็จ",
-                    icon: "success",
-                });
-                fetchData(); // รีเฟรชข้อมูลหลังจากอัปเดตสถานะและลบข้อมูลการประเมิน
+                fetchData(); // รีเฟรชข้อมูลหลังจากอัปเดตสถานะ
             }
             return;
-        }
-        // ตรวจสอบว่าจำนวนการประเมินของนักศึกษามีครบ 3 ครั้งหรือไม่ก่อนที่จะอนุมัติ 'ผ่าน'
-        const evaluationResponse = await axios.get(`${config.api_path}/data-evaluation`);
-        const evaluationCounts = evaluationResponse.data.reduce((counts, evaluation) => {
-            counts[evaluation.studentId] = (counts[evaluation.studentId] || 0) + 1;
-            return counts;
-        }, {});
-
-        const userEvaluations = evaluationCounts[id] || 0;
-
-        if (userEvaluations < 10 && newStatus === 'ผ่าน') {
-            Swal.fire({
-                title: "ไม่สามารถอนุมัติได้",
-                text: "จำนวนนักศึกษาที่ได้รับการประเมินยังไม่ครบ 3 ครั้ง",
-                icon: "warning"
-            });
-            return;
-        }
-
-        const response = await axios.put(`${config.api_path}/user/${id}`, { status: newStatus });
-        if (response.data.message === "Success") {
-            Swal.fire({
-                title: "สำเร็จ",
-                text: "อัปเดตสถานะสำเร็จ",
-                icon: "success",
-            });
-            fetchData();
         }
     } catch (error) {
         Swal.fire({
@@ -159,6 +122,8 @@ const handleStatus = async (id, newStatus) => {
         });
     }
 };
+
+
 
 
 const removeData = async (id) => {

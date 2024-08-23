@@ -14,6 +14,8 @@ const isModalVisible = ref(false);
 const modalData = ref(null);
 const userData = JSON.parse(localStorage.getItem('userData') || '{}');
 let branch = null;
+const evaluationData = ref([]); // เพิ่มการประกาศตัวแปร evaluationData
+const universityEvaluationData = ref([]);
 
 if (userData.branch) {
     branch = userData.branch;
@@ -26,6 +28,9 @@ const fetchData = async () => {
         const usersResponse = await axios.get(`${config.api_path}/users`);
         const evaluationResponse = await axios.get(`${config.api_path}/data-evaluation-internship`);
         const universityEvaluationResponse = await axios.get(`${config.api_path}/data-evaluation-internship-university`);
+
+        evaluationData.value = evaluationResponse.data;
+        universityEvaluationData.value = universityEvaluationResponse.data;
 
         const evaluationCounts = evaluationResponse.data.reduce((counts, evaluation) => {
             counts[evaluation.studentId] = (counts[evaluation.studentId] || 0) + 1;
@@ -52,13 +57,18 @@ const fetchData = async () => {
                     evaluation => evaluation.studentId === user.studentID
                 );
 
-                const hasHighAverageScore = userEvaluations.some(
-                    evaluation => evaluation.averageScore >= 80
-                );
+                if (userEvaluations.length > 0 && userUniversityEvaluations.length > 0) {
+                    const hasHighAverageScore = userEvaluations.some(
+                        evaluation => evaluation.averageScore >= 70
+                    );
 
-                if (hasHighAverageScore && userUniversityEvaluations.length > 0) {
-                    await axios.put(`${config.api_path}/user/${user.id}`, { status: 'ผ่าน' });
-                    user.status = 'ผ่าน';
+                    if (hasHighAverageScore) {
+                        await axios.put(`${config.api_path}/user/${user.id}`, { status: 'ผ่าน' });
+                        user.status = 'ผ่าน';
+                    } else {
+                        await axios.put(`${config.api_path}/user/${user.id}`, { status: 'ไม่ผ่าน' });
+                        user.status = 'ไม่ผ่าน';
+                    }
                 }
             }
             return user;
@@ -86,6 +96,7 @@ const fetchData = async () => {
     }
 };
 
+
 // modal
 const showModal = async (id) => {
     isModalVisible.value = true;
@@ -112,47 +123,32 @@ const handleStatus = async (id, newStatus) => {
     try {
         if (newStatus === 'ไม่ผ่าน') {
             const response = await axios.put(`${config.api_path}/user/${id}`, { status: newStatus });
-
             if (response.data.message === "Success") {
                 Swal.fire({
                     title: "สำเร็จ",
                     text: "อัปเดตสถานะสำเร็จ",
                     icon: "success",
                 });
-
-                const studentID = response.data.data.studentID;
-
-                // ลบข้อมูลที่เกี่ยวข้องกับ studentID นี้
-                await axios.delete(`${config.api_path}/companies`, { data: { studentID: studentID } });
-                await axios.delete(`${config.api_path}/data-evaluation-internship-university`, { data: { studentID: studentID } });
-                await axios.delete(`${config.api_path}/data-evaluation-internship`, { data: { studentID: studentID } });
-
-                Swal.fire({
-                    title: "สำเร็จ",
-                    text: "ลบข้อมูลการประเมินสำเร็จ",
-                    icon: "success",
-                });
-
-                fetchData(); // เรียกใช้ฟังก์ชันเพื่อรีเฟรชข้อมูล
+                fetchData(); // เพียงแค่รีเฟรชข้อมูลโดยไม่ลบข้อมูลที่เกี่ยวข้อง
             }
             return;
         }
-    } catch (error) {
-    
-        if(error.response.data.message === "Evaluations not found"){
+
+        const response = await axios.put(`${config.api_path}/user/${id}`, { status: newStatus });
+        if (response.data.message === "Success") {
             Swal.fire({
-            title: "สำเร็จ",
-            text: ("ลบข้อมูลเรียบร้อยแล้ว"),
-            icon: "success"
-        })
-        }else{
-            Swal.fire({
-            title: "error",
-            text: (error.response.data.message),
-            icon: "error"
-        })
+                title: "สำเร็จ",
+                text: "อัปเดตสถานะสำเร็จ",
+                icon: "success",
+            });
+            fetchData();
         }
-        console.log(error)
+    } catch (error) {
+        Swal.fire({
+            title: "error",
+            text: (error.message, "Cr2 Error Updating Status"),
+            icon: "error"
+        });
     }
 };
 

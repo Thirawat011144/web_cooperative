@@ -19,11 +19,12 @@ const companyAddress = ref('');
 const studentID = ref('')
 const academicYear = ref('')
 const status = ref('');
-const valueStatus = ref('สำเร็จ')
+const valueStatus = ref('สำเร็จ') //ไม่ได้ใช้แล้ว
 
 if (userData.studentID) {
     studentID.value = userData.studentID;
     status.value = userData.status;
+    console.log(status.value)
 } else {
     console.log('No userData found in localStorage');
 }
@@ -64,7 +65,7 @@ const handleSubmit = async () => {
                 console.log(response.data.newCompany);
                 localStorage.setItem('companyData', JSON.stringify(response.data.newCompany));
                 router.push('/user-index/data-student');
-            } else if(response.data.message === 'มีข้อมูลการสมัครเรียบร้อยแล้ว'){
+            } else if (response.data.message === 'มีข้อมูลการสมัครเรียบร้อยแล้ว') {
                 Swal.fire({
                     title: "ผิดพลาด",
                     text: "มีข้อมูลการสมัครแล้ว",
@@ -72,19 +73,19 @@ const handleSubmit = async () => {
                 });
             }
         } catch (error) {
-            if(error.response.data.message === "Validation error"){
-            Swal.fire({
-            title: "error",
-            text: ("มีข้อมูลนี้ในระบบแล้ว"),
-            icon: "error"
-        })
-        }else{
-            Swal.fire({
-            title: "error",
-            text: (error.response.data.message),
-            icon: "error"
-        })
-        }
+            if (error.response.data.message === "Validation error") {
+                Swal.fire({
+                    title: "error",
+                    text: ("มีข้อมูลนี้ในระบบแล้ว"),
+                    icon: "error"
+                })
+            } else {
+                Swal.fire({
+                    title: "error",
+                    text: (error.response.data.message),
+                    icon: "error"
+                })
+            }
             console.log(error);
         }
     }
@@ -133,8 +134,7 @@ const handleSubmit = async () => {
                                         <option value="ป.ตรี ปีที่ 2">ปริญญาตรี ปีที่ 2</option>
                                         <option value="ป.ตรี ปีที่ 3">ปริญญาตรี ปีที่ 3</option>
                                         <option value="ป.ตรี ปีที่ 4">ปริญญาตรี ปีที่ 4</option>
-                                        <option value="ป.ตรี ปีที่ 5">ปริญญาตรี ปีที่ 5</option>
-                                        <option value="ป.ตรี ปีที่ 6">ปริญญาตรี ปีที่ 6</option>
+
                                     </select>
                                 </div>
                             </div>

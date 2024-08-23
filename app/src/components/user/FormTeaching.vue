@@ -19,7 +19,7 @@ const studentID = ref('');
 const department = ref('');
 const schoolSize = ref('');
 const academicYear = ref('ป.ตรี ปีที่ 4');
-const status = ref('ขออนุมัติ');
+const status = ref('');
 
 const provinces = ref([]);
 const companies = ref([]);
@@ -33,6 +33,7 @@ const selectedBranch = ref('');
 // ตั้งค่า student ID ถ้ามี
 if (userData.studentID) {
     studentID.value = userData.studentID;
+    status.value = userData.status;
     console.log('Student ID from localStorage:', studentID.value);
 } else {
     console.log('No userData found in localStorage');
@@ -183,7 +184,7 @@ const handleSubmit = async () => {
         } catch (error) {
             Swal.fire({
                 title: "ข้อผิดพลาด",
-                text: "เกิดข้อผิดพลาดในการสร้างข้อมูล: " + error.message,
+                text: error.response.data.message,
                 icon: "error"
             });
             console.log('Error submitting form:', error);
@@ -296,7 +297,7 @@ watch(selectedCompany, (newValue) => {
 
                         <!-- ฟิลด์อื่นๆ -->
                         <div class="row mb-4">
-                            <div class="col">
+                            <div class="col-md-6">
                                 <div data-mdb-input-init class="form-outline">
                                     <label class="form-label" for="academicYear">ชั้นปี <span
                                             class="text-red">*</span></label>
@@ -309,7 +310,7 @@ watch(selectedCompany, (newValue) => {
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-md-6 mb-4">
+                            <!-- <div class="col-md-6 mb-4">
                                 <div>
                                     <label for="">สถานะ</label>
                                     <select v-model="status" class="form-select" disabled>
@@ -317,7 +318,7 @@ watch(selectedCompany, (newValue) => {
                                         <option value="ขออนุมัติ">ขออนุมัติ</option>
                                     </select>
                                 </div>
-                            </div>
+                            </div> -->
                         </div>
 
                         <label class="form-label" for="contactInfo">ข้อมูลผู้ประสานงานวิทยาลัย</label>

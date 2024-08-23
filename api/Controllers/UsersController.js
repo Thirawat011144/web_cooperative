@@ -278,19 +278,25 @@ router.put('/user/:id', async (req, res) => {
 router.delete('/users/:id', async (req, res) => {
     try {
         const user = await UsersModel.findByPk(req.params.id);
-        const studentID = (user.dataValues.studentID);
+        const studentID = user ? user.dataValues.studentID : null;
 
         if (!user) {
             return res.status(404).send({ message: "User not found" });
         }
-        await CompaniesModel.destroy({ where: { studentID: studentID } });
+
+        // ลบข้อมูลที่เกี่ยวข้องกับการประเมิน แต่เก็บข้อมูลบริษัทและวิทยาลัยไว้
+        await dataEvaluationInternshipModel.destroy({ where: { studentId: studentID } });
+        await dataEvaluationInternshipForUniversity.destroy({ where: { studentId: studentID } });
+        await dataEvaluation.destroy({ where: { studentId: studentID } });
+
+        // ลบข้อมูลผู้ใช้ใน UsersModel
         await user.destroy();
 
-        res.send({ message: "User deleted successfully" });
+        res.send({ message: "User and associated evaluation data deleted successfully" });
     } catch (error) {
         res.status(500).send({ message: error.message });
     }
-})
+});
 
 
 module.exports = router;
