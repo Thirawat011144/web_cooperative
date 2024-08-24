@@ -3,34 +3,17 @@
     <div class="form-wrapper">
       <p v-if="userName.length > 0">
         <label for="Username">Username:</label>
-        <input
-          type="text"
-          v-model="userName[0].userName"
-          disabled
-          class="full-width-input"
-        />
+        <input type="text" v-model="userName[0].userName" disabled class="full-width-input" />
       </p>
       <form @submit.prevent="handleSubmit" class="styled-form">
         <h2>Reset Your Password</h2>
         <div class="input-group">
           <label for="newPassword">New Password:</label>
-          <input
-            type="password"
-            v-model="newPassword"
-            id="newPassword"
-            required
-            class="full-width-input"
-          />
+          <input type="password" v-model="newPassword" id="newPassword" required class="full-width-input" />
         </div>
         <div class="input-group">
           <label for="confirmPassword">Confirm Password:</label>
-          <input
-            type="password"
-            v-model="confirmPassword"
-            id="confirmPassword"
-            required
-            class="full-width-input"
-          />
+          <input type="password" v-model="confirmPassword" id="confirmPassword" required class="full-width-input" />
         </div>
         <input v-if="isReset" type="hidden" v-model="idCard" />
         <button type="submit" class="submit-button">Reset Password</button>
@@ -38,6 +21,7 @@
     </div>
   </div>
 </template>
+
 <script setup>
 import { ref, onMounted } from "vue";
 import axios from "axios";
@@ -52,7 +36,7 @@ const newPassword = ref("");
 const confirmPassword = ref("");
 const userName = ref([]);
 const checkToken = localStorage.getItem(config.token_name);
-const checkRole = localStorage.getItem(config.role_name);
+const checkRole = route.query.role || localStorage.getItem(config.role_name); // ดึง role จาก URL หรือ localStorage
 
 if (route.query.idCard) {
   idCard.value = route.query.idCard;
@@ -64,7 +48,17 @@ if (route.query.idCard) {
 
 const fetchUserName = async () => {
   try {
-    const response = await axios.get(`${config.api_path}/users`);
+    let apiUrl;
+
+    if (checkRole === 'forgot-pass-admin') {
+      apiUrl = `${config.api_path}/admins`; // API สำหรับ admin
+    } else if (checkRole === 'forgot-pass-teacher') {
+      apiUrl = `${config.api_path}/teachers`; // API สำหรับ teacher หรืออื่นๆ
+    }else{
+      apiUrl = `${config.api_path}/users`; 
+    }
+
+    const response = await axios.get(apiUrl);
     userName.value = response.data.filter(
       (user) => user.idCard === idCard.value
     );
@@ -84,13 +78,27 @@ const handleSubmit = async () => {
   }
 
   try {
-    const response = await axios.post(`${config.api_path}/reset-password`, {
+    // ดึง role จาก localStorage หรือ query parameter
+    const checkRole = localStorage.getItem(config.role_name);
+
+    // กำหนด API ที่จะใช้ตาม role
+    let apiPath;
+    if (checkRole === "teacher" || checkRole === "forgot-pass-teacher" ) {
+      apiPath = `${config.api_path}/reset-password-teacher`;
+    } else if (checkRole === "forgot-pass-admin" || checkRole === "admin") {
+      apiPath = `${config.api_path}/reset-password-admin`;
+    } else {
+      apiPath = `${config.api_path}/reset-password`;
+    }
+
+    // ส่งข้อมูลไปยัง API ที่กำหนด
+    const response = await axios.post(apiPath, {
       idCard: idCard.value,
       newPassword: newPassword.value,
     });
 
     if (response.data.message === "Password has been reset successfully") {
-      if (checkToken === null) {
+      if (!checkToken) {
         router.push("/login-choice");
       } else if (checkRole === "teacher") {
         router.push("/teacher-index");
@@ -107,6 +115,7 @@ const handleSubmit = async () => {
     alert("An error occurred. Please try again.");
   }
 };
+
 </script>
 
 <style scoped>

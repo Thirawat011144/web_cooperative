@@ -41,6 +41,8 @@ const sortedUsers = computed(() => {
 //     XLSX.writeFile(workbook, 'students.xlsx');
 // };
 
+
+
 // modal
 const showModal = async (id) => {
     isModalVisible.value = true;
@@ -57,11 +59,49 @@ const showModal = async (id) => {
     }
 };
 
+const removeData = async (id) => {
+    const result = await Swal.fire({
+        title: 'คุณแน่ใจหรือไม่?',
+        text: 'คุณจะไม่สามารถย้อนกลับได้!',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'ใช่, ลบเลย!',
+        cancelButtonText: 'ยกเลิก'
+    });
+
+    if (result.isConfirmed) {
+        try {
+            const response = await axios.delete(`${config.api_path}/users/${id}`);
+            searchResults.value = searchResults.value.filter(user => user.id !== id);
+            Swal.fire({
+                title: 'สำเร็จ',
+                text: 'ลบข้อมูลผู้ใช้สำเร็จ',
+                icon: 'success',
+            }).then((result) => {
+                if (result.value) {
+                    fetchData();
+                }
+            });
+        } catch (error) {
+            Swal.fire({
+                title: 'error',
+                text: (error.message, 'Cr2 Error DeleteData'),
+                icon: 'error'
+            });
+            console.log(error);
+        }
+    }
+};
+
 const closeModal = () => {
     isModalVisible.value = false;
     modalData.value = null;
 };
 // modal
+
+
 
 onMounted(() => {
     updateSearchResults();
@@ -135,10 +175,12 @@ watch(
                             </td>
                             <!-- ใช้ company ตามฟิลด์ในตาราง -->
                             <td>
-                                <button class="btn btn-primary m-1">
-                                    <i class="fa-solid fa-pen-to-square"></i>
-                                </button>
-                                <button class="btn btn-danger m-1">
+                                <router-link :to="`/edit-cr2/${user.id}`">
+                                    <button class="btn btn-primary m-1">
+                                        <i class="fa-solid fa-pen-to-square"></i>
+                                    </button>
+                                </router-link>
+                                <button @click="removeData(user.id)" class="btn btn-danger m-1">
                                     <i class="fa-solid fa-trash-can"></i>
                                 </button>
                             </td>

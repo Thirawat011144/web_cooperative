@@ -74,7 +74,7 @@ const loading = ref(true);
 const fetchUserData = async () => {
     if (id) {
         try {
-            const response = await axios.get(`${config.api_path}/user/${id}`);
+            const response = await axios.get(`${config.api_path}/teacher/${id}`);
             dataResult.value = response.data;
         } catch (error) {
             console.error('Error fetching user data:', error);
@@ -109,7 +109,7 @@ const saveChanges = async () => {
     // ตรวจสอบว่าผู้ใช้กดยืนยันการบันทึกหรือไม่
     if (result.isConfirmed) {
         try {
-            await axios.put(`${config.api_path}/user/${id}`, { branch: dataResult.value.branch });
+            await axios.put(`${config.api_path}/teacher/${id}`, { branch: dataResult.value.branch });
             Swal.fire({
                 title: 'สำเร็จ',
                 text: 'บันทึกการเปลี่ยนแปลงสำเร็จ',

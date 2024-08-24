@@ -1,7 +1,7 @@
 const connect = require('../connect');
 const { DataTypes } = require("sequelize");
 
-const EvaluationModel = connect.define("evaluation", {
+const EvaluationModel = connect.define("evaluators", {
     id: {
         type: DataTypes.BIGINT,
         primaryKey: true,
@@ -29,25 +29,11 @@ const EvaluationModel = connect.define("evaluation", {
         allowNull: false,
     },
     idCard: {
-        type: DataTypes.STRING(50),
-        // allowNull: false,
+        type: DataTypes.STRING,
+        allowNull: false,
+        unique: true,  // กำหนดให้ idCard เป็น unique
     },
-    schoolName: {
-        type: DataTypes.STRING(255),
-        // allowNull: false,
-    },
-    department: {
-        type: DataTypes.STRING(255),
-        // allowNull: false,
-    },
-    schoolSize: {
-        type: DataTypes.STRING(50),
-        // allowNull: false,
-    },
-    courseRelation: {
-        type: DataTypes.STRING(255),
-        // allowNull: false,
-    },
+
     evaluatorStatus: {
         type: DataTypes.STRING(255),
         allowNull: false,
@@ -58,7 +44,7 @@ const EvaluationModel = connect.define("evaluation", {
     },
     statusStart: {
         type: DataTypes.STRING(255),
-        // allowNull: false,
+        allowNull: false,
     },
 
 

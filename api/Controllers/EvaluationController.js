@@ -1,7 +1,7 @@
 const express = require("express");
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const Evaluation = require("../Models/Evaluation");
+const Evaluation = require("../Models/Evaluators");
 require('dotenv').config();
 
 const router = express.Router();
@@ -32,7 +32,7 @@ router.post("/evaluation", async (req, res) => {
             // courseRelation: req.body.courseRelation,
             evaluatorStatus: req.body.evaluatorStatus,
             currentStudyField: req.body.currentStudyField,
-            statusStart : req.body.statusStart
+            statusStart: req.body.statusStart
         });
 
         await result.save();
@@ -72,7 +72,7 @@ router.post("/evaluation/login", async (req, res) => {
             evaluatorStatus: user.evaluatorStatus,
             currentStudyField: user.currentStudyField,
             role: 'evaluator',
-            statusStart:user.statusStart
+            statusStart: user.statusStart
         };
 
         const token = jwt.sign(data, process.env.SECRET_KEY, { expiresIn: '1h' });
@@ -125,7 +125,7 @@ router.put("/evaluation/:id", async (req, res) => {
         if (!user) {
             return res.status(404).send({ message: "User not found" });
         }
-        
+
         user.currentStudyField = req.body.currentStudyField;
         await user.save();
 
@@ -149,7 +149,7 @@ router.put("/evaluation/status-start/:id", async (req, res) => {
         if (!user) {
             return res.status(404).send({ message: "User not found" });
         }
-        
+
         user.statusStart = statusStart;
         await user.save();
 

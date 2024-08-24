@@ -116,7 +116,7 @@ const updateAllStatusToCompleted = async () => {
 
         if (result.isConfirmed) {
             const updatePromises = users.value.map(user => {
-                return axios.put(`${config.api_path}/user/${user.id}`, { status: 'เสร็จสิ้น'});
+                return axios.put(`${config.api_path}/user/${user.id}`, { status: 'เสร็จสิ้น' });
             });
             await Promise.all(updatePromises);
             Swal.fire({
@@ -202,11 +202,20 @@ const downloadExcel = () => {
         const evaluations = evaluationData.value.filter(e => e.studentId === user.studentID);
         evaluations.forEach(evaluation => {
             const formattedDate = evaluation.createdAt ? format(new Date(evaluation.createdAt), 'dd/MM/yyyy, HH:mm:ss') : '';
+
+            // ตรวจสอบว่าค่า phoneNumber มาจากผู้ประเมินคนไหน
+            let phoneNumber = '';
+            if (evaluation.teacher && evaluation.teacher.phoneNumber) {
+                phoneNumber = evaluation.teacher.phoneNumber; // เบอร์โทรจากตาราง TeachersModels
+            } else if (evaluation.evaluator && evaluation.evaluator.phoneNumber) {
+                phoneNumber = evaluation.evaluator.phoneNumber; // เบอร์โทรจากตาราง EvaluatorsModels
+            }
+
             worksheet.addRow({
                 timestamp: formattedDate,
                 evaluatorName: evaluation.evaluatorName || '',
                 idCard: evaluation.idCard || '',
-                phoneNumber: evaluation.phoneNumber || '',
+                phoneNumber : evaluation.phoneNumber || 'ไม่พบข้อมูล', // ใช้ค่า 'ไม่พบข้อมูล' ถ้าไม่มีเบอร์โทร
                 collegeName: user.collegeDetails?.collegeName || '',
                 department: user.collegeDetails?.department || '',
                 schoolSize: user.collegeDetails?.schoolSize || '',

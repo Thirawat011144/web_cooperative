@@ -41,7 +41,8 @@
                                             </div>
                                             <div class="col-md-4 mb-4">
                                                 <div class="form-outline">
-                                                    <label class="form-label" for="form3Example1n">นามสกุล <span>*</span></label>
+                                                    <label class="form-label" for="form3Example1n">นามสกุล
+                                                        <span>*</span></label>
                                                     <input type="text" id="form3Example1n"
                                                         class="form-control form-control-lg" v-model="lastName"
                                                         required />
@@ -196,7 +197,7 @@ const idCard = ref('');  // เพิ่มตัวแปร idCard
 const gender = ref('');
 const branch = ref('');
 const statusStart = 'notVerified'
-const role = 'admin'
+const role = 'teacher'
 
 
 const phoneNumberWarning = ref('');
@@ -210,7 +211,7 @@ if (userData.statusStart) {
     checkStatusStart = userData.statusStart;
     console.log(checkStatusStart)
 } else {
-  console.log('No userData found in localStorage');
+    console.log('No userData found in localStorage');
 }
 
 const validatePhoneNumber = () => {
@@ -254,7 +255,7 @@ const handleRegister = async () => {
         }
 
         // const response = await axios.post(`${config.api_path}/register`, payload);
-        const response = await axios.post(`${config.api_path}/admin`, payload);
+        const response = await axios.post(`${config.api_path}/teacher`, payload);
         if (response.data.message === "Success") {
             Swal.fire({
                 title: "Sign Up",
@@ -263,7 +264,7 @@ const handleRegister = async () => {
                 timer: 2000
             })
 
-            router.push('/login')
+            router.push('/login-choice')
         }
     } catch (error) {
         Swal.fire({

@@ -32,16 +32,11 @@ const CompaniesModel = connect.define("companies", {
         type: DataTypes.STRING(50),
         // unique: true
     }
-    ,
-    valueStatus: {
-        type: DataTypes.STRING(50),
+    // ,
+    // status: {
+    //     type: DataTypes.STRING(50),
        
-    }
-    ,
-    status: {
-        type: DataTypes.STRING(50),
-       
-    }
+    // }
     
     
 })

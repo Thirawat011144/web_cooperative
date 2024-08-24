@@ -52,7 +52,7 @@ onMounted(() => {
     <section class="">
         <div class="card custom-content">
             <div class="">
-                <div class="card-title mb-2">ข้อมูลนักศึกษาชั้นปริญญาตรี ชั้นปีที่ 4
+                <div class="card-title mb-2">ข้อมูลนักศึกษาชั้นปริญญาตรี ชั้นปีที่ 4 กหฟก
                     <div>
                         <router-link :to="`/home-evaluation/list-evaluation-one`">
                             <button class="btn btn-primary m-1"> ครั้งที่ 1 </button>

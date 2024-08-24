@@ -1,4 +1,5 @@
 import { checkAuth } from './authRouterFunction'
+import RegisterAdmin from '../../views/auth/RegisterAdmin.vue'
 
 import TeacherIndex from '../../views/teacher/index.vue'
 import information from '../../components/teacher/information.vue'
@@ -212,6 +213,10 @@ const routeTeacher = [
                 component: StudentTEC4notpass
             },
         ]
+    },
+    {
+        path: '/register-teacher',
+        component:RegisterAdmin
     }
 ]
 

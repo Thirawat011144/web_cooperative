@@ -76,8 +76,8 @@ const authenticateToken = require('../Middleware/Authorization');
 
 router.post('/company', async (req, res) => {
     try {
-        const { companyName, companyDepartment, contactFirstName, contactLastName, companyPhone, companyEmail, companyAddress, studentID, academicYear, status, valueStatus } = req.body;
-       
+        const { companyName, companyDepartment, contactFirstName, contactLastName, companyPhone, companyEmail, companyAddress, studentID, academicYear } = req.body;
+
         // หา record ที่มี studentID ตรงกับค่าในตาราง Users
         const user = await UsersModel.findOne({ where: { studentID } });
 
@@ -87,7 +87,7 @@ router.post('/company', async (req, res) => {
         }
 
         // ตรวจสอบค่า status
-        if (status === 'ไม่อนุมัติ' || status === 'ไม่ผ่าน') {
+        if (user.status === 'ไม่อนุมัติ' || user.status === 'ไม่ผ่าน') {
             // อัปเดต status ใน Users table
             user.year = academicYear
             user.status = 'ขออนุมัติ';
@@ -119,11 +119,10 @@ router.post('/company', async (req, res) => {
                     companyEmail,
                     companyAddress,
                     studentID,
-                    valueStatus
                 })
                 res.status(201).send({ message: "Success", newCompanies });
             }
-        } else if (status === 'ขออนุมัติ') {
+        } else if (user.status === 'ขออนุมัติ') {
             // ตรวจสอบว่ามีข้อมูลการสมัครที่มีสถานะขออนุมัติอยู่แล้วหรือไม่
             const existingCompany = await CompaniesModel.findOne({ where: { studentID } });
 
@@ -132,7 +131,7 @@ router.post('/company', async (req, res) => {
             } else {
                 // อัปเดต status ใน Users table
                 user.year = academicYear;
-                user.status = status;
+                user.status = 'ขออนุมัติ';
                 await user.save();
 
                 // สร้าง record ใหม่
@@ -145,12 +144,11 @@ router.post('/company', async (req, res) => {
                     companyEmail,
                     companyAddress,
                     studentID,
-                    valueStatus,
-                    status // เพิ่มสถานะเข้าไปใน record ใหม่
+                  
                 });
                 res.status(201).send({ message: "Success", newCompany });
             }
-        } else if (status === 'ผ่าน' || status === 'เสร็จสิ้น' || status === 'เข้ารับการฝึก') {
+        } else if (user.status === 'ผ่าน' || user.status === 'เสร็จสิ้น' || user.status === 'เข้ารับการฝึก' || user.status === 'อนุมัติ') {
             res.status(200).send({ message: "มีข้อมูลการสมัครเรียบร้อยแล้ว" })
         } else {
             res.status(400).send({ message: "สถานะไม่ถูกต้อง" });

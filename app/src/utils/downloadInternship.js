@@ -53,12 +53,12 @@ export const downloadExcel = (sortedUsers, evaluationData) => {
             console.log(evaluation); // เพิ่มการพิมพ์ข้อมูล evaluation เพื่อดูโครงสร้าง
             worksheet.addRow({
                 timestamp: formattedDate,
-                evaluatorName: evaluation.evaluatorName || '',
+                evaluatorName: `${evaluation.internshipEvaluator.firstName || ''} ${evaluation.internshipEvaluator.lastName || ''}`.trim(),
                 idCard: evaluation.idCard || '',
-                phoneNumber: evaluation.phoneNumber || 'sad',
+                phoneNumber: evaluation.internshipEvaluator.phoneNumber || 'sad',
                 companyName: user.companyDetails?.companyName || 'ไม่มีข้อมูล', // เพิ่มค่าเริ่มต้นเป็น 'ไม่มีข้อมูล'
                 department: user.companyDetails?.companyDepartment || 'ไม่มีข้อมูล', // เพิ่มค่าเริ่มต้นเป็น 'ไม่มีข้อมูล'
-                evaluatorStatus: evaluation.evaluatorStatus || '',
+                evaluatorStatus: evaluation.internshipEvaluator.evaluatorStatus || '',
                 time: evaluation.time || '',
                 branch: user.branch,
                 studentName: `${user.firstName} ${user.lastName}`,
@@ -180,9 +180,9 @@ export const downloadExcelUniversity = (sortedUsers, universityEvaluationData) =
             console.log(evaluation); // เพิ่มการพิมพ์ข้อมูล evaluation เพื่อดูโครงสร้าง
             worksheet.addRow({
                 timestamp: formattedDate,
-                evaluatorName: evaluation.evaluatorName || '',
+                evaluatorName: `${evaluation.universityTeacher.firstName || ''} ${evaluation.universityTeacher.lastName || ''}`.trim(),
                 idCard: evaluation.idCard || '',
-                phoneNumber: evaluation.phoneNumber || '',
+                phoneNumber: evaluation.universityTeacher.phoneNumber || '',
                 companyName: user.companyDetails?.companyName || 'ไม่มีข้อมูล', // เพิ่มค่าเริ่มต้นเป็น 'ไม่มีข้อมูล'
                 department: user.companyDetails?.companyDepartment || 'ไม่มีข้อมูล', // เพิ่มค่าเริ่มต้นเป็น 'ไม่มีข้อมูล'
                 evaluatorStatus: evaluation.evaluatorStatus || '',

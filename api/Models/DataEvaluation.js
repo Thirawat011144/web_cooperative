@@ -1,24 +1,25 @@
 const connect = require('../connect');
 const { DataTypes } = require("sequelize");
 
-const DataEvaluation = connect.define("dataevaluation", {
+const DataEvaluation = connect.define("dataEvaluation", {
     id: {
         type: DataTypes.BIGINT,
         primaryKey: true,
         autoIncrement: true,
     },
-    evaluatorName: {
-        type: DataTypes.STRING(255),
-        allowNull: false,
-    },
+  
     studentId: {
         type: DataTypes.STRING(50),
         allowNull: false,
     },
-    idCard: {
+    idCardTeacher: {
         type: DataTypes.STRING(50),
-        // allowNull: false,
+        allowNull: true, // ไม่บังคับว่าต้องมีค่า
     },
+    idCardEvaluator: {
+        type: DataTypes.STRING(50),
+        allowNull: true, // ไม่บังคับว่าต้องมีค่า
+    },    
     criteria: {
         type: DataTypes.STRING,
         allowNull: false,
@@ -31,169 +32,165 @@ const DataEvaluation = connect.define("dataevaluation", {
         type: DataTypes.STRING(255),
         allowNull: false,
     },
-    phoneNumber: {
-        type: DataTypes.STRING(255),
-        // allowNull: false,
-    },
     additionalComments: {
         type: DataTypes.STRING(255),
-        // allowNull: false,
+        allowNull: false,
     },
     innovationAlignment: {
         type: DataTypes.STRING(255),
-        // allowNull: false,
+        allowNull: false,
     },
     learningPlan: {
         type: DataTypes.STRING(255),
-        // allowNull: false,
+        allowNull: false,
     },
     innovativeLearningPlan: {
         type: DataTypes.STRING(255),
-        // allowNull: false,
+        allowNull: false,
     },
     joyfulLearningActivities: {
         type: DataTypes.STRING(255),
-        // allowNull: false,
+        allowNull: false,
     },
     learnerWellbeingActivities: {
         type: DataTypes.STRING(255),
-        // allowNull: false,
+        allowNull: false,
     },
     individualStudentDevelopment: {
         type: DataTypes.STRING(255),
-        // allowNull: false,
+        allowNull: false,
     },
     systematicQualityReporting: {
         type: DataTypes.STRING(255),
-        // allowNull: false,
+        allowNull: false,
     },
     studentProblemResearch: {
         type: DataTypes.STRING(255),
-        // allowNull: false,
+        allowNull: false,
     },
     digitalLearningTools: {
         type: DataTypes.STRING(255),
-        // allowNull: false,
+        allowNull: false,
     },
     collaborativeCreativity: {
         type: DataTypes.STRING(255),
-        // allowNull: false,
+        allowNull: false,
     },
     professionalGrowthActivities: {
         type: DataTypes.STRING(255),
-        // allowNull: false,
+        allowNull: false,
     },
     parentCollaboration: {
         type: DataTypes.STRING(255),
-        // allowNull: false,
+        allowNull: false,
     },
     parentCollab: {
         type: DataTypes.STRING(255),
-        // allowNull: false,
+        allowNull: false,
     },
     parentNetwork: {
         type: DataTypes.STRING(255),
-        // allowNull: false,
+        allowNull: false,
     },
     communityNetwork: {
         type: DataTypes.STRING(255),
-        // allowNull: false,
+        allowNull: false,
     },
     communityContextReport: {
         type: DataTypes.STRING(255),
-        // allowNull: false,
+        allowNull: false,
     },
     communityEngagement: {
         type: DataTypes.STRING(255),
-        // allowNull: false,
+        allowNull: false,
     },
     culturalStudyReport: {
         type: DataTypes.STRING(255),
-        // allowNull: false,
+        allowNull: false,
     },
     culturalIntegration: {
         type: DataTypes.STRING(255),
-        // allowNull: false,
+        allowNull: false,
     },
     studentGrowth: {
         type: DataTypes.STRING(255),
-        // allowNull: false,
+        allowNull: false,
     },
     studentCare: {
         type: DataTypes.STRING(255),
-        // allowNull: false,
+        allowNull: false,
     },
     continuousLearning: {
         type: DataTypes.STRING(255),
-        // allowNull: false,
+        allowNull: false,
     },
     inclusivity: {
         type: DataTypes.STRING(255),
-        // allowNull: false,
+        allowNull: false,
     },
     positiveReinforcement: {
         type: DataTypes.STRING(255),
-        // allowNull: false,
+        allowNull: false,
     },
     creativeExpression: {
         type: DataTypes.STRING(255),
-        // allowNull: false,
+        allowNull: false,
     },
     currentAffairsIntegration: {
         type: DataTypes.STRING(255),
-        // allowNull: false,
+        allowNull: false,
     },
     innovativeTeaching: {
         type: DataTypes.STRING(255),
-        // allowNull: false,
+        allowNull: false,
     },
     ethicalRoleModel: {
         type: DataTypes.STRING(255),
-        // allowNull: false,
+        allowNull: false,
     },
     fairnessAndHarmony: {
         type: DataTypes.STRING(255),
-        // allowNull: false,
+        allowNull: false,
     },
     complianceAndCommitment: {
         type: DataTypes.STRING(255),
-        // allowNull: false,
+        allowNull: false,
     },
     adaptiveProfessional: {
         type: DataTypes.STRING(255),
-        // allowNull: false,
+        allowNull: false,
     },
     professionalIntegrity: {
         type: DataTypes.STRING(255),
-        // allowNull: false,
+        allowNull: false,
     },
     professionalMembership: {
         type: DataTypes.STRING(255),
-        // allowNull: false,
+        allowNull: false,
     },
     sincereService: {
         type: DataTypes.STRING(255),
-        // allowNull: false,
+        allowNull: false,
     },
     ethicalConduct: {
         type: DataTypes.STRING(255),
-        // allowNull: false,
+        allowNull: false,
     },
     dedicatedSupport: {
         type: DataTypes.STRING(255),
-        // allowNull: false,
+        allowNull: false,
     },
     teamHarmony: {
         type: DataTypes.STRING(255),
-        // allowNull: false,
+        allowNull: false,
     },
     communityLeadership: {
         type: DataTypes.STRING(255),
-        // allowNull: false,
+        allowNull: false,
     },
     democraticCompliance: {
         type: DataTypes.STRING(255),
-        // allowNull: false,
+        allowNull: false,
     }
 });
 

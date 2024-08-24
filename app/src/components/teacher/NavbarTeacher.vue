@@ -122,33 +122,44 @@ const clearFields = () => {
   searchBranch.value = "";
 };
 
+const trimValue = (value) => value.trim();
+
 const searchUsers = async () => {
   closeSearchModal();
+  
+  const trimmedFirstName = trimValue(searchFirstName.value);
+  const trimmedLastName = trimValue(searchLastName.value);
+  const trimmedStudentID = trimValue(studentID.value);
+  const trimmedYear = trimValue(searchYear.value);
+  const trimmedBranch = trimValue(searchBranch.value);
+  const trimmedStatus = trimValue(status.value);
+
   if (
-    searchFirstName.value.trim() === "" &&
-    searchLastName.value.trim() === "" &&
-    studentID.value.trim() === "" &&
-    searchYear.value.trim() === "" &&
-    searchBranch.value.trim() === "" &&
-    status.value.trim() === ""
+    trimmedFirstName === "" &&
+    trimmedLastName === "" &&
+    trimmedStudentID === "" &&
+    trimmedYear === "" &&
+    trimmedBranch === "" &&
+    trimmedStatus === ""
   ) {
     searchStore.setSearchResults([]);
     return;
   }
+
   try {
     const response = await axios.get(`${config.api_path}/users/search`, {
       params: {
-        firstName: searchFirstName.value,
-        lastName: searchLastName.value,
-        studentID: studentID.value, // ส่งรหัสนักศึกษาที่มีแค่ 2 ตัวแรก
-        year: searchYear.value,
-        branch: searchBranch.value,
-        status: status.value,
+        firstName: trimmedFirstName,
+        lastName: trimmedLastName,
+        studentID: trimmedStudentID, // ส่งรหัสนักศึกษาที่มีแค่ 2 ตัวแรก
+        year: trimmedYear,
+        branch: trimmedBranch,
+        status: trimmedStatus,
       },
     });
     searchStore.setSearchResults(response.data);
-    console.log(response.data)
-    router.push('/teacher-index/search-teacher')
+    console.log(response.data);
+    router.push("/admin-index/search");
   } catch (error) {
     Swal.fire({
       title: "Error",
@@ -157,6 +168,7 @@ const searchUsers = async () => {
     });
   }
 };
+
 </script>
 <template>
   <div>
@@ -305,6 +317,7 @@ const searchUsers = async () => {
                   <option value="ผ่าน">ผ่าน</option>
                   <option value="เสร็จสิ้น">เสร็จสิ้น</option>
                   <option value="ไม่ผ่าน">ไม่ผ่าน</option>
+                  <option value="ไม่ผ่าน">ไม่อนุมัติ</option>
                 </select>
               </div>
             </div>

@@ -21,7 +21,7 @@ const handleLogin = async () => {
             userName: trimmedUsername,
             password: trimmedPassword
         };
-        const response = await axios.post(`${config.api_path}/login`, payload);
+        const response = await axios.post(`${config.api_path}/login/teacher`, payload);
         if (response.data.message === "Success") {
             Swal.fire({
                 title: "Sign In",
@@ -29,24 +29,21 @@ const handleLogin = async () => {
                 icon: "success",
                 timer: 2000,
             });
-            console.log(response)
-            localStorage.setItem(config.token_name, response.data.token);
-            localStorage.setItem(config.role_name, response.data.data.role)
-            localStorage.setItem(config.firstName_name, response.data.data.firstName)
-            localStorage.setItem(config.token_lastName, response.data.data.lastName)
-            localStorage.setItem(config.currentStudyField, response.data.data.branch)
-            localStorage.setItem(config.idCard, response.data.data.idCard)
-            localStorage.setItem(config.phoneNumber, response.data.data.phoneNumber)
-            localStorage.setItem('userData', JSON.stringify(response.data.data)); // เก็บข้อมูลใน localStorage
-            searchData.setDataResults(response.data.data);
-
-            if (response.data.data.role === "admin") {
-                router.push('/admin-index')
-            } else if (response.data.data.role === "teacher") {
-                router.push('/')
-            }
-            else {
-                router.push('/')
+            if (response.data.data.role === "teacher" && response.data.data.statusStart === 'verified') {
+                router.push("/");
+                localStorage.setItem(config.token_name, response.data.token);
+                localStorage.setItem(config.role_name, response.data.data.role)
+                localStorage.setItem(config.firstName_name, response.data.data.firstName)
+                localStorage.setItem(config.token_lastName, response.data.data.lastName)
+                localStorage.setItem(config.currentStudyField, response.data.data.branch)
+                localStorage.setItem(config.idCard, response.data.data.idCard)
+                localStorage.setItem(config.phoneNumber, response.data.data.phoneNumber)
+                localStorage.setItem('userData', JSON.stringify(response.data.data)); // เก็บข้อมูลใน localStorage
+                searchData.setDataResults(response.data.data);
+            } else if (response.data.data.role === "admin") {
+                router.push("/teacher-index/dashboard");
+            } else {
+                router.push("/auth-evaluator");
             }
         }
     } catch (error) {
@@ -57,6 +54,9 @@ const handleLogin = async () => {
         })
     }
 }
+const goToForgotPassword = () => {
+    router.push({ name: 'forgot-pass-teacher', query: { role: 'teacher' } });
+};
 
 </script>
 <template>
@@ -115,9 +115,11 @@ const handleLogin = async () => {
                         <div class="row">
                             <!-- <p>ยังไม่มีบัญชีผู้ใช้ ใช่ไหม</p> -->
                             <!-- <router-link to="/register"><small href="#">สมัครสำหรับนักศึกษา</small></router-link> -->
-                            <router-link to="/teacher-register"><small href="#">Don't have an
+                            <router-link to="/register-teacher"><small href="#">Don't have an
                                     account? Click Register</small></router-link>
-                            <router-link to="/forgot-pass"><small href="#">Forgot your password?</small></router-link>
+                            <router-link to="/forgot-pass-teacher"><small href="#">Forgot your
+                                    password?</small></router-link>
+                            <!-- <button @click="goToForgotPassword">Forgot your password?</button> -->
                             <!-- <router-link to="/register-evaluation"><small
                                     href="#">สมัครสำหรับผู้ประเมิน</small></router-link>
                             <router-link to="/login-evaluation"><small

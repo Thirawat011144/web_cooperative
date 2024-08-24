@@ -499,9 +499,9 @@ const fetchStudentData = async () => {
 const submitEvaluation = async () => {
     try {
         const idCard = localStorage.getItem(config.idCard)
-        const phoneNumber = localStorage.getItem(config.phoneNumber);
-        const evaluatorStatus = localStorage.getItem(config.evaluatorStatus);
-        const evaluatorName = `${localStorage.getItem(config.firstName_name)} ${localStorage.getItem(config.token_lastName)}`;
+    
+    
+      
 
         // คำนวณคะแนนรวม
         const totalScore = parseInt(workCriteria.value) + parseInt(qualityOfWork.value) +
@@ -519,11 +519,8 @@ const submitEvaluation = async () => {
         const averageScore = (totalScore / 200) * 100;
 
         const payload = {
-            evaluatorStatus: evaluatorStatus,
             time: time.value,
-            evaluatorName: evaluatorName,
             studentId: student.value.studentID,
-            phoneNumber: phoneNumber,
             idCard: idCard,
             criteria: workCriteria.value,
             qualityOfWork: qualityOfWork.value,

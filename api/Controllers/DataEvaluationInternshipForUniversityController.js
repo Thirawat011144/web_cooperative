@@ -1,12 +1,14 @@
 const express = require("express");
-const DataEvaluationInternshipForUniversity = require("../Models/DataEvaluationInternshipForUniversity");
+// const DataEvaluationInternshipForUniversity = require("../Models/DataEvaluationInternshipForUniversity");
+const { TeachersModels, dataEvaluationInternshipForUniversity,EvaluatorsModels, } = require("../Models/index");
+
 
 const router = express.Router();
 
 router.post("/data-evaluation-internship-university", async (req, res) => {
     try {
         const {
-            evaluatorStatus, time, evaluatorName, studentId, criteria, hrGuidance, employeeSupport, phoneNumber,
+            evaluatorStatus, time,  studentId, criteria, hrGuidance, employeeSupport, 
             assignedWorkload, taskRelevanceToMajor, taskMatchesProposal, assignedTaskInterestMatch, reportTopicSuitability,
             initialSupervisor, supervisorKnowledgeAndExperience, supervisionTime, reportWritingSupervisionTime, supervisorInterestInGuidance,
             supervisorEvaluationPriority, workPlanDevelopment, personality, maturity, adaptation, learning, expressingOpinions,
@@ -19,12 +21,10 @@ router.post("/data-evaluation-internship-university", async (req, res) => {
         const payload = {
             evaluatorStatus,
             time,
-            evaluatorName,
             studentId,
             criteria,
             hrGuidance,
             employeeSupport,
-            phoneNumber,
             assignedWorkload,
             taskRelevanceToMajor,
             taskMatchesProposal,
@@ -54,12 +54,12 @@ router.post("/data-evaluation-internship-university", async (req, res) => {
             clearAndSystematicCommunication: String(clearAndSystematicCommunication),
             studentOverallEvaluation: String(studentOverallEvaluation),
             other: String(other),
-            idCard:idCard
+            idCard: idCard
         };
 
         console.log("payload:", payload); // เพิ่มดีบักเพื่อดูข้อมูลที่ส่งมา
 
-        const newEvaluation = await DataEvaluationInternshipForUniversity.create(payload);
+        const newEvaluation = await dataEvaluationInternshipForUniversity.create(payload);
 
         res.json({ message: "Success", result: newEvaluation });
     } catch (error) {
@@ -70,7 +70,18 @@ router.post("/data-evaluation-internship-university", async (req, res) => {
 // API สำหรับดึงข้อมูลการประเมินทั้งหมด
 router.get("/data-evaluation-internship-university", async (req, res) => {
     try {
-        const evaluations = await DataEvaluationInternshipForUniversity.findAll();
+        const evaluations = await dataEvaluationInternshipForUniversity.findAll({
+            include: [
+                // {
+                //     model: UsersModel,
+                //     as: 'userDetails'  // ต้องตรงกับ 'as' ที่กำหนดใน association ของ UsersModel
+                // },
+                {
+                    model: TeachersModels,
+                    as: 'universityTeacher'  // ใช้ 'as' ที่ตรงกับการตั้งค่า association ใน DataEvaluationInternship
+                }
+            ]
+        });
         res.json(evaluations);
     } catch (error) {
         res.status(500).send({ message: error.message });
@@ -82,7 +93,7 @@ router.delete("/data-evaluation-internship-university", async (req, res) => {
     try {
         const { studentID } = req.body; // ตรวจสอบชื่อฟิลด์ให้ตรงกัน
 
-        const result = await DataEvaluationInternshipForUniversity.destroy({
+        const result = await dataEvaluationInternshipForUniversity.destroy({
             where: { studentId: studentID } // ใช้ studentID
         });
 

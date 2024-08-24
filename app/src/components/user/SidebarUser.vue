@@ -55,6 +55,12 @@ const handleSignOut = () => {
                     <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
                         data-accordion="false">
                         <li class="nav-item">
+                            <router-link to="/" class="nav-link">
+                                <i class="fa-solid fa-house me-2"></i>
+                                <p>หน้าแรก</p>
+                            </router-link>
+                        </li>
+                        <li class="nav-item">
                             <router-link to="/user-index/data-student" class="nav-link">
                                 <i class="fa-solid fa-user me-2"></i>
                                 <p>ข้อมูลนักศึกษา</p>
@@ -66,18 +72,13 @@ const handleSignOut = () => {
                                 <p>ลงทะเบียนขอออกฝึก</p>
                             </router-link>
                         </li>
-                        <li v-else class="nav-item">
+                        <li v-if="year === 'ป.ตรี ปีที่ 4' || year === 'ป.ตรี ปีที่ 2'" class="nav-item">
                             <router-link to="/user-index/form-teaching" class="nav-link">
                                 <i class="fa-solid fa-comment me-2"></i>
                                 <p>ลงทะเบียนขอออกฝึกสอน</p>
                             </router-link>
                         </li>
-                        <li class="nav-item">
-                            <router-link to="/" class="nav-link">
-                                <i class="fa-solid fa-house me-2"></i>
-                                <p>หน้าแรก</p>
-                            </router-link>
-                        </li>
+
                         <li class="nav-item">
                             <router-link to="/reset-password" class="nav-link">
                                 <i class="fa-solid fa-unlock me-2"></i>

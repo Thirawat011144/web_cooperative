@@ -22,6 +22,8 @@ const currentStudyField = ref('');
 const category = ref('');
 const statusStart = 'ขอยืนยันตัวตน'
 const collegeNames = ref([]);
+const idCardWarning = ref('')
+const phoneNumberWarning = ref('');
 
 const EvaluatorCompany = [
     { value: "ผู้ดูแล", text: "ผู้ดูแล" },
@@ -100,6 +102,30 @@ const fetchCollegeNames = async () => {
     }
 };
 
+const validateIdCard = () => {
+    // ลบอักขระที่ไม่ใช่ตัวเลขออก
+    idCard.value = idCard.value.replace(/[^0-9]/g, '');
+
+    // ตรวจสอบความยาวของเลขบัตรประชาชน
+    if (idCard.value.length !== 13) {
+        idCardWarning.value = 'กรุณาใส่เลขบัตรประชาชนให้ครบ 13 หลัก';
+    } else {
+        idCardWarning.value = ''; // ล้างข้อความแจ้งเตือนหากรูปแบบถูกต้อง
+    }
+};
+
+const validatePhoneNumber = () => {
+    const originalValue = phoneNumber.value;
+    phoneNumber.value = phoneNumber.value.replace(/[^0-9]/g, '');
+
+    if (originalValue !== phoneNumber.value) {
+        phoneNumberWarning.value = 'คุณสามารถใส่ได้เฉพาะตัวเลขเท่านั้น';
+    } else {
+        phoneNumberWarning.value = ''; // ล้างข้อความแจ้งเตือนหากไม่มีการเปลี่ยนแปลง
+    }
+};
+
+
 // Fetch college names on component mount
 onMounted(() => {
     fetchCollegeNames();
@@ -120,7 +146,7 @@ const handleRegister = async () => {
             // courseRelation: courseRelation.value,
             evaluatorStatus: evaluatorStatus.value,
             currentStudyField: currentStudyField.value,
-            statusStart:statusStart
+            statusStart: statusStart
         };
 
         const response = await axios.post(`${config.api_path}/evaluation`, payload);
@@ -159,7 +185,8 @@ const handleRegister = async () => {
                                         <div class="row">
                                             <div class="col-md-6 mb-4">
                                                 <div class="form-outline">
-                                                    <label class="form-label" for="firstName">ชื่อ</label>
+                                                    <label class="form-label" for="firstName">ชื่อ
+                                                        <span>*</span></label>
                                                     <input type="text" id="firstName"
                                                         class="form-control form-control-lg" v-model="firstName"
                                                         required />
@@ -167,7 +194,8 @@ const handleRegister = async () => {
                                             </div>
                                             <div class="col-md-6 mb-4">
                                                 <div class="form-outline">
-                                                    <label class="form-label" for="lastName">นามสกุล</label>
+                                                    <label class="form-label"
+                                                        for="lastName">นามสกุล<span>*</span></label>
                                                     <input type="text" id="lastName"
                                                         class="form-control form-control-lg" v-model="lastName"
                                                         required />
@@ -178,7 +206,8 @@ const handleRegister = async () => {
                                         <div class="row">
                                             <div class="col-md-6 mb-4">
                                                 <div class="form-outline">
-                                                    <label class="form-label" for="userName">ชื่อผู้ใช้</label>
+                                                    <label class="form-label" for="userName">ชื่อผู้ใช้
+                                                        <span>*</span></label>
                                                     <input type="text" id="userName"
                                                         class="form-control form-control-lg" v-model="userName"
                                                         required />
@@ -186,7 +215,8 @@ const handleRegister = async () => {
                                             </div>
                                             <div class="col-md-6 mb-4">
                                                 <div class="form-outline">
-                                                    <label class="form-label" for="password">รหัสผ่าน</label>
+                                                    <label class="form-label" for="password">รหัสผ่าน <span>*</span>
+                                                    </label>
                                                     <input type="password" id="password"
                                                         class="form-control form-control-lg" v-model="password"
                                                         required />
@@ -197,10 +227,13 @@ const handleRegister = async () => {
                                         <div class="row">
                                             <div class="col-md-4 mb-4">
                                                 <div class="form-outline">
-                                                    <label class="form-label"
-                                                        for="idCard">เลขบัตรประจำตัวประชาชน</label>
+                                                    <label class="form-label" for="idCard">เลขบัตรประจำตัวประชาชน
+                                                        <span>*</span></label>
                                                     <input type="text" id="idCard" class="form-control form-control-lg"
-                                                        v-model="idCard" maxlength="13" minlength="13" required />
+                                                        v-model="idCard" maxlength="13" minlength="13"
+                                                        @input="validateIdCard" required />
+                                                    <small v-if="idCardWarning" class="text-danger">{{ idCardWarning
+                                                        }}</small>
                                                 </div>
                                             </div>
                                             <!-- <div class="col-md-6 mb-4">
@@ -292,7 +325,8 @@ const handleRegister = async () => {
                                             </div> -->
                                             <div class="col-md-4 mb-4">
                                                 <div class="form-outline">
-                                                    <label class="form-label" for="category">ประเภทนักศึกษา</label>
+                                                    <label class="form-label" for="category">ประเภทนักศึกษา
+                                                        <span>*</span> </label>
                                                     <select id="category"
                                                         class="form-control form-control-lg form-select"
                                                         v-model="category" required>
@@ -304,8 +338,8 @@ const handleRegister = async () => {
                                             </div>
                                             <div class="col-md-4 mb-4">
                                                 <div class="form-outline">
-                                                    <label class="form-label"
-                                                        for="evaluatorStatus">สถานะผู้ประเมิน</label>
+                                                    <label class="form-label" for="evaluatorStatus">สถานะผู้ประเมิน
+                                                        <span>*</span></label>
                                                     <select id="evaluatorStatus"
                                                         class="form-control form-control-lg form-select"
                                                         v-model="evaluatorStatus" required>
@@ -322,7 +356,7 @@ const handleRegister = async () => {
                                                 <div class="form-outline">
                                                     <label class="form-label"
                                                         for="currentStudyField">สาขาวิชาที่นักศึกษากำลังศึกษา
-                                                        (สามารถเปลี่ยนแปลงได้)</label>
+                                                        (สามารถเปลี่ยนแปลงได้) <span>*</span></label>
                                                     <select id="currentStudyField"
                                                         class="form-control form-control-lg form-select"
                                                         v-model="currentStudyField" required>
@@ -378,10 +412,15 @@ const handleRegister = async () => {
                                             </div>
                                             <div class="col-md-6 mb-4">
                                                 <div class="form-outline mb-4">
-                                                    <label class="form-label" for="phoneNumber">เบอร์โทร</label>
+                                                    <label class="form-label" for="phoneNumber">เบอร์โทร
+                                                        <span>*</span></label>
                                                     <input type="tel" id="phoneNumber"
                                                         class="form-control form-control-lg" v-model="phoneNumber"
-                                                        maxlength="10" pattern="[0-9]{10}" required />
+                                                        maxlength="10" pattern="[0-9]{10}" @input="validatePhoneNumber"
+                                                        required />
+                                                    <small v-if="phoneNumberWarning" class="text-danger">{{
+                                                        phoneNumberWarning
+                                                    }}</small>
                                                 </div>
                                             </div>
                                         </div>
@@ -472,5 +511,9 @@ const handleRegister = async () => {
 .btn-primary:hover {
     background-color: #0056b3;
     border-color: #0056b3;
+}
+
+span {
+    color: red;
 }
 </style>

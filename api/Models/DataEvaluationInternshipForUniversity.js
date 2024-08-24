@@ -7,10 +7,10 @@ const dataEvaluationInternshipForUniversity = connect.define("dataEvaluationInte
         primaryKey: true,
         autoIncrement: true,
     },
-    evaluatorName: {
-        type: DataTypes.STRING(255),
-        allowNull: false,
-    },
+    // evaluatorName: {
+    //     type: DataTypes.STRING(255),
+    //     allowNull: false,
+    // },
     studentId: {
         type: DataTypes.STRING(50),
         allowNull: false,
@@ -151,10 +151,10 @@ const dataEvaluationInternshipForUniversity = connect.define("dataEvaluationInte
         type: DataTypes.STRING,
         allowNull: true,
     },
-    phoneNumber: {
-        type: DataTypes.STRING,
-        allowNull: true,
-    },
+    // phoneNumber: {
+    //     type: DataTypes.STRING,
+    //     allowNull: true,
+    // },
     idCard: {
         type: DataTypes.STRING,
         allowNull: true,

@@ -514,13 +514,14 @@ const fetchStudentData = async () => {
 const submitEvaluation = async () => {
   try {
     const idCard = localStorage.getItem(config.idCard);
-    const phoneNumber = localStorage.getItem(config.phoneNumber);
-    const evaluatorName = `${localStorage.getItem(config.firstName_name)} ${localStorage.getItem(config.token_lastName)}`;
+    console.log(selectedStatus.value)
+    // const phoneNumber = localStorage.getItem(config.phoneNumber);
+    // const evaluatorName = `${localStorage.getItem(config.firstName_name)} ${localStorage.getItem(config.token_lastName)}`;
     const payload = {
       evaluatorStatus: selectedStatus.value,
       time: time.value,
-      evaluatorName: evaluatorName,
-      phoneNumber: phoneNumber,
+      // evaluatorName: evaluatorName,
+      // phoneNumber: phoneNumber,
       studentId: student.value.studentID,
       idCard: idCard,
       criteria: criteria.value,

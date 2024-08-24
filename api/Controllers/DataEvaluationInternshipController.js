@@ -1,28 +1,28 @@
 const express = require("express");
-const DataEvaluationInternship = require("../Models/DataEvaluationInternship");
+const {dataEvaluationInternshipModel,UsersModel,EvaluatorsModels } = require("../Models/index");
+// const {EvaluatorsModels} = require('../Models/Relationship')
 
 const router = express.Router();
 
 router.post("/data-evaluation-internship", async (req, res) => {
     try {
         const {
-            evaluatorName, studentId, criteria, time, evaluatorStatus,
+             studentId, criteria, time, 
             qualityOfWork, academicAbility, abilityToLearn, practicalAbility,
             judgmentAndDecision, managementAndPlanning, communicationSkills,
             foreignLanguage, suitabilityForJob, responsibilityAndDependability,
             interestInWork, initiative, dependability, personality,
             interpersonalSkills, discipline, ethicsAndMorality, strength,
             improvement, jobOffer, other, averageScore, totalScore,
-            phoneNumber, idCard
+            idCard
         } = req.body;
 
         console.log("Criteria Length:", criteria.length); // เพิ่มดีบักเพื่อดูจำนวนข้อ
         console.log("Criteria:", criteria); // เพิ่มดีบักเพื่อดูข้อมูลที่ส่งมา
 
-        const newEvaluation = await DataEvaluationInternship.create({
-            evaluatorName: evaluatorName,
+        const newEvaluation = await dataEvaluationInternshipModel.create({
+           
             studentId: studentId,
-            phoneNumber: phoneNumber,
             idCard: idCard,
             criteria: criteria,
             qualityOfWork: qualityOfWork,
@@ -45,7 +45,6 @@ router.post("/data-evaluation-internship", async (req, res) => {
             totalScore: totalScore,
             averageScore: averageScore,
             time: time,
-            evaluatorStatus: evaluatorStatus,
             strength: strength,
             improvement: improvement,
             jobOffer: jobOffer,
@@ -59,21 +58,32 @@ router.post("/data-evaluation-internship", async (req, res) => {
     }
 });
 
-// API สำหรับดึงข้อมูลการประเมินทั้งหมด
 router.get("/data-evaluation-internship", async (req, res) => {
     try {
-        const evaluations = await DataEvaluationInternship.findAll();
+        const evaluations = await dataEvaluationInternshipModel.findAll({
+            include: [
+                {
+                    model: UsersModel,
+                    as: 'userDetails'  // ต้องตรงกับ 'as' ที่กำหนดใน association ของ UsersModel
+                },
+                {
+                    model: EvaluatorsModels,
+                    as: 'internshipEvaluator'  // ใช้ 'as' ที่ตรงกับการตั้งค่า association ใน DataEvaluationInternship
+                }
+            ]
+        });
         res.json(evaluations);
     } catch (error) {
         res.status(500).send({ message: error.message });
     }
 });
 
+
 // API สำหรับดึงข้อมูลการประเมินของนักเรียนคนเดียวโดยใช้ studentId
 router.get("/data-evaluation-internship/:studentId", async (req, res) => {
     try {
         const { studentId } = req.params;
-        const evaluation = await DataEvaluationInternship.findAll({ where: { studentId: studentId } });
+        const evaluation = await dataEvaluationInternshipModel.findAll({ where: { studentId: studentId } });
 
         if (evaluation) {
             res.json(evaluation);
@@ -91,7 +101,7 @@ router.put("/data-evaluation-internship/:studentId", async (req, res) => {
         const { studentId } = req.params;
         const { totalScore, averageScore } = req.body;
 
-        const evaluations = await DataEvaluationInternship.findAll({ where: { studentId } });
+        const evaluations = await dataEvaluationInternshipModel.findAll({ where: { studentId } });
 
         if (evaluations.length === 0) {
             return res.status(404).send({ message: "Evaluations not found" });
@@ -114,7 +124,7 @@ router.delete("/data-evaluation-internship", async (req, res) => {
     try {
         const { studentID } = req.body; // ตรวจสอบชื่อฟิลด์ให้ตรงกัน
 
-        const result = await DataEvaluationInternship.destroy({
+        const result = await dataEvaluationInternshipModel.destroy({
             where: { studentId: studentID } // ใช้ studentID
         });
 

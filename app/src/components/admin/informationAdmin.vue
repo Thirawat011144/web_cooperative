@@ -10,6 +10,9 @@
                 <p class="card-text">
                     <span>โทรศัพท์:</span> {{ dataResult.phoneNumber }}
                 </p>
+                <p class="card-text">
+                    <span>เลขบัตรประชาชน:</span> {{ dataResult.idCard }}
+                </p>
                 <p class="card-text branch-container">
                     <span>รับผิดชอบสาขา :</span>
                     <select class="branch-select col-md-5 form-select" v-model="dataResult.branch"
@@ -69,7 +72,7 @@ const loading = ref(true);
 const fetchUserData = async () => {
     if (id) {
         try {
-            const response = await axios.get(`${config.api_path}/user/${id}`);
+            const response = await axios.get(`${config.api_path}/admin/${id}`);
             dataResult.value = response.data;
         } catch (error) {
             console.error('Error fetching user data:', error);
@@ -104,7 +107,7 @@ const saveChanges = async () => {
     // ตรวจสอบว่าผู้ใช้กดยืนยันการบันทึกหรือไม่
     if (result.isConfirmed) {
         try {
-            await axios.put(`${config.api_path}/user/${id}`, { branch: dataResult.value.branch });
+            await axios.put(`${config.api_path}/admin/${id}`, { branch: dataResult.value.branch });
             Swal.fire({
                 title: 'สำเร็จ',
                 text: 'บันทึกการเปลี่ยนแปลงสำเร็จ',

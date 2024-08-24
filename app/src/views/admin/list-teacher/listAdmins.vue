@@ -13,7 +13,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="(user, index) in teachers" :key="user.id">
+                        <tr v-for="(user, index) in admins" :key="user.id">
                             <td>{{ index + 1 }}</td>
                             <td>{{ user.firstName }} {{ user.lastName }}</td>
                             <td>{{ user.branch }}</td>
@@ -23,11 +23,10 @@
                                     ขอยืนยันตัวตน
                                 </button>
                                 <span v-else>
-                                    <button class="btn btn-success btn-sm"> {{ user.statusStart }}</button>
+                                    <button class="btn btn-success btn-sm">{{ user.statusStart }}</button>
                                 </span>
                                 <button @click="deleteUser(user.id)" class="btn btn-danger btn-sm ml-2">ลบ</button>
                             </td>
-
                         </tr>
                     </tbody>
                 </table>
@@ -52,12 +51,12 @@ const teachers = ref([]);
 const fetchData = async () => {
     try {
         // ทำการขอข้อมูลจาก API สำหรับ admins และ teachers
-        // const adminsResponse = await axios.get(`${config.api_path}/admins`);
-        const teachersResponse = await axios.get(`${config.api_path}/teachers`);
+        const adminsResponse = await axios.get(`${config.api_path}/admins`);
+        // const teachersResponse = await axios.get(`${config.api_path}/teachers`);
 
         // เก็บข้อมูลแยกกันในตัวแปร admins และ teachers
-        // admins.value = adminsResponse.data;
-        teachers.value = teachersResponse.data;
+        admins.value = adminsResponse.data;
+        // teachers.value = teachersResponse.data;
         // users.value = [...adminsResponse.data, ...teachersResponse.data];
     } catch (error) {
         Swal.fire({
@@ -106,12 +105,8 @@ const deleteUser = async (id) => {
         });
 
         if (confirmation.isConfirmed) {
-            // ใช้ API ที่ถูกต้องสำหรับลบข้อมูลครู
-            await axios.delete(`${config.api_path}/teacher/${id}`);
-            
-            // เรียกใช้ fetchData เพื่ออัปเดตตารางหลังจากลบ
-            await fetchData();
-            
+            await axios.delete(`${config.api_path}/users/${id}`);
+            users.value = users.value.filter(user => user.id !== id); // อัปเดตตารางหลังจากลบ
             Swal.fire({
                 title: "Deleted",
                 text: "ลบข้อมูลเรียบร้อยแล้ว",
@@ -126,7 +121,6 @@ const deleteUser = async (id) => {
         });
     }
 };
-
 
 const verifyUser = async (user) => {
     try {
@@ -143,7 +137,7 @@ const verifyUser = async (user) => {
 
         if (confirmation.isConfirmed) {
             // อัพเดทสถานะในฐานข้อมูลเป็น 'verified'
-            await axios.put(`${config.api_path}/teacher/${user.id}`, {
+            await axios.put(`${config.api_path}/admin/${user.id}`, {
                 statusStart: 'verified'
             });
 

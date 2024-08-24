@@ -1,7 +1,7 @@
 const express = require("express");
 const { Op, Sequelize } = require('sequelize');
-const { UsersModel, CompaniesModel, CollegesModel, dataEvaluationInternshipForUniversity,dataEvaluation } = require("../Models/index");
-const dataEvaluationInternshipModel =require("../Models/DataEvaluationInternship")
+const { UsersModel, CompaniesModel, CollegesModel, dataEvaluationInternshipForUniversity, dataEvaluation,TeachersModels,EvaluatorsModels,dataEvaluationInternshipModel } = require("../Models/index");
+// const dataEvaluationInternshipModel = require("../Models/DataEvaluationInternship")
 // const authenticateToken = require('../Middleware/Authorization');
 
 const router = express.Router();
@@ -110,17 +110,33 @@ router.get("/users/search", async (req, res) => {
                     model: dataEvaluationInternshipModel,
                     as: 'evaluationDetails',
                     // attributes: ['score', 'comments'] // เลือกฟิลด์ที่ต้องการส่งออก
+                    include:[{
+                        model: EvaluatorsModels,
+                        as:'internshipEvaluator'
+                    }]
                 },
                 {
                     model: dataEvaluationInternshipForUniversity,
                     as: 'evaluationUniversityDetails',
                     // attributes: ['score', 'comments'] // เลือกฟิลด์ที่ต้องการส่งออก
+                    include: [
+                        {
+                            model: TeachersModels,
+                            as: 'universityTeacher', // alias ที่ตรงกับความสัมพันธ์ที่กำหนดไว้
+                            // attributes: ['firstName', 'lastName'] // เลือกฟิลด์ที่ต้องการส่งออก
+                        }
+                    ]
                 },
                 {
                     model: dataEvaluation,
                     as: 'evaluationHightDetails',
-                    // attributes: ['score', 'comments'] // เลือกฟิลด์ที่ต้องการส่งออก
+                    // attributes: ['score', 'comments'] // เลือกฟิลด์ที่ต้องการส่งออก       
                 }
+                // {
+                //     model: EvaluatorsModels,
+                //     as: 'evaluatorEvaluations',
+                //     // attributes: ['score', 'comments'] // เลือกฟิลด์ที่ต้องการส่งออก
+                // }
             ]
         });
 
@@ -134,7 +150,7 @@ router.get("/users/search", async (req, res) => {
         res.status(500).send({ message: "เกิดข้อผิดพลาดในการค้นหาผู้ใช้" });
     }
 });
-// router.get("/users/search", async (req, res) => {
+// router.get("/    ", async (req, res) => {
 //     try {
 //         const { query } = req.query;
 //         if (!query) {

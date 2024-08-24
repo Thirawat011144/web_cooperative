@@ -7,9 +7,6 @@ const UsersModel = connect.define("users", {
         primaryKey: true,
         autoIncrement: true,
     },
-    prefix: {
-        type: DataTypes.STRING(50),
-    },
     firstName: {
         type: DataTypes.STRING(50),
     },
@@ -52,10 +49,6 @@ const UsersModel = connect.define("users", {
         type: DataTypes.STRING(50),
         defaultValue: 'user'
     },
-    college: {
-        type: DataTypes.STRING(255),
-        // defaultValue: 'user'
-    }
 })
 
 module.exports = UsersModel;

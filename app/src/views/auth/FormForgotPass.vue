@@ -13,21 +13,38 @@
 
 <script setup>
 import { ref } from "vue";
-import { useRouter } from "vue-router";
+import { useRouter, useRoute } from "vue-router";
 import axios from "axios";
 import config from "../../../config";
 
 const idCard = ref("");
 const router = useRouter();
+const route = useRoute();  // ดึงข้อมูลเกี่ยวกับ route ปัจจุบัน
+
+localStorage.setItem(config.role_name, route.name)
 
 const handleSubmit = async () => {
   try {
     console.log(idCard.value);
+    console.log(route.name)
+    // ตรวจสอบชื่อ route เพื่อกำหนด userType
+    let userType;
+    if (route.name === 'forgot-pass-admin') {
+      userType = 'admin';
+    } else if (route.name === 'forgot-pass-teacher') {
+      userType = 'teacher';
+    } else {
+      userType = 'user'
+    }
 
-    const response = await axios.post(`${config.api_path}/forgot-password`, {
-      idCard: idCard.value,
-    });
+    console.log(userType)
+    
+    const apiPath = `${config.api_path}/forgot-password/${userType}`;
+    console.log(apiPath)
+    // ส่งข้อมูลไปยัง API
+    const response = await axios.post(apiPath, { idCard: idCard.value });
 
+    // ตรวจสอบ response จาก API
     if (response.data.redirectToReset) {
       router.push({ name: "reset-password", query: { idCard: idCard.value } });
     } else {

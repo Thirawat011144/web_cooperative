@@ -123,22 +123,22 @@ const handleRegister = async () => {
                 icon: "success",
                 timer: 2000
             })
-            router.push('/login')
+            router.push('/login-choice')
         }
     } catch (error) {
-    
-        if(error.response.data.message === "Validation error"){
+
+        if (error.response.data.message === "Validation error") {
             Swal.fire({
-            title: "error",
-            text: ("มีข้อมูลนี้ในระบบแล้ว"),
-            icon: "error"
-        })
-        }else{
+                title: "error",
+                text: ("มีข้อมูลนี้ในระบบแล้ว"),
+                icon: "error"
+            })
+        } else {
             Swal.fire({
-            title: "error",
-            text: (error.response.data.message),
-            icon: "error"
-        })
+                title: "error",
+                text: (error.response.data.message),
+                icon: "error"
+            })
         }
         console.log(error)
     }

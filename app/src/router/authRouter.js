@@ -31,11 +31,21 @@ const routerAuth = [
     component: FormChangePass
   }
   ,
-  {
-    path: '/forgot-pass',
-    // name: 'login-teacher',
-    component: FormForgotPass
-  }
+ {
+  path: '/forgot-pass-teacher',
+  name: 'forgot-pass-teacher',
+  component: FormForgotPass
+},
+{
+  path: '/forgot-pass',
+  name: 'forgot-pass',
+  component: FormForgotPass
+},
+{
+  path: '/forgot-pass-admin',
+  name: 'forgot-pass-admin',
+  component: FormForgotPass
+}
   ,
   {
     path: '/login-teacher',

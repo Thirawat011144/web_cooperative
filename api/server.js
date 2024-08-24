@@ -5,7 +5,7 @@ const jwt = require('jsonwebtoken');
 const path = require('path');
 
 // const Evaluation = require('./Models/Evaluation')
-
+const Admins = require('./Models/Admins')
 // const sequelize = require('./connect') ทดสอบการเชื่อมต่อ Database
 // const CompaniesModel = require('./Models/Companies')
 // const ContactModel =  require('./Models/Contact')
@@ -25,7 +25,8 @@ const EvaluationController = require('./Controllers/EvaluationController')
 const DataEvaluationController = require('./Controllers/DataEvaluationController')
 const DataEvaluationInternshipController = require('./Controllers/DataEvaluationInternshipController')
 const DataEvaluationInternshipForUniversityController = require('./Controllers/DataEvaluationInternshipForUniversityController')
-
+const AdminsController = require('./Controllers/AdminsController')
+const TeachersController = require('./Controllers/TeachersController')
 
 const app = express()
 const port = 3000;
@@ -50,6 +51,8 @@ app.use('/api', EvaluationController)
 app.use('/api', DataEvaluationController)
 app.use('/api', DataEvaluationInternshipController)
 app.use('/api', DataEvaluationInternshipForUniversityController)
+app.use('/api', AdminsController)
+app.use('/api', TeachersController)
 
 app.listen(port, () => {
     console.log(`Example app listening on port`, port);

@@ -40,7 +40,7 @@ if (userData.branch) {
 const fetchStudents = async () => {
   try {
     const response = await axios.get(`${config.api_path}/users`);
-    students.value = response.data.filter(student => student.branch === branch && student.role !== 'teacher' && student.role !== 'admin' && student.prefix === null); // กรองสาขาและ role
+    students.value = response.data.filter(student => student.branch === branch && student.role !== 'teacher' && student.role !== 'admin'); // กรองสาขาและ role
     console.log("student",students.value)
     // Assuming you have a way to distinguish between levels
     studentsLevel3.value = students.value.filter(student => student.year === "ปวช 3");

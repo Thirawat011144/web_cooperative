@@ -18,13 +18,13 @@ const companyEmail = ref('');
 const companyAddress = ref('');
 const studentID = ref('')
 const academicYear = ref('')
-const status = ref('');
-const valueStatus = ref('สำเร็จ') //ไม่ได้ใช้แล้ว
+// const status = ref('');
+
 
 if (userData.studentID) {
     studentID.value = userData.studentID;
-    status.value = userData.status;
-    console.log(status.value)
+    // status.value = userData.status;
+    // console.log(status.value)
 } else {
     console.log('No userData found in localStorage');
 }
@@ -52,8 +52,7 @@ const handleSubmit = async () => {
                 companyAddress: companyAddress.value,
                 studentID: studentID.value,
                 academicYear: academicYear.value,
-                status: status.value,
-                valueStatus: valueStatus.value
+
             };
             const response = await axios.post(`${config.api_path}/company`, formData);
             if (response.data.message === 'Success') {

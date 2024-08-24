@@ -25,6 +25,7 @@ import CreateDownload from '../../views/downloads/CreateDownload.vue'
 import ListDownloads from '../../views/downloads/ListDownloads.vue'
 import EditDownload from '../../views/downloads/EditDownload.vue'
 
+import listAdmins from '../../views/admin/list-teacher/listAdmins.vue'
 import listTeachers from '../../views/admin/list-teacher/listTeachers.vue'
 import listEvaluator from '../../views/admin/list-evaluator/ListEvaluator.vue'
 
@@ -151,6 +152,11 @@ const routeAdmin = [
         path: 'list-evaluator',
         name: 'list-evaluator',
         component: listEvaluator
+      },
+      {
+        path: 'list-admins',
+        name: 'list-admins',
+        component: listAdmins
       },
       {
         path: 'list-teachers',

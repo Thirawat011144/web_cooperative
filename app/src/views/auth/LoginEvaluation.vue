@@ -18,10 +18,12 @@ const currentUser = ref(null); // เพิ่มตัวแปรนี้เ�
 // ฟังก์ชันสำหรับการเข้าสู่ระบบ
 const handleLogin = async () => {
   try {
+    const trimUsername = userName.value.trim()
+    const trimPassword = password.value.trim()
     // สร้าง payload สำหรับส่งไปยัง API
     const payload = {
-      userName: userName.value,
-      password: password.value,
+      userName: trimUsername,
+      password: trimPassword
     };
     // เรียกใช้ API สำหรับการเข้าสู่ระบบ
     const response = await axios.post(

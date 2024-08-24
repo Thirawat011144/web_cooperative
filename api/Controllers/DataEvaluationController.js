@@ -1,18 +1,19 @@
 const express = require("express");
-const DataEvaluation = require("../Models/DataEvaluation");
+// const DataEvaluation = require("../Models/DataEvaluation");
+const { dataEvaluation, TeachersModels, EvaluatorsModels } = require("../Models/index");
 
 const router = express.Router();
 
 router.post("/data-evaluation", async (req, res) => {
     try {
         const {
-            evaluatorName,
+
             studentId,
             idCard,
             criteria,
             time,
             evaluatorStatus,
-            phoneNumber,
+
             additionalComments,
             innovationAlignment,
             learningPlan,
@@ -55,14 +56,14 @@ router.post("/data-evaluation", async (req, res) => {
             democraticCompliance
         } = req.body;
 
-        const newEvaluation = await DataEvaluation.create({
-            evaluatorName: evaluatorName,
+        const newEvaluation = await dataEvaluation.create({
+
             studentId: studentId,
-            idCard: idCard,
+            idCardTeacher: evaluatorStatus === 'อาจารย์นิเทศ' ? idCard : null,
+            idCardEvaluator: evaluatorStatus === 'ครูพี่เลี้ยง' || evaluatorStatus === 'หัวหน้าแผนกวิชา' || evaluatorStatus === 'ผู้บริหารสถานศึกษา/ผู้ได้รับมอบหมาย' || evaluatorStatus === 'กรรมการบริหารสถานศึกษา/ตัวแทนชุมชน' ? idCard : null,
             criteria: criteria,
             time: time,
             evaluatorStatus: evaluatorStatus,
-            phoneNumber: phoneNumber,
             additionalComments: additionalComments,
             innovationAlignment: innovationAlignment,
             learningPlan: learningPlan,
@@ -115,18 +116,46 @@ router.post("/data-evaluation", async (req, res) => {
 // API สำหรับดึงข้อมูลการประเมินทั้งหมด
 router.get("/data-evaluation", async (req, res) => {
     try {
-        const evaluations = await DataEvaluation.findAll();
-        res.json(evaluations);
+        const evaluations = await dataEvaluation.findAll({
+            include: [
+                {
+                    model: TeachersModels,
+                    as: 'teacher'
+                },
+                {
+                    model: EvaluatorsModels,
+                    as: 'evaluator'
+                }
+            ]
+        });
+
+        const results = evaluations.map(evaluation => {
+            const evaluatorName = evaluation.teacher ? `${evaluation.teacher.firstName} ${evaluation.teacher.lastName}` :
+                evaluation.evaluator ? `${evaluation.evaluator.firstName} ${evaluation.evaluator.lastName}` : '';
+
+            const idCard = evaluation.teacher ? evaluation.teacher.idCard :
+                evaluation.evaluator ? evaluation.evaluator.idCard : '';
+
+            const phoneNumber = evaluation.teacher ? evaluation.teacher.phoneNumber :
+                evaluation.evaluator ? evaluation.evaluator.phoneNumber : '';
+            return {
+                ...evaluation.toJSON(),
+                evaluatorName,
+                idCard,
+                phoneNumber
+            };
+        });
+
+        res.json(results);
     } catch (error) {
         res.status(500).send({ message: error.message });
     }
 });
-
 // API สำหรับดึงข้อมูลการประเมินของนักเรียนคนเดียวโดยใช้ studentId
 router.get("/data-evaluation/:studentId", async (req, res) => {
     try {
         const { studentId } = req.params;
-        const evaluation = await DataEvaluation.findAll({ where: { studentId: studentId } });
+        const evaluation = await dataEvaluation.findAll({ where: { studentId: studentId } });
 
         if (evaluation) {
             res.json(evaluation);
@@ -143,7 +172,7 @@ router.delete("/data-evaluation", async (req, res) => {
     try {
         const { studentID } = req.body; // ตรวจสอบชื่อฟิลด์ให้ตรงกัน
 
-        const result = await DataEvaluation.destroy({
+        const result = await dataEvaluation.destroy({
             where: { studentId: studentID } // ใช้ studentID
         });
 

@@ -85,12 +85,12 @@ export const downloadExcel = (filename, sortedUsers) => {
     ]);
 
     const data = sortedUsers.map(user => ({
-        evaluatorName: user.evaluationDetails?.[0]?.evaluatorName || '',
+        evaluatorName: `${user.evaluationDetails?.[0]?.internshipEvaluator?.firstName || ''} ${user.evaluationDetails?.[0]?.internshipEvaluator?.lastName || ''}`.trim(),
         idCard: user.evaluationDetails?.[0]?.idCard || '',
-        phoneNumberEvaluator: user.evaluationDetails?.[0]?.phoneNumber || 'sad',
+        phoneNumberEvaluator: user.evaluationDetails?.[0]?.internshipEvaluator?.phoneNumber || '',
         companyName: user.companyDetails?.companyName || 'ไม่มีข้อมูล',
         department: user.companyDetails?.companyDepartment || 'ไม่มีข้อมูล', // เพิ่มค่าเริ่มต้นเป็น 'ไม่มีข้อมูล'
-        evaluatorStatus: user.evaluationDetails?.[0]?.evaluatorStatus || '',
+        evaluatorStatus: user.evaluationDetails?.[0]?.internshipEvaluator?.evaluatorStatus || '',
         time: user.evaluationDetails?.[0]?.time || '',
         branch: user.branch,
         studentID: user.studentID,
@@ -199,9 +199,11 @@ export const downloadExcelHight = (filename, sortedUsers) => {
     ]);
 
     const data = sortedUsers.map(user => ({
-        evaluatorName: user.evaluationUniversityDetails?.[0]?.evaluatorName || '',
+        evaluatorName: `${user.evaluationUniversityDetails?.[0]?.universityTeacher?.firstName || ''} ${user.evaluationUniversityDetails?.[0]?.universityTeacher?.lastName || ''}`,
+        // evaluatorName : `${user.evaluationDetails?.[0]?.internshipEvaluator?.firstName || ''} ${user.evaluationDetails?.[0]?.internshipEvaluator?.lastName || ''}`.trim(),
         idCard: user.evaluationUniversityDetails?.[0]?.idCard || '',
-        phoneNumberTeacher: user.evaluationUniversityDetails?.[0]?.phoneNumber || '',
+        phoneNumberTeacher: user.evaluationUniversityDetails?.[0]?.universityTeacher?.phoneNumber || '',
+        // phoneNumberEvaluator: user.evaluationDetails?.[0]?.internshipEvaluator?.phoneNumber || '',
         companyName: user.companyDetails?.companyName || 'ไม่มีข้อมูล',
         department: user.companyDetails?.companyDepartment || 'ไม่มีข้อมูล', // เพิ่มค่าเริ่มต้นเป็น 'ไม่มีข้อมูล'
         evaluatorStatus: user.evaluationUniversityDetails?.[0]?.evaluatorStatus || '',

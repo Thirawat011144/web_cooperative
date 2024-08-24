@@ -1,14 +1,14 @@
 const express = require("express");
 const bcrypt = require('bcryptjs');
 const UsersModel = require("../Models/Users");
-const EvaluationModel = require ('../Models/Evaluation')
+const EvaluatorsModel = require('../Models/Evaluators')
 
 const router = express.Router();
 
 router.post("/register", async (req, res) => {
   try {
     const existingUser = await UsersModel.findOne({
-      where: { userName: req.body.userName, idCard:req.body.idCard },
+      where: { userName: req.body.userName, idCard: req.body.idCard },
     });
     if (existingUser) {
       res.status(400).send({ message: "ชื่อผู้ใช้นี้ถูกใช้งานไปแล้ว" });
@@ -39,7 +39,7 @@ router.post("/register", async (req, res) => {
 })
 
 // Forgot Password Route
-router.post('/forgot-password', async (req, res) => {
+router.post('/forgot-password/user', async (req, res) => {
   const { idCard } = req.body;
 
   try {
@@ -61,7 +61,7 @@ router.post('/forgot-password-evaluator', async (req, res) => {
 
   try {
     // ใช้ findOne ของ Sequelize เพื่อค้นหาผู้ใช้
-    const user = await EvaluationModel.findOne({ where: { idCard: idCard } });
+    const user = await EvaluatorsModel.findOne({ where: { idCard: idCard } });
 
     if (!user) {
       return res.status(404).send({ redirectToReset: false, message: 'User not found' });
@@ -103,7 +103,7 @@ router.post('/reset-password-evaluator', async (req, res) => {
 
   try {
     // ค้นหาผู้ใช้ตาม idCard
-    const user = await EvaluationModel.findOne({ where: { idCard: idCard } });
+    const user = await EvaluatorsModel.findOne({ where: { idCard: idCard } });
 
     if (!user) {
       return res.status(404).send({ message: 'User not found' });

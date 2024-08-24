@@ -11,8 +11,18 @@ const searchData = useDataStore();
 
 const userName = ref("");
 const password = ref("");
+const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+let checkStatusStart = null;
+
+if (userData.statusStart) {
+  checkStatusStart = userData.statusStart;
+  console.log(checkStatusStart); // นี่จะแสดง 'notVerified'
+} else {
+  console.log('No userData found in localStorage or statusStart is missing');
+}
 
 const handleLogin = async () => {
+
   const trimmedUsername = userName.value.trim();
   const trimmedPassword = password.value.trim();
   try {
@@ -20,7 +30,8 @@ const handleLogin = async () => {
       userName: trimmedUsername,
       password: trimmedPassword,
     };
-    const response = await axios.post(`${config.api_path}/login`, payload);
+    const response = await axios.post(`${config.api_path}/login/admin`, payload);
+    console.log(response.data.message)
     if (response.data.message === "Success") {
       Swal.fire({
         title: "Sign In",
@@ -28,20 +39,22 @@ const handleLogin = async () => {
         icon: "success",
         timer: 2000,
       });
-      console.log(response);
-      localStorage.setItem(config.token_name, response.data.token);
-      localStorage.setItem(config.role_name, response.data.data.role);
-      localStorage.setItem(config.firstName_name, response.data.data.firstName);
-      localStorage.setItem(config.branch, response.data.data.branch);
-      localStorage.setItem("userData", JSON.stringify(response.data.data)); // เก็บข้อมูลใน localStorage
-      searchData.setDataResults(response.data.data);
 
-      if (response.data.data.role === "admin") {
+
+
+      if (response.data.data.role === "admin" && response.data.data.statusStart === 'verified') {
         router.push("/");
+        console.log(response);
+        localStorage.setItem(config.token_name, response.data.token);
+        localStorage.setItem(config.role_name, response.data.data.role);
+        localStorage.setItem(config.firstName_name, response.data.data.firstName);
+        localStorage.setItem(config.branch, response.data.data.branch);
+        localStorage.setItem("userData", JSON.stringify(response.data.data)); // เก็บข้อมูลใน localStorage
+        searchData.setDataResults(response.data.data);
       } else if (response.data.data.role === "teacher") {
         router.push("/teacher-index/dashboard");
       } else {
-        router.push("/");
+        router.push("/auth-evaluator");
       }
     }
   } catch (error) {
@@ -52,6 +65,11 @@ const handleLogin = async () => {
     });
   }
 };
+
+const goToForgotPassword = () => {
+  router.push({ name: 'forgot-pass-admin', query: { role: 'admin' } });
+};
+
 </script>
 <template>
   <div>
@@ -59,30 +77,20 @@ const handleLogin = async () => {
     <div class="background"></div>
 
     <!-- Main Container -->
-    <div
-      class="container d-flex justify-content-center align-items-center min-vh-100"
-    >
+    <div class="container d-flex justify-content-center align-items-center min-vh-100">
       <!-- Login Container -->
       <div class="row border rounded-5 p-3 bg-white shadow box-area">
         <!-- Left Box -->
-        <div
-          class="col-md-6 rounded-4 d-flex justify-content-center align-items-center flex-column left-box"
-          style="background: #fff"
-        >
+        <div class="col-md-6 rounded-4 d-flex justify-content-center align-items-center flex-column left-box"
+          style="background: #fff">
           <div class="featured-image mb-3">
-            <img
-              src="../../assets/img/rmuti3.png"
-              class="img-fluid"
-              style="width: 100px"
-            />
+            <img src="../../assets/img/rmuti3.png" class="img-fluid" style="width: 100px" />
           </div>
           <p class="text-back fs-2" style="font-weight: 600">งานสหกิจศึกษา</p>
-          <small class="text-back text-wrap text-center" style="width: 17rem"
-            >คณะครุศาสตร์อุตสหกรรม <br />
+          <small class="text-back text-wrap text-center" style="width: 17rem">คณะครุศาสตร์อุตสหกรรม <br />
             มหาวิทยาลัยเทคโนโลยีราชมงคลอีสาน
             <br />
-            วิทยาเขตขอนแก่น</small
-          >
+            วิทยาเขตขอนแก่น</small>
         </div>
         <!-- Right Box -->
         <div class="col-md-6 right-box">
@@ -93,22 +101,12 @@ const handleLogin = async () => {
             </div>
             <form @submit.prevent="handleLogin">
               <div class="input-group mb-3">
-                <input
-                  v-model="userName"
-                  type="text"
-                  class="form-control form-control-lg bg-light fs-6"
-                  placeholder="Username"
-                  required
-                />
+                <input v-model="userName" type="text" class="form-control form-control-lg bg-light fs-6"
+                  placeholder="Username" required />
               </div>
               <div class="input-group mb-1">
-                <input
-                  v-model="password"
-                  type="password"
-                  class="form-control form-control-lg bg-light fs-6"
-                  placeholder="Password"
-                  required
-                />
+                <input v-model="password" type="password" class="form-control form-control-lg bg-light fs-6"
+                  placeholder="Password" required />
               </div>
               <!-- <div class="input-group mb-5 d-flex justify-content-between">
                                 <div class="form-check">
@@ -118,10 +116,7 @@ const handleLogin = async () => {
                                 </div>
                             </div> -->
               <div class="input-group mb-3 mt-5">
-                <button
-                  style="background-color: mediumvioletred; color: white"
-                  class="btn w-100 fs-6"
-                >
+                <button style="background-color: mediumvioletred; color: white" class="btn w-100 fs-6">
                   Login
                 </button>
 
@@ -132,14 +127,10 @@ const handleLogin = async () => {
             <div class="row">
               <!-- <p>ยังไม่มีบัญชีผู้ใช้ ใช่ไหม</p> -->
               <!-- <router-link to="/register"><small href="#">สมัครสำหรับนักศึกษา</small></router-link> -->
-              <router-link to="/teacher-register"
-                ><small href="#"
-                  >Don't have an account? Click Register</small
-                ></router-link
-              >
-              <router-link to="/forgot-pass"
-                ><small href="#">Forgot your password?</small></router-link
-              >
+              <router-link to="/teacher-register"><small href="#">Don't have an account? Click
+                  Register</small></router-link>
+              <!-- <button @click="goToForgotPassword">Forgot your password?</button> -->
+                    <router-link to="/forgot-pass-admin"><small href="#">Forgot your password?</small></router-link>
               <!-- <router-link to="/register-evaluation"><small
                                     href="#">สมัครสำหรับผู้ประเมิน</small></router-link>
                             <router-link to="/login-evaluation"><small
