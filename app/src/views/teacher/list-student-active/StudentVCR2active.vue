@@ -162,11 +162,11 @@ const handleEvaluation = (userId) => {
     }
 
     localStorage.setItem(config.evaluatorStatus, role);
-    const roleTeacher = localStorage.getItem(config.role_name);
+    const roleTeacher = localStorage.getItem(config.role_name); // ไม่ได้ใช้
     const roleStatus = localStorage.getItem(config.evaluatorStatus);
 
     console.log("User ID:", userId);
-    console.log("Role Teacher:", roleTeacher);
+    console.log("Role Teacher:", roleTeacher); // ไม่ได้ใช้แล้ว
     console.log("Role:", roleStatus);
 
     if (roleStatus === 'อาจารย์นิเทศ') {

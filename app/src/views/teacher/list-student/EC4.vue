@@ -27,7 +27,7 @@ if (userData.branch) {
 const fetchData = async () => {
   try {
     const response = await axios.get(`${config.api_path}/users`);
-    users.value = response.data.filter(user => user.year === "ป.ตรี ปีที่ 4" && user.branch === branch);
+    users.value = response.data.filter(user => user.year === "ป.ตรี ปีที่ 4" && user.branch === branch && user.status !== 'เสร็จสิ้น');
   } catch (error) {
     Swal.fire({
       title: "error",

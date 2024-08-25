@@ -9,31 +9,40 @@ const CollegesModel = connect.define("colleges", {
     },
     collegeName: {
         type: DataTypes.STRING(255),
+        allowNull: false,
     },
     contactFirstName: {
         type: DataTypes.STRING(255),
+        allowNull: false,
     },
     contactLastName: {
         type: DataTypes.STRING(255),
+        allowNull: false,
     },
     collegePhone: {
         type: DataTypes.STRING(255),
+        allowNull: false,
     },
     collegeAddress: {
         type: DataTypes.STRING(500),
+        allowNull: false,
     },
     collegeEmail: {
         type: DataTypes.STRING(255),
+        allowNull: false,
     },
     studentID: {
         type: DataTypes.STRING(50),
-        unique: true
+        unique: true,
+        allowNull: false,
     },
     department: { 
         type: DataTypes.STRING(255),
+        allowNull: false,
     },
     schoolSize:{
-        type:DataTypes.STRING(500)
+        type:DataTypes.STRING(500),
+        allowNull: false,
     }
 
 });

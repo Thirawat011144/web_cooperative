@@ -9,28 +9,36 @@ const CompaniesModel = connect.define("companies", {
     },
     companyName: {
         type: DataTypes.STRING(255),
+        allowNull: false,
     },
     companyDepartment: {
         type: DataTypes.STRING(255),
+        allowNull: false,
     },
     contactFirstName: {
         type: DataTypes.STRING(255),
+        allowNull: false,
     },
     contactLastName: {
         type: DataTypes.STRING(255),
+        allowNull: false,
     },
     companyPhone: {
         type: DataTypes.STRING(255),
+        allowNull: false,
     },
     companyAddress: {
         type: DataTypes.STRING(500),
+        allowNull: false,
     },
     companyEmail: {
         type: DataTypes.STRING(255),
+        allowNull: false,
     },
     studentID: {
         type: DataTypes.STRING(50),
-        // unique: true
+        unique: true,
+        allowNull: false, // กำหนดให้ค่านี้ต้องไม่เป็น NULL
     }
     // ,
     // status: {

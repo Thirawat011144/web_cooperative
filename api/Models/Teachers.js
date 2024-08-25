@@ -8,7 +8,7 @@ const TeachersModel = connect.define("teachers", {
         autoIncrement: true,
     },
     prefix: {
-        type: DataTypes.STRING(50),
+        type: DataTypes.STRING(50),    
         allowNull: false,
     },
     firstName: {

@@ -9,6 +9,7 @@ const NewsModel = connect.define("news", {
     },
     title: {
         type: DataTypes.STRING(255),
+        allowNull: false,
     },
     detail: {
         type: DataTypes.TEXT // ใช้ TEXT แทน STRING เพื่อไม่จำกัดความยาวของข้อความ
@@ -20,7 +21,7 @@ const NewsModel = connect.define("news", {
         type: DataTypes.STRING, // หรือตามประเภทของไฟล์ที่คุณจะใช้
     },
     imageFile: {
-        type: DataTypes.STRING, // เพิ่มคอลัมน์สำหรับการจัดเก็บ URL ของรูปภาพ
+        type: DataTypes.STRING, 
     }
 })
 

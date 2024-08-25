@@ -5,7 +5,7 @@ const AdminsModel = connect.define("admins", {
     id: {
         type: DataTypes.BIGINT,
         primaryKey: true,
-        autoIncrement: true,
+        autoIncrement: true, 
     },
     prefix: {
         type: DataTypes.STRING(50),

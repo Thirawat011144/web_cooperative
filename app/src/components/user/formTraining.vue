@@ -165,7 +165,8 @@ const handleSubmit = async () => {
 
                         <!-- Email input -->
                         <div data-mdb-input-init class="form-outline mb-4">
-                            <label class="form-label" for="companyEmail">Email </label>
+                            <label class="form-label" for="companyEmail">Email <span
+                                class="text-red">*</span> </label>
                             <input type="email" id="companyEmail" class="form-control" v-model="companyEmail" />
                         </div>
 

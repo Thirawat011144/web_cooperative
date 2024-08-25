@@ -20,7 +20,7 @@ router.get("/users", async (req, res) => {
                     model: CollegesModel,
                     as: 'collegeDetails',
                     // attributes: ['collegeName']
-                }
+                },
             ]
         });
         res.send(users);
@@ -130,6 +130,16 @@ router.get("/users/search", async (req, res) => {
                 {
                     model: dataEvaluation,
                     as: 'evaluationHightDetails',
+                    include:[
+                        {
+                            model:TeachersModels,
+                            as:'teacher'
+                        },{
+                            model:EvaluatorsModels,
+                            as:'evaluator'
+                            
+                        }
+                    ]
                     // attributes: ['score', 'comments'] // เลือกฟิลด์ที่ต้องการส่งออก       
                 }
                 // {

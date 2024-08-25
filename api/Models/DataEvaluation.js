@@ -34,7 +34,7 @@ const DataEvaluation = connect.define("dataEvaluation", {
     },
     additionalComments: {
         type: DataTypes.STRING(255),
-        allowNull: false,
+        allowNull: true,
     },
     innovationAlignment: {
         type: DataTypes.STRING(255),

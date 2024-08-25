@@ -25,13 +25,13 @@ const checkEvaluatorRole = localStorage.getItem(config.evaluatorStatus);
   <aside class="main-sidebar bg-secondary sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
     <a href="index3.html" class="brand-link">
-      <img
+      <!-- <img
         src="@/assets/img/AdminLTELogo.png"
         alt="AdminLTE Logo"
         class="brand-image img-circle elevation-3"
         style="opacity: 0.8"
-      />
-      <span class="brand-text font-weight-light">RMUTI</span>
+      /> -->
+      <span class="brand-text font-weight-light ms-2">RMUTI</span>
     </a>
 
     <!-- Sidebar -->
@@ -47,12 +47,7 @@ const checkEvaluatorRole = localStorage.getItem(config.evaluatorStatus);
 
       <!-- Sidebar Menu -->
       <nav class="mt-2">
-        <ul
-          class="nav nav-pills nav-sidebar flex-column"
-          data-widget="treeview"
-          role="menu"
-          data-accordion="false"
-        >
+        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
           <div class="nav-header text-white">เมนู</div>
           <li class="nav-item">
             <router-link to="/" class="nav-link">
@@ -77,44 +72,30 @@ const checkEvaluatorRole = localStorage.getItem(config.evaluatorStatus);
             <ul class="nav nav-treeview">
               <div v-if="extractedField === 'สาขาวิชา'">
                 <li class="nav-item">
-                  <router-link
-                    to="/home-evaluation/student-ev-vcr2"
-                    class="nav-link ms-4"
-                  >
+                  <router-link to="/home-evaluation/student-ev-vcr2" class="nav-link ms-4">
                     <p>ปวช ชั้นปีที่ 3</p>
                   </router-link>
                 </li>
                 <li class="nav-item">
-                  <router-link
-                    to="/home-evaluation/student-ev-uvcr"
-                    class="nav-link ms-4"
-                  >
+                  <router-link to="/home-evaluation/student-ev-uvcr" class="nav-link ms-4">
                     <p>ปวส ชั้นปีที่ 2</p>
                   </router-link>
                 </li>
               </div>
-              <div
-                v-else-if="
-                  extractedField !== 'สาขาวิชา' &&
-                  (checkEvaluatorRole === 'พี่เลี้ยง' ||
-                    checkEvaluatorRole === 'ผู้ดูแล')
-                "
-              >
+              <div v-else-if="
+                extractedField !== 'สาขาวิชา' &&
+                (checkEvaluatorRole === 'พี่เลี้ยง' ||
+                  checkEvaluatorRole === 'ผู้ดูแล')
+              ">
                 <li class="nav-item">
-                  <router-link
-                    to="/home-evaluation/student-ev-tec2"
-                    class="nav-link ms-4"
-                  >
+                  <router-link to="/home-evaluation/student-ev-tec2" class="nav-link ms-4">
                     <p>ป.ตรี ชั้นปีที่ 2</p>
                   </router-link>
                 </li>
               </div>
               <div v-else>
                 <li class="nav-item">
-                  <router-link
-                    to="/home-evaluation/student-ev-tec4"
-                    class="nav-link ms-4"
-                  >
+                  <router-link to="/home-evaluation/student-ev-tec4" class="nav-link ms-4">
                     <p>ป.ตรี ชั้นปีที่ 4</p>
                   </router-link>
                 </li>

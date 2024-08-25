@@ -52,7 +52,7 @@ const updateData = async () => {
     if (result.isConfirmed) {
         try {
             const checkYears = user.value.year
-            console.log("check",checkYears)
+            console.log("check", checkYears)
             const response = await axios.put(`${config.api_path}/user/${route.params.id}`, user.value);
             if (response.data.message === 'Success') {
                 Swal.fire({
@@ -62,7 +62,7 @@ const updateData = async () => {
                 });
                 if (role === 'teacher') {
                     router.push('/teacher-index/list-cr2');
-                } else if (role === 'admin' && checkYears === 'ปวส 2'){
+                } else if (role === 'admin' && checkYears === 'ปวส 2') {
                     router.push('/admin-index/list-dcr');
                 } else {
                     router.push('/admin-index/list-cr2');
@@ -166,7 +166,7 @@ onMounted(() => {
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-6 mb-4">
+                            <div class="col-md mb-4">
                                 <label class="form-label" for="branch">สาขา</label>
                                 <select v-model="user.branch" class="form-select">
                                     <option value="" disabled>-</option>
@@ -196,6 +196,21 @@ onMounted(() => {
                                         สาขาวิชาการออกแบบนวัตกรรมเครื่องจักรกล</option>
                                     <option value="สาขาวิชาเทคโนโลยีคอมพิวเตอร์">
                                         สาขาวิชาเทคโนโลยีคอมพิวเตอร์</option>
+                                    <!-- <option value="" disabled>-</option> -->
+                                    <option value="สาขาครุศาสตร์อุตสาหกรรมโยธา">
+                                        สาขาครุศาสตร์อุตสาหกรรมโยธา</option>
+                                    <option value="สาขาครุศาสตร์อุตสาหกรรมไฟฟ้า">
+                                        สาขาครุศาสตร์อุตสาหกรรมไฟฟ้า</option>
+                                    <option value="สาขาครุศาสตร์อุตสาหกรรมเครื่องกล">
+                                        สาขาครุศาสตร์อุตสาหกรรมเครื่องกล</option>
+                                    <option value="สาขาครุศาสตร์อุตสาหกรรมอุตสาหการ">
+                                        สาขาครุศาสตร์อุตสาหกรรมอุตสาหการ</option>
+                                    <option value="สาขาครุศาสตร์อุตสาหกรรมอิเล็กทรอนิกส์และโทรคมนาคม">
+                                        สาขาครุศาสตร์อุตสาหกรรมอิเล็กทรอนิกส์และโทรคมนาคม</option>
+                                    <option value="สาขาครุศาสตร์อุตสาหกรรมคอมพิวเตอร์">
+                                        สาขาครุศาสตร์อุตสาหกรรมคอมพิวเตอร์</option>
+                                    <option value="สาขาครุศาสตร์อุตสาหการเชื่อมประกอบ">
+                                        สาขาครุศาสตร์อุตสาหการเชื่อมประกอบ</option>
                                 </select>
                             </div>
                             <!-- <div class="col-md-6 mb-4">

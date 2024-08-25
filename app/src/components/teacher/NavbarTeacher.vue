@@ -62,13 +62,13 @@ const branchOptions2 = ref([
 ]);
 
 const branchOptions3 = ref([{ value: "สาขาวิชาช่างก่อสร้าง", text: "สาขาวิชาช่างก่อสร้าง" },
-  { value: "สาขาวิชาช่างไฟฟ้ากำลัง", text: "สาขาวิชาช่างไฟฟ้ากำลัง" },
-  { value: "สาขาวิชาช่างยนต์", text: "สาขาวิชาช่างยนต์" },
-  { value: "สาขาวิชาเทคโนโลยีการเขียนแบบเครื่องกล", text: "สาขาวิชาเทคโนโลยีการเขียนแบบเครื่องกล" },
-  { value: "สาขาวิชาช่างอิเล็กทรอนิกส์", text: "สาขาวิชาช่างอิเล็กทรอนิกส์" },
-  { value: "สาขาวิชาช่างเทคนิคคอมพิวเตอร์", text: "สาขาวิชาช่างเทคนิคคอมพิวเตอร์" },])
+{ value: "สาขาวิชาช่างไฟฟ้ากำลัง", text: "สาขาวิชาช่างไฟฟ้ากำลัง" },
+{ value: "สาขาวิชาช่างยนต์", text: "สาขาวิชาช่างยนต์" },
+{ value: "สาขาวิชาเทคโนโลยีการเขียนแบบเครื่องกล", text: "สาขาวิชาเทคโนโลยีการเขียนแบบเครื่องกล" },
+{ value: "สาขาวิชาช่างอิเล็กทรอนิกส์", text: "สาขาวิชาช่างอิเล็กทรอนิกส์" },
+{ value: "สาขาวิชาช่างเทคนิคคอมพิวเตอร์", text: "สาขาวิชาช่างเทคนิคคอมพิวเตอร์" },])
 
-  const availableBranches = computed(() => {
+const availableBranches = computed(() => {
   if (
     searchYear.value === "ป.ตรี ปีที่ 2" ||
     searchYear.value === "ป.ตรี ปีที่ 4"
@@ -78,7 +78,7 @@ const branchOptions3 = ref([{ value: "สาขาวิชาช่างก่
   if (searchYear.value === "ปวส 2") {
     return branchOptions2.value;
   }
-  if(searchYear.value === 'ปวช 3'){
+  if (searchYear.value === 'ปวช 3') {
     return branchOptions3.value;
   }
   return [];
@@ -126,7 +126,7 @@ const trimValue = (value) => value.trim();
 
 const searchUsers = async () => {
   closeSearchModal();
-  
+
   const trimmedFirstName = trimValue(searchFirstName.value);
   const trimmedLastName = trimValue(searchLastName.value);
   const trimmedStudentID = trimValue(studentID.value);
@@ -159,7 +159,7 @@ const searchUsers = async () => {
     });
     searchStore.setSearchResults(response.data);
     console.log(response.data);
-    router.push("/admin-index/search");
+    router.push("/teacher-index/search-teacher");
   } catch (error) {
     Swal.fire({
       title: "Error",
@@ -181,10 +181,7 @@ const searchUsers = async () => {
             <div class="input-group input-group-sm custom-search-input me-5">
               <!-- ปุ่มสำหรับเปิด Modal การค้นหา -->
               <div class="input-group-append">
-                <button
-                  class="bg-primary btn btn-navbar btn-primary"
-                  type="submit"
-                >
+                <button class="bg-primary btn btn-navbar btn-primary" type="submit">
                   <i class="fas fa-search"></i>
                 </button>
               </div>
@@ -213,64 +210,36 @@ const searchUsers = async () => {
           <div class="modal-body">
             <!-- ชื่อ -->
             <div class="row mb-3">
-              <label for="searchFirstName" class="col-sm-3 col-form-label"
-                >ชื่อ</label
-              >
+              <label for="searchFirstName" class="col-sm-3 col-form-label">ชื่อ</label>
               <div class="col-sm-9">
-                <input
-                  type="text"
-                  class="form-control"
-                  id="searchFirstName"
-                  v-model="searchFirstName"
-                  placeholder="Firstname"
-                />
+                <input type="text" class="form-control" id="searchFirstName" v-model="searchFirstName"
+                  placeholder="Firstname" />
               </div>
             </div>
 
             <!-- นามสกุล -->
             <div class="row mb-3">
-              <label for="searchLastName" class="col-sm-3 col-form-label"
-                >นามสกุล</label
-              >
+              <label for="searchLastName" class="col-sm-3 col-form-label">นามสกุล</label>
               <div class="col-sm-9">
-                <input
-                  type="text"
-                  class="form-control"
-                  id="searchLastName"
-                  v-model="searchLastName"
-                  placeholder="Lastname"
-                />
+                <input type="text" class="form-control" id="searchLastName" v-model="searchLastName"
+                  placeholder="Lastname" />
               </div>
             </div>
 
             <!-- รหัสนักศึกษา -->
             <div class="row mb-3">
-              <label for="studentID" class="col-sm-3 col-form-label"
-                >รหัสนักศึกษา</label
-              >
+              <label for="studentID" class="col-sm-3 col-form-label">รหัสนักศึกษา</label>
               <div class="col-sm-9">
-                <input
-                  type="text"
-                  class="form-control"
-                  id="studentID"
-                  v-model="studentID"
-                  placeholder="Format 1 [64] or Format 2 [64322110094-5]"
-                  maxlength="13"
-                />
+                <input type="text" class="form-control" id="studentID" v-model="studentID"
+                  placeholder="Format 1 [64] or Format 2 [64322110094-5]" maxlength="13" />
               </div>
             </div>
 
             <!-- ชั้นปี -->
             <div class="row mb-3">
-              <label for="searchYear" class="col-sm-3 col-form-label"
-                >ชั้นปี</label
-              >
+              <label for="searchYear" class="col-sm-3 col-form-label">ชั้นปี</label>
               <div class="col-sm-9">
-                <select
-                  class="form-control"
-                  id="searchYear"
-                  v-model="searchYear"
-                >
+                <select class="form-control" id="searchYear" v-model="searchYear">
                   <option value="">Year</option>
                   <option value="ปวช 3">ประกาศนีบัตรวิชาชีพชั้นปีที่ 3</option>
                   <option value="ปวส 2">
@@ -284,21 +253,11 @@ const searchUsers = async () => {
 
             <!-- สาขา -->
             <div class="row mb-3">
-              <label for="searchBranch" class="col-sm-3 col-form-label"
-                >สาขา</label
-              >
+              <label for="searchBranch" class="col-sm-3 col-form-label">สาขา</label>
               <div class="col-sm-9">
-                <select
-                  class="form-control"
-                  id="searchBranch"
-                  v-model="searchBranch"
-                >
+                <select class="form-control" id="searchBranch" v-model="searchBranch">
                   <option value="">Faculty</option>
-                  <option
-                    v-for="branch in availableBranches"
-                    :key="branch.value"
-                    :value="branch.value"
-                  >
+                  <option v-for="branch in availableBranches" :key="branch.value" :value="branch.value">
                     {{ branch.text }}
                   </option>
                 </select>
@@ -317,7 +276,7 @@ const searchUsers = async () => {
                   <option value="ผ่าน">ผ่าน</option>
                   <option value="เสร็จสิ้น">เสร็จสิ้น</option>
                   <option value="ไม่ผ่าน">ไม่ผ่าน</option>
-                  <option value="ไม่ผ่าน">ไม่อนุมัติ</option>
+                  <option value="ไม่อนุมัติ">ไม่อนุมัติ</option>
                 </select>
               </div>
             </div>
@@ -326,11 +285,7 @@ const searchUsers = async () => {
             <button type="button" class="btn btn-warning" @click="clearFields">
               ล้างค่า
             </button>
-            <button
-              type="button"
-              class="btn btn-secondary"
-              @click="closeSearchModal"
-            >
+            <button type="button" class="btn btn-secondary" @click="closeSearchModal">
               ปิด
             </button>
             <button type="button" class="btn btn-primary" @click="searchUsers">

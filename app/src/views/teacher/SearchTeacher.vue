@@ -117,7 +117,7 @@ watch(
                             <th>ชั้นปี</th>
                             <th>สาขา</th>
                             <th>สถานที่ฝึกงาน</th>
-                            <th>Tools</th>
+                            <!-- <th>Tools</th> -->
                         </tr>
                     </thead>
                     <tbody>
@@ -134,14 +134,14 @@ watch(
                                 </button>
                             </td>
                             <!-- ใช้ company ตามฟิลด์ในตาราง -->
-                            <td>
+                            <!-- <td>
                                 <button class="btn btn-primary m-1">
                                     <i class="fa-solid fa-pen-to-square"></i>
                                 </button>
                                 <button class="btn btn-danger m-1">
                                     <i class="fa-solid fa-trash-can"></i>
                                 </button>
-                            </td>
+                            </td> -->
                         </tr>
                     </tbody>
                 </table>

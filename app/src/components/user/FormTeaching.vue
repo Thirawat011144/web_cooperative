@@ -102,7 +102,7 @@ const checkAvailability = async () => {
         const applicants = response.data.filter(college =>
             college.collegeName === selectedCompany.value &&
             college.department === selectedBranch.value &&
-            (college.userDetails.status !== 'ผ่าน' && college.userDetails.status !== 'เสร็จสิ้น')
+            (college.userDetails.status !== 'ผ่าน' && college.userDetails.status !== 'เสร็จสิ้น' && college.userDetails.status !== 'ไม่ผ่าน' && college.userDetails.status !== 'ไม่อนุมัติ')
         );
         console.log('Applicants:', applicants); // เพิ่มการตรวจสอบค่าผู้สมัคร
 

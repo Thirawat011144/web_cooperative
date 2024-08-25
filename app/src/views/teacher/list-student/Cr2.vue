@@ -28,7 +28,7 @@ const fetchData = async () => {
     const response = await axios.get(`${config.api_path}/users`, {
       // headers: { 'Authorization': `Bearer ${localStorage.getItem(config.token_name)}` }
     });
-    users.value = response.data.filter(user => user.year === "ปวช 3" && user.branch === branch);
+    users.value = response.data.filter(user => user.year === "ปวช 3" && user.branch === branch && user.status !== 'เสร็จสิ้น');
   } catch (error) {
     Swal.fire({
       title: "error",

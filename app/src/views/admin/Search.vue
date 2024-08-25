@@ -174,7 +174,7 @@ watch(
                                 </button>
                             </td>
                             <!-- ใช้ company ตามฟิลด์ในตาราง -->
-                            <td>
+                            <td> 
                                 <router-link :to="`/edit-cr2/${user.id}`">
                                     <button class="btn btn-primary m-1">
                                         <i class="fa-solid fa-pen-to-square"></i>

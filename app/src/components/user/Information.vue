@@ -1,7 +1,8 @@
 <template>
     <div class="flex-grow-1 p-3">
-        <h2>ข้อมูลผู้ใข้งาน</h2>
+
         <div class="card" v-if="dataResult">
+            <h2>ข้อมูลผู้ใข้งาน</h2>
             <div class="card-body">
                 <h5 class="card-title">
                     <span>ชื่อ:</span> {{ dataResult.firstName }} <span>นามสกุล:</span> {{ dataResult.lastName }}

@@ -42,13 +42,13 @@ const handleSignOut = () => {
 </script>
 <template>
     <div>
-        <aside class="main-sidebar sidebar-white-primary elevation-4">
+        <aside class="main-sidebar sidebar-dark-primary elevation-4">
             <div class="sidebar">
                 <div class="user-panel mt-3 pb-3 mb-3 d-flex">
                     <div class="image">
                     </div>
                     <div class="info">
-                        <a class="d-block">ชื่อผู้ใช้งาน {{ getUserName }}</a>
+                        <a class="d-block">นาย {{ getUserName }}</a>
                     </div>
                 </div>
                 <nav class="mt-2">
@@ -66,7 +66,8 @@ const handleSignOut = () => {
                                 <p>ข้อมูลนักศึกษา</p>
                             </router-link>
                         </li>
-                        <li v-if="year === 'ปวช 3' || year === 'ปวส 2' || year === 'ป.ตรี ปีที่ 2' || year === 'ประกาศนียบัตรวิชาชีพชั้นปีที่ 3' || year === 'ประกาศนียบัตรวิชาชีพชั้นสูงชั้นปีที่ 2'" class="nav-item">
+                        <li v-if="year === 'ปวช 3' || year === 'ปวส 2' || year === 'ป.ตรี ปีที่ 2' || year === 'ประกาศนียบัตรวิชาชีพชั้นปีที่ 3' || year === 'ประกาศนียบัตรวิชาชีพชั้นสูงชั้นปีที่ 2'"
+                            class="nav-item">
                             <router-link to="/user-index/form" class="nav-link">
                                 <i class="fa-solid fa-comment me-2"></i>
                                 <p>ลงทะเบียนขอออกฝึก</p>

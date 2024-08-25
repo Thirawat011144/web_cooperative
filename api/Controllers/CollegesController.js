@@ -147,7 +147,7 @@ router.post('/college', async (req, res) => {
             // อัปเดต status และข้อมูลอื่นๆ ใน Users table
             user.year = academicYear;
             user.status = 'ขออนุมัติ';
-            user.college = collegeName;
+            // user.college = collegeName;
             await user.save();
 
             // ตรวจสอบว่ามี record ในตาราง Colleges หรือไม่
@@ -189,7 +189,7 @@ router.post('/college', async (req, res) => {
                 // อัปเดต status ใน Users table
                 user.year = academicYear;
                 user.status = 'ขออนุมัติ';
-                user.college = collegeName;
+                // user.college = collegeName;
                 await user.save();
 
                 // สร้าง record ใหม่
@@ -206,8 +206,8 @@ router.post('/college', async (req, res) => {
                 });
                 res.status(201).send({ message: "Success", newCollege });
             }
-        } else if (status === 'ผ่าน' || status === 'เสร็จสิ้น' || status === 'เข้ารับการฝึก') {
-            res.status(200).send({ message: "มีข้อมูลการสมัครเรียบร้อยแล้ว" });
+        } else if (status === 'ผ่าน' || status === 'เสร็จสิ้น' || status === 'เข้ารับการฝึก' || status === 'อนุมัติ') {
+            res.status(409).send({ message: "มีข้อมูลการสมัครเรียบร้อยแล้ว" });
         } else {
             res.status(400).send({ message: "สถานะไม่ถูกต้อง" });
         }

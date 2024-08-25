@@ -31,7 +31,7 @@ const EvaluationModel = connect.define("evaluators", {
     idCard: {
         type: DataTypes.STRING,
         allowNull: false,
-        unique: true,  // กำหนดให้ idCard เป็น unique
+        unique: true,  
     },
 
     evaluatorStatus: {

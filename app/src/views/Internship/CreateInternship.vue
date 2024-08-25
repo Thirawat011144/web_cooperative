@@ -64,7 +64,7 @@
               id="vacancies" class="form-control" required>
           </div>
           <div class="mb-3 mt-2">
-            <label for="branch" class="form-label">สาขาที่รับ(ระบุเป็นสาขางานที่ต้องการ หรือ เป็นระบุเจาะจงเป็นสาขา)
+            <label for="branch" class="form-label">สาขาที่รับ(ระบุสาขางานที่ต้องการ หรือ ระบุเจาะจงเป็นสาขา)
               <span class="text-red">*</span></label>
             <input v-model="internship.branch" @input="logValue('branch', internship.branch)" type="text" id="vacancies"
               class="form-control" required>

@@ -85,7 +85,9 @@ export const downloadExcel = (filename, sortedUsers) => {
     ]);
 
     const data = sortedUsers.map(user => ({
-        evaluatorName: `${user.evaluationDetails?.[0]?.internshipEvaluator?.firstName || ''} ${user.evaluationDetails?.[0]?.internshipEvaluator?.lastName || ''}`.trim(),
+
+        // evaluatorName: `${user.evaluationDetails?.[0]?.internshipEvaluator?.firstName || ''} ${user.evaluationDetails?.[0]?.internshipEvaluator?.lastName || ''}`.trim(),
+        evaluatorName: user.evaluationHightDetails.evaluatorName || '',
         idCard: user.evaluationDetails?.[0]?.idCard || '',
         phoneNumberEvaluator: user.evaluationDetails?.[0]?.internshipEvaluator?.phoneNumber || '',
         companyName: user.companyDetails?.companyName || 'ไม่มีข้อมูล',
@@ -330,10 +332,24 @@ export const downloadExcelHightEvaluation = (filename, sortedUsers) => {
     sortedUsers.forEach(user => {
         if (user.evaluationHightDetails && user.evaluationHightDetails.length > 0) {
             user.evaluationHightDetails.forEach(detail => {
+                let idCard = '';
+                let phoneNumber = '';
+                let conditionForEvaluator = detail.evaluator !== null && detail.evaluator !== undefined;
+
+                if (conditionForEvaluator) {
+                    idCard = detail.evaluator ? detail.evaluator.idCard : '';
+                    phoneNumber = detail.evaluator ? detail.evaluator.phoneNumber : '';
+                } else {
+                    idCard = detail.teacher ? detail.teacher.idCard : detail.idCard || '';
+                    phoneNumber = detail.teacher ? detail.teacher.phoneNumber : detail.phoneNumber || '';
+                }
+                console.log(user.evaluationHightDetails);
+                console.log("User ID:", user.id, "Evaluation Details:", detail);
                 const row = worksheet.addRow({
-                    evaluatorName: detail.evaluatorName || '',
-                    idCard: detail.idCard || '',
-                    phoneNumber: detail.phoneNumber || '',
+
+                    evaluatorName: detail.evaluator ? detail.evaluator.firstName : (detail.teacher ? detail.teacher.firstName : ''),
+                    idCard: idCard || '',
+                    phoneNumber: phoneNumber || '',
                     collegeName: user.collegeDetails?.collegeName || '',
                     department: user.collegeDetails?.department || '',
                     schoolSize: user.collegeDetails?.schoolSize || '',

@@ -33,7 +33,7 @@ const InternshipModel = connect.define("internships", {
     },
     type: {
         type: DataTypes.STRING(255),
-        allowNull: false,
+        allowNull: true,
     },
     vacancies: {
         type: DataTypes.STRING(50),
@@ -73,7 +73,7 @@ const InternshipModel = connect.define("internships", {
     },
     branch: {
         type: DataTypes.STRING(255),
-        allowNull: true,
+        allowNull: false,
     }
 });
 

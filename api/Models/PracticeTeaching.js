@@ -139,7 +139,7 @@ const PracticeTeachingModel = connect.define("practiceTeaching", {
     },
     branches: {
         type: DataTypes.JSON, // ใช้ JSON สำหรับเก็บข้อมูลสาขาและจำนวนคนที่รับ
-        allowNull: true,
+        allowNull: false,
     }
 });
 

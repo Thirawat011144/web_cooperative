@@ -20,7 +20,7 @@ const DownloadsModel = connect.define("downloads", {
         allowNull: true,
     },
     docFile: {
-        type: DataTypes.STRING(255),
+        type: DataTypes.STRING,
         allowNull: true,
     },
 });
