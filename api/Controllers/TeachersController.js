@@ -11,29 +11,29 @@ const router = express.Router();
 
 router.post('/reset-password-teacher', async (req, res) => {
     const { idCard, newPassword } = req.body;
-  
+
     try {
-      // ค้นหาผู้ใช้ในโมเดล Teachers ตาม idCard
-      const teacher = await TeachersModels.findOne({ where: { idCard: idCard } });
-  
-      if (!teacher) {
-        return res.status(404).send({ message: 'Teacher not found' });
-      }
-  
-      // สร้าง salt และ hash รหัสผ่านใหม่
-      const salt = await bcrypt.genSalt(10);
-      const hashedPassword = await bcrypt.hash(newPassword, salt);
-  
-      // อัพเดตรหัสผ่านในฐานข้อมูล
-      teacher.password = hashedPassword;
-      await teacher.save();
-  
-      res.send({ message: 'Password has been reset successfully' });
+        // ค้นหาผู้ใช้ในโมเดล Teachers ตาม idCard
+        const teacher = await TeachersModels.findOne({ where: { idCard: idCard } });
+
+        if (!teacher) {
+            return res.status(404).send({ message: 'Teacher not found' });
+        }
+
+        // สร้าง salt และ hash รหัสผ่านใหม่
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(newPassword, salt);
+
+        // อัพเดตรหัสผ่านในฐานข้อมูล
+        teacher.password = hashedPassword;
+        await teacher.save();
+
+        res.send({ message: 'Password has been reset successfully' });
     } catch (error) {
-      console.error('Error:', error);
-      res.status(500).send({ message: error.message });
+        console.error('Error:', error);
+        res.status(500).send({ message: error.message });
     }
-  });
+});
 
 router.post('/forgot-password/teacher', async (req, res) => {
     const { idCard } = req.body;
@@ -79,53 +79,77 @@ router.get("/teacher/:id", async (req, res) => {
 
 
 // POST: สร้าง teacher ใหม่
-router.post("/teacher", async (req, res) => {
+// router.post("/teacher", async (req, res) => {
+//     try {
+//         const existingTeacher = await TeachersModels.findOne({
+//             where: { userName: req.body.userName},
+//         });
+
+//         if (existingTeacher) {
+//             res.status(400).send({ message: "ชื่อผู้ใช้นี้ถูกใช้งานไปแล้วหรือเลขบัตรประชาชนนี้ถูกใช้งานไปแล้ว" });
+//         } else {
+//             const salt = await bcrypt.genSalt(10);
+//             const hashedPassword = await bcrypt.hash(req.body.password, salt);
+
+//             const newTeacher = await TeachersModels.create({
+//                 prefix: req.body.prefix,
+//                 firstName: req.body.firstName,
+//                 lastName: req.body.lastName,
+//                 userName: req.body.userName,
+//                 password: hashedPassword,
+//                 phoneNumber: req.body.phoneNumber,
+//                 idCard: req.body.idCard,
+//                 gender: req.body.gender,
+//                 branch: req.body.branch,
+//                 statusStart: req.body.statusStart,  // สมมติว่ามีฟิลด์ department สำหรับ teachers
+//                 role: req.body.role
+//             });
+
+//             await newTeacher.save();
+//             res.json({ message: "Success", result: newTeacher });
+//         }
+//     } catch (error) {
+//         res.status(500).send({ message: error.message });
+//     }
+// });
+
+// POST: เพิ่มอีเมลของครู
+router.post('/teacher', async (req, res) => {
     try {
-        const existingTeacher = await TeachersModels.findOne({
-            where: { userName: req.body.userName, idCard: req.body.idCard },
+        const { userName, password } = req.body;
+
+        if (!userName || !password) {
+            return res.status(400).json({ message: 'UserName and Password are required' });
+        }
+
+        // เข้ารหัสรหัสผ่านก่อนบันทึกลงฐานข้อมูล
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        // สร้างครูใหม่ในฐานข้อมูล โดยไม่รวมฟิลด์ statusStart
+        const newTeacher = await TeachersModels.create({
+            userName,
+            password: hashedPassword,  // เก็บรหัสผ่านที่เข้ารหัสแล้ว
+            role: 'teacher'  // กำหนดบทบาทเป็น teacher
         });
 
-        if (existingTeacher) {
-            res.status(400).send({ message: "ชื่อผู้ใช้นี้ถูกใช้งานไปแล้วหรือเลขบัตรประชาชนนี้ถูกใช้งานไปแล้ว" });
-        } else {
-            const salt = await bcrypt.genSalt(10);
-            const hashedPassword = await bcrypt.hash(req.body.password, salt);
-
-            const newTeacher = await TeachersModels.create({
-                prefix: req.body.prefix,
-                firstName: req.body.firstName,
-                lastName: req.body.lastName,
-                userName: req.body.userName,
-                password: hashedPassword,
-                phoneNumber: req.body.phoneNumber,
-                idCard: req.body.idCard,
-                gender: req.body.gender,
-                branch: req.body.branch,
-                statusStart: req.body.statusStart,  // สมมติว่ามีฟิลด์ department สำหรับ teachers
-                role: req.body.role
-            });
-
-            await newTeacher.save();
-            res.json({ message: "Success", result: newTeacher });
-        }
+        res.status(201).json({ message: 'Teacher added successfully', teacher: newTeacher });
     } catch (error) {
-        res.status(500).send({ message: error.message });
+        res.status(500).json({ message: error.message });
     }
 });
 
-
-
-
 router.post('/login/teacher', async (req, res) => {
     try {
+        console.log(req.body.userName)
         const User = await TeachersModels.findOne({
             where: {
                 userName: req.body.userName
             },
         });
+        console.log(User)
 
         if (!User) {
-            return res.status(400).json({ message: "Username or Password Invalid" });
+            return res.status(400).json({ message: "Username or Password Invalids" });
         }
 
         const isMatch = await bcrypt.compare(req.body.password, User.password);

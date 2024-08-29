@@ -1,5 +1,6 @@
 import { checkAuth } from './authRouterFunction'
 import RegisterAdmin from '../../views/auth/RegisterAdmin.vue'
+import SetInformation from '../../components/teacher/SetInformation.vue'
 
 import TeacherIndex from '../../views/teacher/index.vue'
 import information from '../../components/teacher/information.vue'
@@ -45,6 +46,11 @@ import StudentTEC4notpass from '../../views/teacher/list-student-notpass/Student
 
 
 const routeTeacher = [
+    {
+        path:'/set-information',
+        name:'set-information',
+        component:SetInformation
+    },
     {
         path: '/teacher-index',
         name: 'teacher-home',

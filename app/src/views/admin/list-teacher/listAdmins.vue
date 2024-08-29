@@ -2,7 +2,7 @@
     <div class="content mt-4">
         <div class="card">
             <div class="card-header">
-                <div class="card-title">ข้อมูลอาจารย์</div>
+                <div class="card-title">ข้อมูลผู้ดูแล</div>
                 <table class="table">
                     <thead>
                         <tr>

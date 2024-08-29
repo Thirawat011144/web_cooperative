@@ -21,6 +21,8 @@ const handleLogin = async () => {
             userName: trimmedUsername,
             password: trimmedPassword
         };
+
+
         const response = await axios.post(`${config.api_path}/login/teacher`, payload);
         if (response.data.message === "Success") {
             Swal.fire({
@@ -29,22 +31,25 @@ const handleLogin = async () => {
                 icon: "success",
                 timer: 2000,
             });
-            if (response.data.data.role === "teacher" && response.data.data.statusStart === 'verified') {
-                router.push("/");
-                localStorage.setItem(config.token_name, response.data.token);
-                localStorage.setItem(config.role_name, response.data.data.role)
-                localStorage.setItem(config.firstName_name, response.data.data.firstName)
-                localStorage.setItem(config.token_lastName, response.data.data.lastName)
-                localStorage.setItem(config.currentStudyField, response.data.data.branch)
-                localStorage.setItem(config.idCard, response.data.data.idCard)
-                localStorage.setItem(config.phoneNumber, response.data.data.phoneNumber)
-                localStorage.setItem('userData', JSON.stringify(response.data.data)); // เก็บข้อมูลใน localStorage
-                searchData.setDataResults(response.data.data);
-            } else if (response.data.data.role === "admin") {
-                router.push("/teacher-index/dashboard");
-            } else {
-                router.push("/auth-evaluator");
+            if (response.data.data.role === "teacher") {
+                router.push('/set-information')
             }
+            // if (response.data.data.role === "teacher" && response.data.data.statusStart === null ) {
+            //     router.push("/");
+            //     localStorage.setItem(config.token_name, response.data.token);
+            //     localStorage.setItem(config.role_name, response.data.data.role)
+            //     localStorage.setItem(config.firstName_name, response.data.data.firstName)
+            //     localStorage.setItem(config.token_lastName, response.data.data.lastName)
+            //     localStorage.setItem(config.currentStudyField, response.data.data.branch)
+            //     localStorage.setItem(config.idCard, response.data.data.idCard)
+            //     localStorage.setItem(config.phoneNumber, response.data.data.phoneNumber)
+            //     localStorage.setItem('userData', JSON.stringify(response.data.data)); // เก็บข้อมูลใน localStorage
+            //     searchData.setDataResults(response.data.data);
+            // } else if (response.data.data.role === "admin") {
+            //     router.push("/teacher-index/dashboard");
+            // } else {
+            //     router.push("/auth-evaluator");
+            // }
         }
     } catch (error) {
         Swal.fire({

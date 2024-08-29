@@ -18,7 +18,7 @@
                     </div>
                     <div class="mb-3">
                         <label for="tel" class="form-label">เบอร์ติดต่อ <span class="text-red">*</span></label>
-                        <input v-model="internship.tel" type="text" id="tel" class="form-control" required>
+                        <input v-model="internship.tel" type="text" id="tel" class="form-control" maxlength="10" required>
                     </div>
                     <div class="mb-3">
                         <label for="zipCode" class="form-label">รหัสไปรษณีย์</label>
@@ -88,7 +88,7 @@
                     <div class="mb-3">
                         <label for="contactTel" class="form-label">เบอร์โทร <span class="text-red">*</span></label>
                         <input v-model="internship.contactTel" type="text" id="contactTel" class="form-control"
-                            required>
+                          maxlength="10" required>
                     </div>
                     <div class="mb-3">
                         <label for="otherContact" class="form-label">ช่องทางการติดต่ออื่นๆ</label>
@@ -148,7 +148,7 @@ const submitForm = async () => {
                 icon: "success",
                 timer: 2000
             });
-            router.push('/admin-index/internship-admin');
+            router.push('/admin-index/practice');
         }
     } catch (error) {
         Swal.fire({

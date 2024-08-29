@@ -8,58 +8,51 @@ const TeachersModel = connect.define("teachers", {
         autoIncrement: true,
     },
     prefix: {
-        type: DataTypes.STRING(50),    
-        allowNull: false,
+        type: DataTypes.STRING(50),
+        allowNull: true,  // สามารถมีค่าว่างได้
     },
     firstName: {
         type: DataTypes.STRING(50),
-        allowNull: false,
+        allowNull: true,  // สามารถมีค่าว่างได้
     },
     lastName: {
         type: DataTypes.STRING(50),
-        allowNull: false,
+        allowNull: true,  // สามารถมีค่าว่างได้
     },
     userName: {
-        type: DataTypes.STRING(50),
-        allowNull: false,
-    },
-    password: {
-        type: DataTypes.STRING(255),
-        allowNull: false,
-    },
-    phoneNumber: {
-        type: DataTypes.STRING(50),
-        allowNull: false,
-    },
-    idCard: {
         type: DataTypes.STRING(50),
         unique: true,
         allowNull: false,
     },
+    password: {
+        type: DataTypes.STRING(255),
+        allowNull: true,  // สามารถมีค่าว่างได้
+    },
+    phoneNumber: {
+        type: DataTypes.STRING(50),
+        allowNull: true,  // สามารถมีค่าว่างได้
+    },
+    idCard: {
+        type: DataTypes.STRING(50),
+        unique: true,
+        allowNull: true,  // สามารถมีค่าว่างได้
+    },
     gender: {
         type: DataTypes.STRING(50),
-        allowNull: false,
+        allowNull: true,  // สามารถมีค่าว่างได้
     },
     branch: {
         type: DataTypes.STRING(255),
-        allowNull: false,
+        allowNull: true,  // สามารถมีค่าว่างได้
     },
     role: {
         type: DataTypes.STRING(50),
-        allowNull: false,
+        allowNull: true,  // สามารถมีค่าว่างได้
     },
     statusStart: {
         type: DataTypes.STRING(50),
-        allowNull: false,
+        allowNull: true,  // สามารถมีค่าว่างได้
     }
-})
-
-// TeachersModel.sync({ alter: true })
-//     .then(() => {
-//         console.log("Table created successfully!");
-//     })
-//     .catch((err) => {
-//         console.error("Error creating table:", err);
-//     });
+});
 
 module.exports = TeachersModel;

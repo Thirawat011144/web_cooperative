@@ -2,7 +2,7 @@
     <div class="login-choices">
         <div class="choice" @click="loginAs('admin')">
             <span class="emoji">🧑‍💼</span>
-            <span>เข้าสู่ระบบสำหรับแอดมิน</span>
+            <span>เข้าสู่ระบบสำหรับผู้ดูแล</span>
         </div>
         <div class="choice" @click="loginAs('student')">
             <span class="emoji">🎓</span>

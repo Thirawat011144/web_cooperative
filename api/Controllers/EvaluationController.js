@@ -159,6 +159,37 @@ router.put("/evaluation/status-start/:id", async (req, res) => {
     }
 });
 
+router.put('/evaluator/:id', async (req, res) => {
+    try {
+        const evaluator = await Evaluation.findByPk(req.params.id);
+        if (!evaluator) {
+            return res.status(404).send({ message: "Evaluator not found" });
+        }
+
+        // Check and update fields that exist in req.body
+        const { firstName, lastName, userName, password, phoneNumber, idCard, evaluatorStatus, currentStudyField, statusStart } = req.body;
+
+        if (firstName !== undefined) evaluator.firstName = firstName;
+        if (lastName !== undefined) evaluator.lastName = lastName;
+        if (userName !== undefined) evaluator.userName = userName;
+        if (password !== undefined) {
+            const salt = await bcrypt.genSalt(10);
+            evaluator.password = await bcrypt.hash(password, salt); // Hash the password before updating
+        }
+        if (phoneNumber !== undefined) evaluator.phoneNumber = phoneNumber;
+        if (idCard !== undefined) evaluator.idCard = idCard;
+        if (evaluatorStatus !== undefined) evaluator.evaluatorStatus = evaluatorStatus;
+        if (currentStudyField !== undefined) evaluator.currentStudyField = currentStudyField;
+        if (statusStart !== undefined) evaluator.statusStart = statusStart;
+
+        await evaluator.save();
+
+        res.json({ data: evaluator, message: "Success" });
+    } catch (error) {
+        res.status(500).send({ message: error.message });
+    }
+});
+
 // Delete Route
 router.delete("/evaluation/:id", async (req, res) => {
     try {

@@ -47,7 +47,7 @@ const handleLogin = async () => {
       currentUser.value = response.data.data;
 
       // ตรวจสอบสถานะของ statusStart ของผู้ใช้ที่ล็อกอิน
-      if (currentUser.value.statusStart === "ยืนยัน") {
+      if (currentUser.value.statusStart === "verified") {
               // เก็บข้อมูลลงใน localStorage
       localStorage.setItem(config.token_name, response.data.token);
       localStorage.setItem(config.role_name, response.data.data.role);

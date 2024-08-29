@@ -29,7 +29,8 @@ const getUserName = computed(() => {
                     <img src="../../../dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
                 </div> -->
                 <div class="info">
-                    <router-link to="/admin-index/information-admin"> <a href="#" class="d-block fw-bold">Admin: {{ getUserName }}</a>
+                    <router-link to="/admin-index/information-admin"> <a href="#" class="d-block fw-bold">Admin: {{
+                        getUserName }}</a>
                     </router-link>
                 </div>
             </div>
@@ -274,7 +275,31 @@ const getUserName = computed(() => {
                             <p>เปลี่ยนรหัสผ่าน</p>
                         </router-link>
                     </li>
-
+                    <li class="nav-item">
+                        <a class="nav-link">
+                            <span class="grayscale-emoji">👨‍🏫</span>
+                            <p>
+                                อาจารย์
+                                <i class="right fas fa-angle-left"></i>
+                            </p>
+                        </a>
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item ms-4">
+                                <router-link to="/admin-index/create-contact" class="nav-link">
+                                    <p>เพิ่มข้อมูล</p>
+                                    <!-- <i class="fa-solid fa-plus ms-2"></i> -->
+                                </router-link>
+                            </li>
+                        </ul>
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item ms-4">
+                                <router-link to="/admin-index/cooperative-education" class="nav-link">
+                                    <p>รายการ</p>
+                                    <!-- <i class="fa-solid fa-book ms-4"></i> -->
+                                </router-link>
+                            </li>
+                        </ul>
+                    </li>
                 </ul>
 
 
@@ -289,4 +314,10 @@ const getUserName = computed(() => {
 </template>
 
 
-<style></style>
+<style scoped>
+.grayscale-emoji {
+    /* font-size: 50px; */
+    /* ขนาดของอิโมจิ */
+    filter: grayscale(100%);
+}
+</style>

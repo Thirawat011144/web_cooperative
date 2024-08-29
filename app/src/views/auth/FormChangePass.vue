@@ -48,11 +48,12 @@ if (route.query.idCard) {
 
 const fetchUserName = async () => {
   try {
+    console.log(checkRole)
     let apiUrl;
 
-    if (checkRole === 'forgot-pass-admin') {
+    if (checkRole === 'forgot-pass-admin' || checkRole === 'admin') {
       apiUrl = `${config.api_path}/admins`; // API สำหรับ admin
-    } else if (checkRole === 'forgot-pass-teacher') {
+    } else if (checkRole === 'forgot-pass-teacher' || checkRole === 'teacher') {
       apiUrl = `${config.api_path}/teachers`; // API สำหรับ teacher หรืออื่นๆ
     }else{
       apiUrl = `${config.api_path}/users`; 

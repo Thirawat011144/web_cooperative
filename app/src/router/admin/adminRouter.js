@@ -3,6 +3,8 @@ import Search from '../../views/admin/Search.vue';
 import config from '../../../config';
 import { checkAuth } from "./authRouteFunction"
 
+
+
 import informationAdmin from '../../components/admin/informationAdmin.vue'
 
 import CreateContact from '../../views/cooperative/CreateContact.vue'

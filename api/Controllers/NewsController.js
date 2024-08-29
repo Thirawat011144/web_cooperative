@@ -190,7 +190,7 @@
 // });
 
 // module.exports = router;
-
+//-----------------------------------------------------------------------------
 const express = require('express');
 const NewsModel = require('../Models/News');
 const multer = require('multer');
@@ -327,3 +327,98 @@ router.delete('/news/:id', async (req, res) => {
 });
 
 module.exports = router;
+
+//---------------------------------------------------------------------------------------------------------
+
+
+// นำเข้าโมดูลที่จำเป็น
+// const express = require('express');
+// const NewsModel = require('../Models/News');
+// const multer = require('multer');
+// const path = require('path');
+
+// const router = express.Router();
+
+// // กำหนดการจัดเก็บไฟล์
+// const storage = multer.diskStorage({
+//     destination: (req, file, cb) => {
+//         cb(null, 'uploads/');
+//     },
+//     filename: (req, file, cb) => {
+//         const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+//         cb(null, uniqueSuffix + path.extname(file.originalname));
+//     },
+// });
+
+// const upload = multer({ storage: storage });
+
+// // POST เพิ่มข่าวสารพร้อมอัปโหลดไฟล์
+// router.post('/news', upload.fields([{ name: 'pdfFile' }, { name: 'docFile' }, { name: 'imageFile' }]), async (req, res) => {
+//     try {
+//         const { title, detail, link } = req.body; // เพิ่มการรับ link จาก body
+//         let pdfFile = '';
+//         let docFile = '';
+//         let imageFile = '';
+
+//         if (!title) {
+//             return res.status(400).send({ message: 'กรุณากรอกข้อมูลให้ครบถ้วน' });
+//         }
+
+//         if (req.files['pdfFile']) {
+//             pdfFile = req.files['pdfFile'][0].filename;
+//         }
+//         if (req.files['docFile']) {
+//             docFile = req.files['docFile'][0].filename;
+//         }
+//         if (req.files['imageFile']) {
+//             imageFile = req.files['imageFile'][0].filename;
+//         }
+
+//         const news = await NewsModel.create({
+//             title,
+//             detail,
+//             link, // บันทึก link ในฐานข้อมูล
+//             pdfFile,
+//             docFile,
+//             imageFile,
+//         });
+
+//         res.status(201).send({ message: 'สร้างข่าวสารสำเร็จ', news });
+//     } catch (error) {
+//         res.status(500).send({ message: 'เกิดข้อผิดพลาดในการสร้างข่าวสาร: ' + error.message });
+//     }
+// });
+
+// // PUT แก้ไขข่าวสารตาม ID
+// router.put('/news/:id', upload.fields([{ name: 'pdfFile' }, { name: 'docFile' }, { name: 'imageFile' }]), async (req, res) => {
+//     try {
+//         const news = await NewsModel.findByPk(req.params.id);
+//         if (!news) {
+//             return res.status(404).send({ message: 'ไม่พบข่าวสารที่ต้องการแก้ไข' });
+//         }
+
+//         const { title, detail, link } = req.body; // เพิ่มการรับ link จาก body
+
+//         if (req.files['pdfFile']) {
+//             news.pdfFile = req.files['pdfFile'][0].filename;
+//         }
+//         if (req.files['docFile']) {
+//             news.docFile = req.files['docFile'][0].filename;
+//         }
+//         if (req.files['imageFile']) {
+//             news.imageFile = req.files['imageFile'][0].filename;
+//         }
+
+//         news.title = title;
+//         news.detail = detail;
+//         news.link = link; // อัปเดต link ในฐานข้อมูล
+
+//         await news.save();
+//         res.json({ data: news, message: 'แก้ไขข่าวสารสำเร็จ' });
+//     } catch (error) {
+//         res.status(500).send({ message: 'เกิดข้อผิดพลาดในการแก้ไขข่าวสาร: ' + error.message });
+//     }
+// });
+
+// โค้ดส่วนอื่นๆ (GET, DELETE) ไม่จำเป็นต้องแก้ไขสำหรับการเพิ่ม link
+

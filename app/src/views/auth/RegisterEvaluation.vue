@@ -20,7 +20,7 @@ const idCard = ref('');
 const evaluatorStatus = ref('');
 const currentStudyField = ref('');
 const category = ref('');
-const statusStart = 'ขอยืนยันตัวตน'
+const statusStart = 'notVerified'
 const collegeNames = ref([]);
 const idCardWarning = ref('')
 const phoneNumberWarning = ref('');
@@ -420,7 +420,7 @@ const handleRegister = async () => {
                                                         required />
                                                     <small v-if="phoneNumberWarning" class="text-danger">{{
                                                         phoneNumberWarning
-                                                    }}</small>
+                                                        }}</small>
                                                 </div>
                                             </div>
                                         </div>
