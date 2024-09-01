@@ -101,7 +101,7 @@ const handleSignOut = () => {
       localStorage.removeItem(config.idCard);
       localStorage.removeItem(config.phoneNumber);
       localStorage.removeItem("userData");
-      router.push("/");
+      router.push("/login-choice");
     }
   });
 };
@@ -273,8 +273,8 @@ const searchUsers = async () => {
                   <option value="ขออนุมัติ">ขออนุมัติ</option>
                   <option value="อนุมัติ">อนุมัติ</option>
                   <option value="เข้ารับการฝึก">เข้ารับการฝึก</option>
-                  <option value="ผ่าน">ผ่าน</option>
-                  <option value="เสร็จสิ้น">เสร็จสิ้น</option>
+                  <option value="ประเมินเสร็จสิ้น">ประเมินเสร็จสิ้น</option>
+                  <!-- <option value="เสร็จสิ้น">เสร็จสิ้น</option> -->
                   <option value="ไม่ผ่าน">ไม่ผ่าน</option>
                   <option value="ไม่อนุมัติ">ไม่อนุมัติ</option>
                 </select>

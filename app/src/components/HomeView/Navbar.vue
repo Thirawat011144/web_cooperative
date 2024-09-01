@@ -102,7 +102,7 @@ const handleSignOut = () => {
             localStorage.removeItem('userData');
             localStorage.removeItem('collegeData')
             isLoggedIn.value = false;
-            router.push("/");
+            router.push("/login-choice");
         }
     });
 };

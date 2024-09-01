@@ -121,13 +121,102 @@
 
 const express = require('express');
 const router = express.Router();
-const { UsersModel, CollegesModel } = require("../Models/index");
+const { UsersModel, CollegesModel, CompaniesModel } = require("../Models/index");
 const authenticateToken = require('../Middleware/Authorization');
+
+// router.post('/college', async (req, res) => {
+//     try {
+//         const { collegeName, contactFirstName, contactLastName, collegePhone, collegeEmail, collegeAddress, studentID, department, schoolSize, academicYear, status } = req.body;
+//         console.log(status)
+//         // หา record ที่มี studentID ตรงกับค่าในตาราง Users
+//         const user = await UsersModel.findOne({ where: { studentID } });
+
+//         if (!user) {
+//             res.status(404).send({ message: "ไม่พบข้อมูล studentID ในตาราง Users" });
+//             return;
+//         }
+
+//           // ตรวจสอบว่านักศึกษาเคยฝึกงานในปีที่ 2 หรือไม่
+//           const internshipStatus = await CompaniesModel.findOne({ where: { studentID } });
+
+//         // ดำเนินการต่อเฉพาะถ้าสถานะปัจจุบันเป็น 'ไม่อนุมัติ' หรือ 'ไม่ผ่าน'
+//         if (internshipStatus || status === 'ไม่อนุมัติ' || status === 'ไม่ผ่าน') {
+//             // อัปเดต status และข้อมูลอื่นๆ ใน Users table
+//             user.year = academicYear;
+//             user.status = 'ขออนุมัติ';
+//             // user.college = collegeName;
+//             await user.save();
+
+//             // ตรวจสอบว่ามี record ในตาราง Colleges หรือไม่
+//             const existingCollege = await CollegesModel.findOne({ where: { studentID } });
+
+//             if (existingCollege) {
+//                 // อัปเดตข้อมูลในตาราง Colleges
+//                 existingCollege.collegeName = collegeName;
+//                 existingCollege.contactFirstName = contactFirstName;
+//                 existingCollege.contactLastName = contactLastName;
+//                 existingCollege.collegePhone = collegePhone;
+//                 existingCollege.collegeEmail = collegeEmail;
+//                 existingCollege.collegeAddress = collegeAddress;
+//                 existingCollege.department = department;
+//                 existingCollege.schoolSize = schoolSize;
+//                 await existingCollege.save();
+
+//                 res.status(200).send({ message: "Success", existingCollege });
+//             } else {
+//                 // สร้าง record ใหม่ในตาราง Colleges
+//                 const newCollege = await CollegesModel.create({
+//                     collegeName,
+//                     contactFirstName,
+//                     contactLastName,
+//                     collegePhone,
+//                     collegeEmail,
+//                     collegeAddress,
+//                     studentID,
+//                     department,
+//                     schoolSize
+//                 });
+//                 res.status(201).send({ message: "Success", newCollege });
+//             }
+//         } else if (status === 'ขออนุมัติ') {
+//             const existingCollege = await CollegesModel.findOne({ where: { studentID } });
+//             if (existingCollege) {
+//                 res.status(409).send({ message: "มีข้อมูลการสมัครที่อยู่ระหว่างการอนุมัติอยู่แล้ว" });
+//             } else {
+//                 // อัปเดต status ใน Users table
+//                 user.year = academicYear;
+//                 user.status = 'ขออนุมัติ';
+//                 // user.college = collegeName;
+//                 await user.save();
+
+//                 // สร้าง record ใหม่
+//                 const newCollege = await CollegesModel.create({
+//                     collegeName,
+//                     contactFirstName,
+//                     contactLastName,
+//                     collegePhone,
+//                     collegeEmail,
+//                     collegeAddress,
+//                     studentID,
+//                     department,
+//                     schoolSize
+//                 });
+//                 res.status(201).send({ message: "Success", newCollege });
+//             }
+//         } else if (status === 'ผ่าน' || status === 'เสร็จสิ้น' || status === 'เข้ารับการฝึก' || status === 'อนุมัติ' || status === 'ประเมินเสร็จสิ้น') {
+//             res.status(409).send({ message: "มีข้อมูลการสมัครเรียบร้อยแล้ว" });
+//         } else {
+//             res.status(400).send({ message: error.message });
+//         }
+//     } catch (error) {
+//         res.status(500).send({ message: error.message });
+//     }
+// });
 
 router.post('/college', async (req, res) => {
     try {
         const { collegeName, contactFirstName, contactLastName, collegePhone, collegeEmail, collegeAddress, studentID, department, schoolSize, academicYear, status } = req.body;
-        console.log(status)
+
         // หา record ที่มี studentID ตรงกับค่าในตาราง Users
         const user = await UsersModel.findOne({ where: { studentID } });
 
@@ -136,63 +225,49 @@ router.post('/college', async (req, res) => {
             return;
         }
 
-        // ตรวจสอบสถานะปัจจุบันใน UsersModel
-        // if (user.status !== 'ไม่อนุมัติ' && user.status !== 'ไม่ผ่าน') {
-        //     res.status(403).send({ message: "นักศึกษาที่มีสถานะนี้ไม่สามารถสมัครซ้ำได้" });
-        //     return;
-        // }
+        // ตรวจสอบว่านักศึกษาเคยฝึกงานในปีที่ 2 หรือไม่
+        const internshipStatus = await CompaniesModel.findOne({ where: { studentID } });
 
-        // ดำเนินการต่อเฉพาะถ้าสถานะปัจจุบันเป็น 'ไม่อนุมัติ' หรือ 'ไม่ผ่าน'
-        if (status === 'ไม่อนุมัติ' || status === 'ไม่ผ่าน') {
-            // อัปเดต status และข้อมูลอื่นๆ ใน Users table
-            user.year = academicYear;
-            user.status = 'ขออนุมัติ';
-            // user.college = collegeName;
-            await user.save();
+        // ตรวจสอบว่านักศึกษาเคยสมัครฝึกสอนในปีที่ 4 หรือไม่
+        const existingCollege = await CollegesModel.findOne({ where: { studentID } });
 
-            // ตรวจสอบว่ามี record ในตาราง Colleges หรือไม่
-            const existingCollege = await CollegesModel.findOne({ where: { studentID } });
-
-            if (existingCollege) {
-                // อัปเดตข้อมูลในตาราง Colleges
-                existingCollege.collegeName = collegeName;
-                existingCollege.contactFirstName = contactFirstName;
-                existingCollege.contactLastName = contactLastName;
-                existingCollege.collegePhone = collegePhone;
-                existingCollege.collegeEmail = collegeEmail;
-                existingCollege.collegeAddress = collegeAddress;
-                existingCollege.department = department;
-                existingCollege.schoolSize = schoolSize;
-                await existingCollege.save();
-
-                res.status(200).send({ message: "Success", existingCollege });
-            } else {
-                // สร้าง record ใหม่ในตาราง Colleges
-                const newCollege = await CollegesModel.create({
-                    collegeName,
-                    contactFirstName,
-                    contactLastName,
-                    collegePhone,
-                    collegeEmail,
-                    collegeAddress,
-                    studentID,
-                    department,
-                    schoolSize
-                });
-                res.status(201).send({ message: "Success", newCollege });
-            }
-        } else if (status === 'ขออนุมัติ') {
-            const existingCollege = await CollegesModel.findOne({ where: { studentID } });
-            if (existingCollege) {
+        if (existingCollege) {
+            if (existingCollege.status === 'ขออนุมัติ') {
                 res.status(409).send({ message: "มีข้อมูลการสมัครที่อยู่ระหว่างการอนุมัติอยู่แล้ว" });
             } else {
-                // อัปเดต status ใน Users table
-                user.year = academicYear;
-                user.status = 'ขออนุมัติ';
-                // user.college = collegeName;
-                await user.save();
+                res.status(409).send({ message: "มีข้อมูลการสมัครเรียบร้อยแล้ว" });
+            }
+            return;
+        }
 
-                // สร้าง record ใหม่
+        // ตรวจสอบว่าเคยมีการฝึกงานใน CompaniesModel หรือไม่
+        if (internshipStatus || status === 'ไม่อนุมัติ' || status === 'ไม่ผ่าน') {
+            // อนุญาตให้สมัครใหม่สำหรับปีที่ 4
+            user.year = academicYear;
+            user.status = 'ขออนุมัติ';
+            await user.save();
+
+            const newCollege = await CollegesModel.create({
+                collegeName,
+                contactFirstName,
+                contactLastName,
+                collegePhone,
+                collegeEmail,
+                collegeAddress,
+                studentID,
+                department,
+                schoolSize
+            });
+
+            res.status(201).send({ message: "Success", newCollege });
+        } else if (status === 'ขออนุมัติ') {
+            // ตรวจสอบว่ามีการสมัครไปแล้วหรือไม่
+            const existingCollege = await CollegesModel.findOne({ where: { studentID } });
+
+            if (existingCollege) {
+                res.status(409).send({ message: "คุณได้สมัครไปแล้วและอยู่ระหว่างการอนุมัติ" });
+            } else {
+                // ถ้าไม่มีการสมัครก่อนหน้า จะอนุญาตให้สร้างการสมัครใหม่
                 const newCollege = await CollegesModel.create({
                     collegeName,
                     contactFirstName,
@@ -206,15 +281,14 @@ router.post('/college', async (req, res) => {
                 });
                 res.status(201).send({ message: "Success", newCollege });
             }
-        } else if (status === 'ผ่าน' || status === 'เสร็จสิ้น' || status === 'เข้ารับการฝึก' || status === 'อนุมัติ') {
-            res.status(409).send({ message: "มีข้อมูลการสมัครเรียบร้อยแล้ว" });
         } else {
-            res.status(400).send({ message: "สถานะไม่ถูกต้อง" });
+            res.status(400).send({ message: "ไม่สามารถสมัครใหม่ได้เนื่องจากสถานะปัจจุบันไม่ตรงเงื่อนไข" });
         }
     } catch (error) {
         res.status(500).send({ message: error.message });
     }
 });
+
 
 router.get('/college/:studentID', async (req, res) => {
     try {

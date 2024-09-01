@@ -8,23 +8,27 @@
                         <tr>
                             <th>ลำดับ</th>
                             <th>ชื่อ-นามสกุล</th>
-                            <th>สาขาวิชา</th>
-                            <th>Tools</th>
+                            <!-- <th>สาขาวิชา</th> -->
+                            <th>สถานะ</th>
+                            <th>การจัดการ</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr v-for="(user, index) in admins" :key="user.id">
                             <td>{{ index + 1 }}</td>
                             <td>{{ user.firstName }} {{ user.lastName }}</td>
-                            <td>{{ user.branch }}</td>
+                            <!-- <td>{{ user.branch }}</td> -->
                             <td style="display: flex; align-items: center;">
                                 <button v-if="user.statusStart === 'notVerified'" @click="verifyUser(user)"
                                     class="btn btn-warning btn-sm">
                                     ขอยืนยันตัวตน
                                 </button>
                                 <span v-else>
-                                    <button class="btn btn-success btn-sm">{{ user.statusStart }}</button>
+                                    <button class="btn btn-success btn-sm">ยืนยันตัวตนเรียบร้อยแล้ว</button>
                                 </span>
+
+                            </td>
+                            <td>
                                 <button @click="deleteUser(user.id)" class="btn btn-danger btn-sm ml-2">ลบ</button>
                             </td>
                         </tr>

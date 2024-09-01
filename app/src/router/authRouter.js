@@ -59,12 +59,12 @@ const routerAuth = [
     component: LoginStudent
   }
   ,
-  {
-    path: '/login-choice',
-    name: 'login-choice',
-    component: ChoiceLogin
-  }
-  ,
+  // {
+  //   path: '/login-choice',
+  //   name: 'login-choice',
+  //   component: ChoiceLogin
+  // }
+  // ,
   {
     path: '/login-evaluation',
     name: 'login-evaluation',

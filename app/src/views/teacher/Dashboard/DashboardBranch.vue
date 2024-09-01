@@ -31,8 +31,8 @@
           percentageText="+0.5% from yesterday"
         />
         <StatusCard
-          status="ผ่าน"
-          label="ผ่าน"
+          status="ประเมินเสร็จสิ้น"
+          label="ประเมินเสร็จสิ้น"
           branch="ปวช 3"
           cardColor="purple"
           percentageText="-2% from yesterday"

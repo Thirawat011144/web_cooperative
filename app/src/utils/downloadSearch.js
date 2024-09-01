@@ -34,6 +34,7 @@ export const populateWorksheet = (worksheet, data) => {
 };
 // ฟังก์ชันดาวน์โหลด Excel
 export const downloadExcel = (filename, sortedUsers) => {
+    console.log(sortedUsers)
     if (!sortedUsers) {
         console.error("sortedUsers ไม่มีค่า");
         return;
@@ -86,23 +87,23 @@ export const downloadExcel = (filename, sortedUsers) => {
 
     const data = sortedUsers.map(user => ({
 
-        // evaluatorName: `${user.evaluationDetails?.[0]?.internshipEvaluator?.firstName || ''} ${user.evaluationDetails?.[0]?.internshipEvaluator?.lastName || ''}`.trim(),
-        evaluatorName: user.evaluationHightDetails.evaluatorName || '',
-        idCard: user.evaluationDetails?.[0]?.idCard || '',
-        phoneNumberEvaluator: user.evaluationDetails?.[0]?.internshipEvaluator?.phoneNumber || '',
+        // evaluatorName: user.evaluationHightDetails?.evaluatorName || 'ไม่มีข้อมูลไม่มี',
+        evaluatorName: `${user.evaluationDetails?.[0]?.internshipEvaluator?.firstName || 'ไม่มีข้อมูล'} ${user.evaluationDetails?.[0]?.internshipEvaluator?.lastName || 'ไม่มีข้อมูล'}`,
+        idCard: user.evaluationDetails?.[0]?.idCard || 'ไม่มีข้อมูล',
+        phoneNumberEvaluator: user.evaluationDetails?.[0]?.internshipEvaluator?.phoneNumber || 'ไม่มีข้อมูล',
         companyName: user.companyDetails?.companyName || 'ไม่มีข้อมูล',
         department: user.companyDetails?.companyDepartment || 'ไม่มีข้อมูล', // เพิ่มค่าเริ่มต้นเป็น 'ไม่มีข้อมูล'
-        evaluatorStatus: user.evaluationDetails?.[0]?.internshipEvaluator?.evaluatorStatus || '',
-        time: user.evaluationDetails?.[0]?.time || '',
-        branch: user.branch,
-        studentID: user.studentID,
-        studentIdCard: user.idCard,
-        firstName: user.firstName,
-        lastName: user.lastName,
-        year: user.year,
-        status: user.status,
-        phoneNumber: user.phoneNumber,
-        email: user.email,
+        evaluatorStatus: user.evaluationDetails?.[0]?.internshipEvaluator?.evaluatorStatus || 'ไม่มีข้อมูล',
+        time: user.evaluationDetails?.[0]?.time || 'ไม่มีข้อมูล',
+        branch: user.branch || 'ไม่มีข้อมูล',
+        studentID: user.studentID || 'ไม่มีข้อมูล',
+        studentIdCard: user.idCard || 'ไม่มีข้อมูล',
+        firstName: user.firstName || 'ไม่มีข้อมูล',
+        lastName: user.lastName || 'ไม่มีข้อมูล',
+        year: user.year || 'ไม่มีข้อมูล',
+        status: user.status || 'ไม่มีข้อมูล',
+        phoneNumber: user.phoneNumber || 'ไม่มีข้อมูล',
+        email: user.email || 'ไม่มีข้อมูล',
         totalScore: user.evaluationDetails?.[0]?.totalScore || 'ไม่มีข้อมูล',
         averageScore: user.evaluationDetails?.[0]?.averageScore || 'ไม่มีข้อมูล',
         criteria: user.evaluationDetails?.[0]?.criteria || 'ไม่มีข้อมูล',
@@ -129,6 +130,7 @@ export const downloadExcel = (filename, sortedUsers) => {
         other: user.evaluationDetails?.[0]?.other || 'ไม่มีข้อมูล',
 
     }));
+
 
     populateWorksheet(worksheet, data);
 
@@ -201,14 +203,14 @@ export const downloadExcelHight = (filename, sortedUsers) => {
     ]);
 
     const data = sortedUsers.map(user => ({
-        evaluatorName: `${user.evaluationUniversityDetails?.[0]?.universityTeacher?.firstName || ''} ${user.evaluationUniversityDetails?.[0]?.universityTeacher?.lastName || ''}`,
+        evaluatorName: `${user.evaluationUniversityDetails?.[0]?.universityTeacher?.firstName || 'ไม่มีข้อมูล'} ${user.evaluationUniversityDetails?.[0]?.universityTeacher?.lastName || ''}`,
         // evaluatorName : `${user.evaluationDetails?.[0]?.internshipEvaluator?.firstName || ''} ${user.evaluationDetails?.[0]?.internshipEvaluator?.lastName || ''}`.trim(),
-        idCard: user.evaluationUniversityDetails?.[0]?.idCard || '',
-        phoneNumberTeacher: user.evaluationUniversityDetails?.[0]?.universityTeacher?.phoneNumber || '',
+        idCard: user.evaluationUniversityDetails?.[0]?.idCard || 'ไม่มีข้อมูล',
+        phoneNumberTeacher: user.evaluationUniversityDetails?.[0]?.universityTeacher?.phoneNumber || 'ไม่มีข้อมูล',
         // phoneNumberEvaluator: user.evaluationDetails?.[0]?.internshipEvaluator?.phoneNumber || '',
         companyName: user.companyDetails?.companyName || 'ไม่มีข้อมูล',
         department: user.companyDetails?.companyDepartment || 'ไม่มีข้อมูล', // เพิ่มค่าเริ่มต้นเป็น 'ไม่มีข้อมูล'
-        evaluatorStatus: user.evaluationUniversityDetails?.[0]?.evaluatorStatus || '',
+        evaluatorStatus: user.evaluationUniversityDetails?.[0]?.evaluatorStatus || 'ไม่มีข้อมูล',
 
         studentID: user.studentID,
         studentIdCard: user.idCard,
@@ -348,12 +350,12 @@ export const downloadExcelHightEvaluation = (filename, sortedUsers) => {
                 const row = worksheet.addRow({
 
                     evaluatorName: detail.evaluator ? detail.evaluator.firstName : (detail.teacher ? detail.teacher.firstName : ''),
-                    idCard: idCard || '',
-                    phoneNumber: phoneNumber || '',
-                    collegeName: user.collegeDetails?.collegeName || '',
+                    idCard: idCard || 'ไม่มีข้อมูล',
+                    phoneNumber: phoneNumber || 'ไม่มีข้อมูล',
+                    collegeName: user.collegeDetails?.collegeName || 'ไม่มีข้อมูล',
                     department: user.collegeDetails?.department || '',
                     schoolSize: user.collegeDetails?.schoolSize || '',
-                    evaluatorStatus: detail.evaluatorStatus || '',
+                    evaluatorStatus: detail.evaluatorStatus || 'ไม่มีข้อมูล',
                     time: detail.time || '',
                     branch: user.branch || '',
                     fullName: `${user.firstName || ''} ${user.lastName || ''}`.trim(),

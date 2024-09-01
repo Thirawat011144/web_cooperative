@@ -9,7 +9,7 @@
                             <th>ลำดับ</th>
                             <th>ชื่อ-นามสกุล</th>
                             <th>สถานะ</th>
-                            <th>Tools</th>
+                            <th>เครื่องมือ</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -30,7 +30,7 @@
                                     ขอยืนยันตัวตน
                                 </button>
                                 <span v-else>
-                                    <button class="btn btn-success btn-sm"> {{ user.statusStart }}</button>
+                                    <button class="btn btn-success btn-sm">ยืนยันตัวตนเรียบร้อยแล้ว</button>
                                 </span>
                                 <button @click="deleteUser(user.id)" class="btn btn-danger btn-sm ml-2">ลบ</button>
                             </td>

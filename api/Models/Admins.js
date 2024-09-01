@@ -5,7 +5,7 @@ const AdminsModel = connect.define("admins", {
     id: {
         type: DataTypes.BIGINT,
         primaryKey: true,
-        autoIncrement: true, 
+        autoIncrement: true,
     },
     prefix: {
         type: DataTypes.STRING(50),
@@ -41,8 +41,8 @@ const AdminsModel = connect.define("admins", {
         allowNull: false,
     },
     branch: {
-        type: DataTypes.STRING(255),
-        allowNull: false,
+        type: DataTypes.JSON,  // เปลี่ยนเป็น JSON
+        allowNull: true,
     },
     role: {
         type: DataTypes.STRING(50),

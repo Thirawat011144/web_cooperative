@@ -10,6 +10,7 @@ const Admins = require('./Models/Admins')
 // const CompaniesModel = require('./Models/Companies')
 // const ContactModel =  require('./Models/Contact')
 // const DataEvaluationInternshipForUniversityController = require('./Models/DataEvaluationInternshipForUniversity')
+// const Delete = require('./Models/Delete')
 
 const RegisterController = require("./Controllers/RegisterController")
 const LoginController = require("./Controllers/LoginController")
@@ -27,6 +28,7 @@ const DataEvaluationInternshipController = require('./Controllers/DataEvaluation
 const DataEvaluationInternshipForUniversityController = require('./Controllers/DataEvaluationInternshipForUniversityController')
 const AdminsController = require('./Controllers/AdminsController')
 const TeachersController = require('./Controllers/TeachersController')
+const ManageStatusController = require('./Controllers/ManageStatusController')
 
 const app = express()
 const port = 3000;
@@ -53,6 +55,8 @@ app.use('/api', DataEvaluationInternshipController)
 app.use('/api', DataEvaluationInternshipForUniversityController)
 app.use('/api', AdminsController)
 app.use('/api', TeachersController)
+app.use('/api', ManageStatusController)
+
 
 app.listen(port, () => {
     console.log(`Example app listening on port`, port);

@@ -5,7 +5,7 @@
             <h2>ข้อมูลผู้ใข้งาน</h2>
             <div class="card-body">
                 <h5 class="card-title">
-                    <span>ชื่อ:</span> {{ dataResult.firstName }} <span>นามสกุล:</span> {{ dataResult.lastName }}
+                    <span>ชื่อ:</span> {{ dataResult.firstName }} {{ dataResult.lastName }}
                 </h5>
 
                 <p class="card-text">

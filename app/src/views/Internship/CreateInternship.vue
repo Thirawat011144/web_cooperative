@@ -6,43 +6,43 @@
         <form @submit.prevent="submitForm">
           <!-- ข้อมูลทั่วไป -->
           <div class="mb-3">
-            <h5>ข้อมูลทั่วไป</h5>
+            <!-- <h5>ข้อมูลทั่วไป</h5> -->
             <label for="company" class="form-label">บริษัท <span class="text-red">*</span></label>
             <input v-model="internship.company" @input="logValue('company', internship.company)" type="text"
               id="company" class="form-control" required>
           </div>
-          <div class="mb-3">
+          <!-- <div class="mb-3">
             <label for="title" class="form-label">ตำแหน่ง <span class="text-red">*</span></label>
             <input v-model="internship.position" @input="logValue('position', internship.position)" type="text"
               id="title" class="form-control" required>
-          </div>
+          </div> -->
           <div class="mb-3">
             <label for="location" class="form-label">ที่ตั้ง <span class="text-red">*</span></label>
             <input v-model="internship.location" @input="logValue('location', internship.location)" type="text"
               id="location" class="form-control" required>
           </div>
-          <div class="mb-3">
+          <!-- <div class="mb-3">
             <label for="tel" class="form-label">เบอร์ติดต่อ <span class="text-red">*</span></label>
             <input v-model="internship.tel" @input="logValue('tel', internship.tel)" type="text" id="tel"
               class="form-control" required>
-          </div>
-          <div class="mb-3">
+          </div> -->
+          <!-- <div class="mb-3">
             <label for="zipCode" class="form-label">รหัสไปรษณีย์</label>
             <input v-model="internship.zipCode" @input="logValue('zipCode', internship.zipCode)" type="text"
               id="zipCode" class="form-control">
-          </div>
-          <div class="mb-3">
+          </div> -->
+          <!-- <div class="mb-3">
             <label for="mail" class="form-label">อีเมล์ <span class="text-red">*</span></label>
             <input v-model="internship.mail" @input="logValue('mail', internship.mail)" type="text" id="mail"
               class="form-control" required>
-          </div>
+          </div> -->
           <!-- รายละเอียดอื่นๆ -->
-          <h5>รายละเอียดอื่นๆ</h5>
-          <div class="mb-3">
+          <!-- <h5>รายละเอียดอื่นๆ</h5>   -->
+          <!-- <div class="mb-3">
             <label for="type" class="form-label">ประเภทหน่วยงาน</label>
             <input v-model="internship.type" @input="logValue('type', internship.type)" type="text" id="type"
               class="form-control" placeholder="Ex. งานรัฐวิสาหกิจ/เอกชน/อื่นๆ">
-          </div>
+          </div> -->
           <!-- <div v-for="(branch, index) in internship.branch" :key="index" class="mb-3">
             <label :for="'branchName_' + index" class="form-label">สาขาที่รับสมัคร<span
                 class="text-red">*</span></label>
@@ -58,23 +58,23 @@
           </div>
           <button type="button" @click="addBranch" class="btn btn-success mb-3">เพิ่ม</button> -->
 
-          <div class="mb-3 mt-2">
+          <!-- <div class="mb-3 mt-2">
             <label for="vacancies" class="form-label">อัตราที่รับ <span class="text-red">*</span></label>
             <input v-model="internship.vacancies" @input="logValue('vacancies', internship.vacancies)" type="number"
               id="vacancies" class="form-control" required>
-          </div>
+          </div> -->
           <div class="mb-3 mt-2">
             <label for="branch" class="form-label">สาขาที่รับ(ระบุสาขางานที่ต้องการ หรือ ระบุเจาะจงเป็นสาขา)
               <span class="text-red">*</span></label>
             <input v-model="internship.branch" @input="logValue('branch', internship.branch)" type="text" id="vacancies"
               class="form-control" required>
           </div>
-          <div class="mb-3">
+          <!-- <div class="mb-3">
             <label for="salary" class="form-label">เงินเดือน</label>
             <input v-model="internship.salary" @input="logValue('salary', internship.salary)" type="text" id="salary"
               class="form-control">
-          </div>
-          <div class="mb-3">
+          </div> -->
+          <!-- <div class="mb-3">
             <label for="gender" class="form-label">เพศ <span class="text-red">*</span></label>
             <select v-model="internship.gender" @change="logValue('gender', internship.gender)" id="gender"
               class="form-control" required>
@@ -83,8 +83,8 @@
               <option value="หญิง">หญิง</option>
               <option value="ไม่จำกัด">ไม่จำกัด</option>
             </select>
-          </div>
-          <div class="mb-3">
+          </div> -->
+          <!-- <div class="mb-3">
             <label for="educationLevel" class="form-label">ระดับการศึกษา <span class="text-red">*</span></label>
             <select v-model="internship.educationLevel" @change="logValue('educationLevel', internship.educationLevel)"
               id="educationLevel" class="form-control" required>
@@ -96,18 +96,18 @@
               <option value="ปริญญาตรี">ปริญญาตรี</option>
               <option value="ท้ังหมดทุกระดับชั้น">ท้ังหมดทุกระดับชั้น</option>
             </select>
-          </div>
+          </div> -->
           <!-- ข้อมูลผู้ประสานงาน -->
-          <h5>ข้อมูลผู้ประสานงาน</h5>
+          <!-- <h5>ข้อมูลผู้ประสานงาน</h5> -->
           <div class="mb-3">
             <label for="contactPerson" class="form-label">ชื่อผู้ติดต่อ <span class="text-red">*</span></label>
             <input v-model="internship.contactPerson" @input="logValue('contactPerson', internship.contactPerson)"
               type="text" id="contactPerson" class="form-control" required>
           </div>
           <div class="mb-3">
-            <label for="contactPosition" class="form-label">ตำแหน่ง</label>
+            <label for="contactPosition" class="form-label">ตำแหน่ง <span class="text-red">*</span></label>
             <input v-model="internship.contactPosition" @input="logValue('contactPosition', internship.contactPosition)"
-              type="text" id="contactPosition" class="form-control">
+              type="text" id="contactPosition" class="form-control" required>
           </div>
           <div class="mb-3">
             <label for="contactEmail" class="form-label">อีเมล์ <span class="text-red">*</span></label>
@@ -117,7 +117,7 @@
           <div class="mb-3">
             <label for="contactTel" class="form-label">เบอร์โทร <span class="text-red">*</span></label>
             <input v-model="internship.contactTel" @input="logValue('contactTel', internship.contactTel)" type="text"
-              id="contactTel" class="form-control" required>
+              id="contactTel" class="form-control" maxlength="10" required>
           </div>
           <div class="mb-3">
             <label for="otherContact" class="form-label">ช่องทางการติดต่ออื่นๆ</label>
@@ -144,16 +144,16 @@ const selectedBranches = ref([]);
 
 const internship = ref({
   company: '',
-  position: '',
+  // position: '',
   location: '',
-  tel: '',
-  zipCode: '',
-  mail: '',
-  type: '',
-  vacancies: '',
-  salary: '',
-  gender: '',
-  educationLevel: '',
+  // tel: '',
+  // zipCode: '',
+  // mail: '',
+  // type: '',
+  // vacancies: '',
+  // salary: '',
+  // gender: '',
+  // educationLevel: '',
   contactPerson: '',
   contactPosition: '',
   contactEmail: '',

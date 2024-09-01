@@ -7,7 +7,7 @@
                         <div class="row g-0">
                             <div class="col-xl-12">
                                 <div class="card-body p-md-5 text-black">
-                                    <h3 class="mb-5 text-uppercase">สมัครสมาชิก</h3>
+                                    <h3 class="mb-5 text-uppercase">สมัครสมาชิกผู้ดูแล</h3>
 
                                     <form @submit.prevent="handleRegister">
                                         <div class="row">
@@ -41,7 +41,8 @@
                                             </div>
                                             <div class="col-md-4 mb-4">
                                                 <div class="form-outline">
-                                                    <label class="form-label" for="form3Example1n">นามสกุล <span>*</span></label>
+                                                    <label class="form-label" for="form3Example1n">นามสกุล
+                                                        <span>*</span></label>
                                                     <input type="text" id="form3Example1n"
                                                         class="form-control form-control-lg" v-model="lastName"
                                                         required />
@@ -104,57 +105,14 @@
                                                 <label class="form-check-label" for="maleGender">ชาย</label>
                                             </div>
                                         </div>
-
                                         <div class="row">
                                             <label for="">สาขาวิชาที่ดูแล(สามารถเปลี่ยนได้) <span>*</span></label>
                                             <div class="col mb-4">
-                                                <select v-model="branch" class="form-select" required>
-                                                    <option value="" disabled>-</option>
-                                                    <option value="สาขาครุศาสตร์อุตสาหกรรมโยธา">
-                                                        สาขาครุศาสตร์อุตสาหกรรมโยธา</option>
-                                                    <option value="สาขาครุศาสตร์อุตสาหกรรมไฟฟ้า">
-                                                        สาขาครุศาสตร์อุตสาหกรรมไฟฟ้า</option>
-                                                    <option value="สาขาครุศาสตร์อุตสาหกรรมเครื่องกล">
-                                                        สาขาครุศาสตร์อุตสาหกรรมเครื่องกล</option>
-                                                    <option value="สาขาครุศาสตร์อุตสาหกรรมอุตสาหการ">
-                                                        สาขาครุศาสตร์อุตสาหกรรมอุตสาหการ</option>
-                                                    <option value="สาขาครุศาสตร์อุตสาหกรรมอิเล็กทรอนิกส์และโทรคมนาคม">
-                                                        สาขาครุศาสตร์อุตสาหกรรมอิเล็กทรอนิกส์และโทรคมนาคม</option>
-                                                    <option value="สาขาครุศาสตร์อุตสาหกรรมคอมพิวเตอร์">
-                                                        สาขาครุศาสตร์อุตสาหกรรมคอมพิวเตอร์</option>
-                                                    <option value="สาขาครุศาสตร์อุตสาหการเชื่อมประกอบ">
-                                                        สาขาครุศาสตร์อุตสาหการเชื่อมประกอบ</option>
-                                                    <option value="สาขาวิชาช่างโยธา">สาขาวิชาช่างโยธา</option>
-                                                    <option value="สาขาวิชาช่างก่อสร้าง">สาขาวิชาช่างก่อสร้าง</option>
-                                                    <option value="สาขาวิชาช่างเครื่องมือกลอัตโนมัติ">
-                                                        สาขาวิชาช่างเครื่องมือกลอัตโนมัติ</option>
-                                                    <option value="สาขาวิชาช่างยนต์">สาขาวิชาช่างยนต์</option>
-                                                    <option value="สาขาวิชาช่างกลเกษตร">สาขาวิชาช่างกลเกษตร</option>
-                                                    <option value="สาขาวิชาช่างกลโรงงาน">สาขาวิชาช่างกลโรงงาน</option>
-                                                    <option value="สาขาวิชาช่างท่อและประสาน">สาขาวิชาช่างท่อและประสาน
-                                                    </option>
-                                                    <option value="สาขาวิชาการออกแบบนวัตกรรมเครื่องจักรกล">
-                                                        สาขาวิชาการออกแบบนวัตกรรมเครื่องจักรกล
-                                                    </option>
-                                                    <option value="สาขาวิชาช่างอิเล็กทรอนิกส์">
-                                                        สาขาวิชาช่างอิเล็กทรอนิกส์</option>
-                                                    <option value="สาขาวิชาเทคโนโลยีคอมพิวเตอร์">
-                                                        สาขาวิชาเทคโนโลยีคอมพิวเตอร์</option>
-
-                                                    <!-- สาขาวิชาช่างก่อสร้าง (ซ้ำ) -->
-                                                    <option value="สาขาวิชาช่างไฟฟ้ากำลัง">สาขาวิชาช่างไฟฟ้ากำลัง
-                                                    </option>
-                                                    <!-- สาขาวิชาช่างยนต์ (ซ้ำ) -->
-                                                    <option value="สาขาวิชาเทคโนโลยีการเขียนแบบเครื่องกล">
-                                                        สาขาวิชาเทคโนโลยีการเขียนแบบเครื่องกล
-                                                    </option>
-                                                    <!-- สาขาวิชาช่างอิเล็กทรอนิกส์ (ซ้ำ) -->
-                                                    <option value="สาขาวิชาช่างเทคนิคคอมพิวเตอร์">
-                                                        สาขาวิชาช่างเทคนิคคอมพิวเตอร์</option>
-                                                </select>
+                                                <multiselect v-model="branch" :options="branchOptions" :multiple="true"
+                                                    track-by="name" label="name" placeholder="เลือกสาขาวิชา" required>
+                                                </multiselect>
                                             </div>
                                         </div>
-
                                         <div class="d-flex justify-content-end pt-3">
                                             <button type="submit" class="btn btn-lg"
                                                 style="background-color: mediumvioletred; color: white;">Submit
@@ -182,36 +140,49 @@ import axios from "axios";
 import { ref } from 'vue';
 import config from "../../../config";
 import Swal from 'sweetalert2';
-import { useRouter } from 'vue-router'
+import { useRouter } from 'vue-router';
+import Multiselect from 'vue-multiselect';
+import 'vue-multiselect/dist/vue-multiselect.css';
 
 const router = useRouter();
 
-const prefix = ref('');  // เพิ่มตัวแปร prefix
+const prefix = ref('');
 const firstName = ref('');
 const lastName = ref('');
 const userName = ref('');
 const password = ref('');
 const phoneNumber = ref('');
-const idCard = ref('');  // เพิ่มตัวแปร idCard
+const idCard = ref('');
 const gender = ref('');
-const branch = ref('');
-const statusStart = 'notVerified'
-const role = 'admin'
-
+const branch = ref([]); // ใช้ array ในการเก็บสาขาที่เลือก
+const statusStart = 'notVerified';
+const role = 'admin';
 
 const phoneNumberWarning = ref('');
-// const emailWarning = ref('');
-const idCardWarning = ref('')
+const idCardWarning = ref('');
 
-const userData = JSON.parse(localStorage.getItem('userData') || '{}');
-let checkStatusStart = null
-
-if (userData.statusStart) {
-    checkStatusStart = userData.statusStart;
-    console.log(checkStatusStart)
-} else {
-  console.log('No userData found in localStorage');
-}
+const branchOptions = ref([
+    { name: 'สาขาครุศาสตร์อุตสาหกรรมโยธา' },
+    { name: 'สาขาครุศาสตร์อุตสาหกรรมไฟฟ้า' },
+    { name: 'สาขาครุศาสตร์อุตสาหกรรมเครื่องกล' },
+    { name: 'สาขาครุศาสตร์อุตสาหกรรมอุตสาหการ' },
+    { name: 'สาขาครุศาสตร์อุตสาหกรรมอิเล็กทรอนิกส์และโทรคมนาคม' },
+    { name: 'สาขาครุศาสตร์อุตสาหกรรมคอมพิวเตอร์' },
+    { name: 'สาขาครุศาสตร์อุตสาหการเชื่อมประกอบ' },
+    { name: 'สาขาวิชาช่างโยธา' },
+    { name: 'สาขาวิชาช่างก่อสร้าง' },
+    { name: 'สาขาวิชาช่างเครื่องมือกลอัตโนมัติ' },
+    { name: 'สาขาวิชาช่างยนต์' },
+    { name: 'สาขาวิชาช่างกลเกษตร' },
+    { name: 'สาขาวิชาช่างกลโรงงาน' },
+    { name: 'สาขาวิชาช่างท่อและประสาน' },
+    { name: 'สาขาวิชาการออกแบบนวัตกรรมเครื่องจักรกล' },
+    { name: 'สาขาวิชาช่างอิเล็กทรอนิกส์' },
+    { name: 'สาขาวิชาเทคโนโลยีคอมพิวเตอร์' },
+    { name: 'สาขาวิชาช่างไฟฟ้ากำลัง' },
+    { name: 'สาขาวิชาเทคโนโลยีการเขียนแบบเครื่องกล' },
+    { name: 'สาขาวิชาช่างเทคนิคคอมพิวเตอร์' }
+]);
 
 const validatePhoneNumber = () => {
     const originalValue = phoneNumber.value;
@@ -220,40 +191,36 @@ const validatePhoneNumber = () => {
     if (originalValue !== phoneNumber.value) {
         phoneNumberWarning.value = 'คุณสามารถใส่ได้เฉพาะตัวเลขเท่านั้น';
     } else {
-        phoneNumberWarning.value = ''; // ล้างข้อความแจ้งเตือนหากไม่มีการเปลี่ยนแปลง
+        phoneNumberWarning.value = '';
     }
 };
 
 const validateIdCard = () => {
-    // ลบอักขระที่ไม่ใช่ตัวเลขออก
     idCard.value = idCard.value.replace(/[^0-9]/g, '');
 
-    // ตรวจสอบความยาวของเลขบัตรประชาชน
     if (idCard.value.length !== 13) {
         idCardWarning.value = 'กรุณาใส่เลขบัตรประชาชนให้ครบ 13 หลัก';
     } else {
-        idCardWarning.value = ''; // ล้างข้อความแจ้งเตือนหากรูปแบบถูกต้อง
+        idCardWarning.value = '';
     }
 };
-
 
 const handleRegister = async () => {
     try {
         const payload = {
-            prefix: prefix.value,  // เพิ่ม prefix ใน payload
+            prefix: prefix.value,
             firstName: firstName.value,
             lastName: lastName.value,
             userName: userName.value,
             password: password.value,
             phoneNumber: phoneNumber.value,
-            idCard: idCard.value,  // เพิ่ม idCard ใน payload
+            idCard: idCard.value,
             gender: gender.value,
-            branch: branch.value,
+            branch: branch.value, // ส่ง array ของ objects [{ name: "..." }]
             statusStart,
             role
-        }
+        };
 
-        // const response = await axios.post(`${config.api_path}/register`, payload);
         const response = await axios.post(`${config.api_path}/admin`, payload);
         if (response.data.message === "Success") {
             Swal.fire({
@@ -261,19 +228,19 @@ const handleRegister = async () => {
                 text: "สมัครบัญชีเรียบร้อยแล้ว",
                 icon: "success",
                 timer: 2000
-            })
+            });
 
-            router.push('/login')
+            router.push('/login');
         }
     } catch (error) {
         Swal.fire({
             title: "error",
             text: (error.message, "Register Error"),
             icon: "error"
-        })
-        console.log(error)
+        });
+        console.log(error);
     }
-}
+};
 </script>
 
 <style scoped>

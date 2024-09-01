@@ -10,21 +10,16 @@ const router = useRouter();
 const userData = JSON.parse(localStorage.getItem('userData') || '{}');
 
 const companyName = ref('');
-const companyDepartment = ref('');
-const contactFirstName = ref('');
-const contactLastName = ref('');
+const contactName = ref(''); // รวมชื่อและนามสกุลเข้าด้วยกัน
+const contactPosition = ref(''); // เพิ่มฟิลด์ตำแหน่งผู้ประสานงาน
 const companyPhone = ref('');
 const companyEmail = ref('');
 const companyAddress = ref('');
-const studentID = ref('')
-const academicYear = ref('')
-// const status = ref('');
-
+const studentID = ref('');
+const academicYear = ref('');
 
 if (userData.studentID) {
     studentID.value = userData.studentID;
-    // status.value = userData.status;
-    // console.log(status.value)
 } else {
     console.log('No userData found in localStorage');
 }
@@ -44,15 +39,13 @@ const handleSubmit = async () => {
         try {
             const formData = {
                 companyName: companyName.value,
-                companyDepartment: companyDepartment.value,
-                contactFirstName: contactFirstName.value,
-                contactLastName: contactLastName.value,
+                contactName: contactName.value, // รวมชื่อและนามสกุลเข้าด้วยกัน
+                contactPosition: contactPosition.value, // เพิ่มตำแหน่งผู้ประสานงาน
                 companyPhone: companyPhone.value,
                 companyEmail: companyEmail.value,
                 companyAddress: companyAddress.value,
                 studentID: studentID.value,
                 academicYear: academicYear.value,
-
             };
             const response = await axios.post(`${config.api_path}/company`, formData);
             if (response.data.message === 'Success') {
@@ -112,14 +105,6 @@ const handleSubmit = async () => {
                         <div class="row mb-4">
                             <div class="col">
                                 <div data-mdb-input-init class="form-outline">
-                                    <label class="form-label" for="companyType">แผนก <span
-                                            class="text-red">*</span></label>
-                                    <input type="text" id="companyType" class="form-control" v-model="companyDepartment"
-                                        required />
-                                </div>
-                            </div>
-                            <div class="col">
-                                <div data-mdb-input-init class="form-outline">
                                     <label class="form-label" for="academicYear">ชั้นปี <span
                                             class="text-red">*</span></label>
                                     <select id="academicYear" class="form-control" v-model="academicYear" required>
@@ -140,20 +125,18 @@ const handleSubmit = async () => {
                         </div>
 
                         <label class="form-label" for="contactInfo">ข้อมูลผู้ประสานงานสถานประกอบการ</label>
-                        <!-- Text input -->
-                        <div data-mdb-input-init class="form-outline row mb-4 ">
-                            <div class="col">
-                                <label class="form-label" for="contactFirstName">ชื่อ <span
-                                        class="text-red">*</span></label>
-                                <input type="text" id="contactFirstName" class="form-control" v-model="contactFirstName"
-                                    required />
-                            </div>
-                            <div class="col">
-                                <label class="form-label" for="contactLastName">นามสกุล <span
-                                        class="text-red">*</span></label>
-                                <input type="text" id="contactLastName" class="form-control" v-model="contactLastName"
-                                    required />
-                            </div>
+
+                        <div data-mdb-input-init class="form-outline mb-4">
+                            <label class="form-label" for="contactName">ชื่อ-นามสกุล <span
+                                    class="text-red">*</span></label>
+                            <input type="text" id="contactName" class="form-control" v-model="contactName" required />
+                        </div>
+
+                        <div data-mdb-input-init class="form-outline mb-4">
+                            <label class="form-label" for="contactPosition">ตำแหน่ง <span
+                                    class="text-red">*</span></label>
+                            <input type="text" id="contactPosition" class="form-control" v-model="contactPosition"
+                                required />
                         </div>
 
                         <div data-mdb-input-init class="form-outline mb-4">
@@ -163,28 +146,25 @@ const handleSubmit = async () => {
                                 maxlength="10" required />
                         </div>
 
-                        <!-- Email input -->
                         <div data-mdb-input-init class="form-outline mb-4">
-                            <label class="form-label" for="companyEmail">Email <span
-                                class="text-red">*</span> </label>
+                            <label class="form-label" for="companyEmail">อีเมล <span class="text-red">*</span> </label>
                             <input type="email" id="companyEmail" class="form-control" v-model="companyEmail" />
                         </div>
 
-                        <!-- StudentID input -->
                         <div data-mdb-input-init class="form-outline mb-4">
-                            <label class="form-label" for="studentID">Student ID <span class="text-red">*</span></label>
+                            <label class="form-label" for="studentID">รหัสนักศึกษา <span
+                                    class="text-red">*</span></label>
                             <input type="text" id="studentID" class="form-control" v-model="studentID" disabled />
                         </div>
 
-                        <!-- Message input -->
                         <div data-mdb-input-init class="form-outline mb-4">
                             <label class="form-label" for="companyAddress">ที่ตั้งสถานประกอบการ <span
                                     class="text-red">*</span></label>
                             <textarea class="form-control" id="companyAddress" rows="4" v-model="companyAddress"
+                                placeholder="ตัวอย่าง (150 ถนนศรีจันทร์ ในเมือง อำเภอเมืองขอนแก่น ขอนแก่น 40000)"
                                 required></textarea>
                         </div>
 
-                        <!-- Submit button -->
                         <button type="submit" class="btn btn-primary btn-block mb-4">Submit</button>
                     </form>
                 </div>

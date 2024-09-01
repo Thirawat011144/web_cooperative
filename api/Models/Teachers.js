@@ -9,15 +9,15 @@ const TeachersModel = connect.define("teachers", {
     },
     prefix: {
         type: DataTypes.STRING(50),
-        allowNull: true,  // สามารถมีค่าว่างได้
+        allowNull: true,
     },
     firstName: {
         type: DataTypes.STRING(50),
-        allowNull: true,  // สามารถมีค่าว่างได้
+        allowNull: true,
     },
     lastName: {
         type: DataTypes.STRING(50),
-        allowNull: true,  // สามารถมีค่าว่างได้
+        allowNull: true,
     },
     userName: {
         type: DataTypes.STRING(50),
@@ -26,33 +26,32 @@ const TeachersModel = connect.define("teachers", {
     },
     password: {
         type: DataTypes.STRING(255),
-        allowNull: true,  // สามารถมีค่าว่างได้
+        allowNull: true,
     },
     phoneNumber: {
         type: DataTypes.STRING(50),
-        allowNull: true,  // สามารถมีค่าว่างได้
+        allowNull: true,
     },
     idCard: {
         type: DataTypes.STRING(50),
         unique: true,
-        allowNull: true,  // สามารถมีค่าว่างได้
+        allowNull: true,
     },
     gender: {
         type: DataTypes.STRING(50),
-        allowNull: true,  // สามารถมีค่าว่างได้
+        allowNull: true,
     },
     branch: {
-        type: DataTypes.STRING(255),
-        allowNull: true,  // สามารถมีค่าว่างได้
+        type: DataTypes.JSON,  // เปลี่ยนเป็น JSON
+        allowNull: true,
     },
     role: {
         type: DataTypes.STRING(50),
-        allowNull: true,  // สามารถมีค่าว่างได้
+        allowNull: true,
     },
-    statusStart: {
-        type: DataTypes.STRING(50),
-        allowNull: true,  // สามารถมีค่าว่างได้
-    }
+    // statusStart: {
+    //     type: DataTypes.STRING(50),
+    //     allowNull: true,
+    // }
 });
-
 module.exports = TeachersModel;

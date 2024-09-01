@@ -11,15 +11,11 @@ const CompaniesModel = connect.define("companies", {
         type: DataTypes.STRING(255),
         allowNull: false,
     },
-    companyDepartment: {
+    contactName: {
         type: DataTypes.STRING(255),
         allowNull: false,
     },
-    contactFirstName: {
-        type: DataTypes.STRING(255),
-        allowNull: false,
-    },
-    contactLastName: {
+    contactPosition: {
         type: DataTypes.STRING(255),
         allowNull: false,
     },

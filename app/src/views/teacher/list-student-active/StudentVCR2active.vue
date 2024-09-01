@@ -12,16 +12,27 @@ const router = useRouter();
 const users = ref([]);
 const isModalVisible = ref(false);
 const modalData = ref(null);
-const userData = JSON.parse(localStorage.getItem('userData') || '{}');
-let branch = null;
+// const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+// let branch = null;
 const evaluationData = ref([]); // เพิ่มการประกาศตัวแปร evaluationData
 const universityEvaluationData = ref([]);
+
+const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+let branch = null
 
 if (userData.branch) {
     branch = userData.branch;
 } else {
     console.log('No userData found in localStorage');
 }
+
+const branches = userData.branch;
+console.log('Branches:', branches);
+
+
+branches.forEach((branch, index) => {
+    console.log(`Branch ${index + 1}:`, branch.name);
+});
 
 const fetchData = async () => {
     try {
@@ -32,60 +43,69 @@ const fetchData = async () => {
         evaluationData.value = evaluationResponse.data;
         universityEvaluationData.value = universityEvaluationResponse.data;
 
-        const evaluationCounts = evaluationResponse.data.reduce((counts, evaluation) => {
-            counts[evaluation.studentId] = (counts[evaluation.studentId] || 0) + 1;
-            return counts;
-        }, {});
+        console.log("Users Response:", usersResponse.data);
 
-        const universityEvaluationCounts = universityEvaluationResponse.data.reduce((counts, evaluation) => {
-            counts[evaluation.studentId] = (counts[evaluation.studentId] || 0) + 1;
-            return counts;
-        }, {});
+        const updatedUsers = usersResponse.data.map(async user => {
+            console.log("Processing User:", user);
 
-        // อัปเดตสถานะเป็น 'ผ่าน' หรือ 'ไม่ผ่าน' สำหรับนักศึกษาตามเงื่อนไข
-        const updateStatusPromises = usersResponse.data.map(async user => {
-            if (
-                user.status === "เข้ารับการฝึก" &&
-                user.year === "ปวช 3" &&
-                user.branch === branch
-            ) {
-                const userEvaluations = evaluationResponse.data.filter(
-                    evaluation => evaluation.studentId === user.studentID
-                );
+            const userEvaluations = evaluationResponse.data.filter(
+                evaluation => evaluation.studentId === user.studentID
+            );
 
-                const userUniversityEvaluations = universityEvaluationResponse.data.filter(
-                    evaluation => evaluation.studentId === user.studentID
-                );
+            const userUniversityEvaluations = universityEvaluationResponse.data.filter(
+                evaluation => evaluation.studentId === user.studentID
+            );
 
-                if (userEvaluations.length > 0 && userUniversityEvaluations.length > 0) {
-                    const hasHighAverageScore = userEvaluations.some(
-                        evaluation => evaluation.averageScore >= 70
-                    );
-
-                    if (hasHighAverageScore) {
-                        await axios.put(`${config.api_path}/user/${user.id}`, { status: 'ผ่าน' });
-                        user.status = 'ผ่าน';
-                    } else {
-                        await axios.put(`${config.api_path}/user/${user.id}`, { status: 'ไม่ผ่าน' });
-                        user.status = 'ไม่ผ่าน';
-                    }
-                }
+            if (userEvaluations.length > 0 && userUniversityEvaluations.length > 0) {
+                await axios.put(`${config.api_path}/user/${user.id}`, { status: 'ประเมินเรียบร้อยแล้ว' });
+                user.status = 'ประเมินเรียบร้อยแล้ว';
             }
+
+            console.log("Updated User Status:", user.status);
+
             return user;
         });
 
-        const updatedUsers = await Promise.all(updateStatusPromises);
+        const finalUsers = await Promise.all(updatedUsers);
+console.log("Final Users After Update:", finalUsers);
 
-        users.value = updatedUsers.filter(user =>
-            user.status === "เข้ารับการฝึก" &&
-            user.year === "ปวช 3" &&
-            user.branch === branch
-        );
+users.value = finalUsers.filter(user => {
+    // การกรองตามสาขาและปี
+    const branchNames = branches.map(branch => branch.name);
 
-        // เพิ่มสถานะการประเมินให้กับข้อมูลนักศึกษา
-        users.value.forEach(user => {
-            user.isEvaluated = universityEvaluationCounts[user.studentID] > 0;
-        });
+    let userBranchNames = [];
+    if (Array.isArray(user.branch)) {
+        userBranchNames = user.branch.map(branch => branch.name);
+    } else if (typeof user.branch === 'object' && user.branch !== null) {
+        if (user.branch.name) {
+            userBranchNames = [user.branch.name];  // ถ้า `user.branch` เป็น object และมี `name`
+        } else {
+            console.log("Unexpected branch object format:", user.branch);
+            return false;  // ถ้า `user.branch` เป็น object แต่ไม่มี `name`
+        }
+    } else if (typeof user.branch === 'string') {
+        userBranchNames = [user.branch];  // ถ้า `user.branch` เป็น string
+    } else {
+        console.log("Unexpected branch format:", user.branch);
+        return false;  // ถ้า `user.branch` ไม่อยู่ในรูปแบบที่คาดหวัง ไม่ให้ผ่านการกรอง
+    }
+
+    const isStatusMatch = user.status === "เข้ารับการฝึก";
+    const isYearMatch = user.year === "ปวช 3";
+    const isBranchMatch = userBranchNames.some(name => branchNames.includes(name));
+    const userUniversityEvaluations = universityEvaluationData.value.filter(
+        evaluation => evaluation.studentId === user.studentID
+    );
+
+
+    // ตรวจสอบว่าผู้ใช้คนนี้ได้ถูกประเมินหรือไม่
+    user.isEvaluated = user.status === 'ประเมินเรียบเสร็จสิ้น' || 
+        (userUniversityEvaluations.length > 0);
+
+    return isStatusMatch && isYearMatch && isBranchMatch;
+});
+
+console.log("Filtered Users:", users.value);
 
     } catch (error) {
         Swal.fire({
@@ -95,7 +115,6 @@ const fetchData = async () => {
         });
     }
 };
-
 
 // modal
 const showModal = async (id) => {

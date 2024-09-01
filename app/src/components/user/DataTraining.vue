@@ -61,10 +61,10 @@ onMounted(() => {
                     <span>ชื่อสถานประกอบการ:</span> {{ company.companyName }}
                 </h5>
                 <p class="card-text">
-                    <span>แผนก:</span> {{ company.companyDepartment }}
+                    <span>ชื่อ-นามสกุลผู้ประสานงาน:</span> {{ company.contactName }}
                 </p>
                 <p class="card-text">
-                    <span>ชื่อ-นามสกุลผู้ประสานงาน:</span> {{ company.contactFirstName }} {{ company.contactLastName }}
+                    <span>ตำแหน่ง:</span> {{ company.contactPosition }}
                 </p>
                 <p class="card-text">
                     <span>เบอร์โทรศัพท์:</span> {{ company.companyPhone }}
@@ -73,7 +73,7 @@ onMounted(() => {
                     <span>Email:</span> {{ company.companyEmail }}
                 </p>
                 <p class="card-text">
-                    <span>ที่ตั้ง:</span> {{ company.companyAddress }}
+                    <span>ที่อยู่:</span> {{ company.companyAddress }}
                 </p>
             </div>
         </div>

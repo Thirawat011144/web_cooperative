@@ -15,7 +15,6 @@ const modalData = ref(null);
 const currentStudyField = localStorage.getItem(config.currentStudyField)
 
 
-
 const fetchData = async () => {
     try {
         const universityEvaluationResponse = await axios.get(`${config.api_path}/data-evaluation-internship`);

@@ -23,6 +23,10 @@ const idCard = ref('');
 const phoneNumberWarning = ref('');
 const emailWarning = ref('');
 const idCardWarning = ref('')
+const userNameWarning = ref('');
+const showPassword = ref(false);
+const firstNameWarning = ref('');
+const lastNameWarning = ref('');
 
 const vocationalBranches = [
     { value: "สาขาวิชาช่างก่อสร้าง", text: "สาขาวิชาช่างก่อสร้าง" },
@@ -55,6 +59,50 @@ const bachelorBranches = [
     { value: "สาขาครุศาสตร์อุตสาหกรรมคอมพิวเตอร์", text: "สาขาครุศาสตร์อุตสาหกรรมคอมพิวเตอร์" },
     { value: "สาขาครุศาสตร์อุตสาหการเชื่อมประกอบ", text: "สาขาครุศาสตร์อุตสาหการเชื่อมประกอบ" },
 ];
+
+const togglePasswordVisibility = () => {
+    showPassword.value = !showPassword.value;
+};
+
+const validateFirstName = () => {
+    const namePattern = /^[a-zA-Zก-ฮะ-ๅ่-๋็์ \-]+$/;
+
+    if (!namePattern.test(firstName.value)) {
+        firstNameWarning.value = 'ชื่อควรประกอบด้วยตัวอักษรภาษาไทยหรือภาษาอังกฤษเท่านั้น';
+    } else if (firstName.value.trim().length < 2) {
+        firstNameWarning.value = 'ชื่อควรมีความยาวอย่างน้อย 2 ตัวอักษร';
+    } else {
+        firstNameWarning.value = ''; // ล้างข้อความเตือนหากชื่อถูกต้อง
+    }
+};
+
+const validateLastName = () => {
+    const namePattern = /^[a-zA-Zก-ฮะ-ๅ่-๋็์ \-]+$/;
+
+    if (!namePattern.test(lastName.value)) {
+        lastNameWarning.value = 'นามสกุลควรประกอบด้วยตัวอักษรภาษาไทยหรือภาษาอังกฤษเท่านั้น';
+    } else if (lastName.value.trim().length < 2) {
+        lastNameWarning.value = 'นามสกุลควรมีความยาวอย่างน้อย 2 ตัวอักษร';
+    } else {
+        lastNameWarning.value = ''; // ล้างข้อความเตือนหากนามสกุลถูกต้อง
+    }
+};
+
+const validateAndFilterUserName = () => {
+    // อนุญาตเฉพาะตัวอักษรภาษาอังกฤษ ตัวเลข และ . หรือ _
+    const allowedCharacters = /^[a-zA-Z0-9._]*$/;
+
+    if (!allowedCharacters.test(userName.value)) {
+        // กรองอักขระที่ไม่อนุญาตออกจาก Username
+        userName.value = userName.value.replace(/[^a-zA-Z0-9._]/g, '');
+        userNameWarning.value = 'Username ต้องประกอบด้วยตัวอักษรหรือตัวเลขเท่านั้น และสามารถใช้เครื่องหมาย . หรือ _ ได้';
+    } else if (/^\d/.test(userName.value)) {
+        // ตรวจสอบว่าถ้ามีตัวเลขเป็นตัวแรก
+        userNameWarning.value = 'Username ห้ามเริ่มต้นด้วยตัวเลข';
+    } else {
+        userNameWarning.value = ''; // ล้างข้อความเตือนถ้าไม่มีอักขระต้องห้ามและไม่เริ่มด้วยตัวเลข
+    }
+};
 
 const validatePhoneNumber = () => {
     const originalValue = phoneNumber.value;
@@ -102,18 +150,18 @@ const branches = computed(() => {
 const handleRegister = async () => {
     try {
         const payload = {
-            firstName: firstName.value,
-            lastName: lastName.value,
-            userName: userName.value,
-            password: password.value,
-            phoneNumber: phoneNumber.value,
+            firstName: firstName.value.trim(),
+            lastName: lastName.value.trim(),
+            userName: userName.value.trim(),
+            password: password.value.trim(),
+            phoneNumber: phoneNumber.value.trim(),
             gender: gender.value,
             year: year.value,
             branch: branch.value,
             status: status.value,
-            studentID: studentID.value,
-            email: email.value,
-            idCard: idCard.value
+            studentID: studentID.value.trim(),
+            email: email.value.trim(),
+            idCard: idCard.value.trim()
         }
         const response = await axios.post(`${config.api_path}/register`, payload);
         if (response.data.message === "Success") {
@@ -163,7 +211,10 @@ const handleRegister = async () => {
                                                     <label class="form-label" for="form3Example1m">ชื่อ </label>
                                                     <input type="text" id="form3Example1m"
                                                         class="form-control form-control-lg" v-model="firstName"
-                                                        required />
+                                                        @input="validateFirstName" required />
+                                                    <!-- แสดงข้อความเตือนถ้าชื่อไม่ผ่านการตรวจสอบ -->
+                                                    <small v-if="firstNameWarning" class="text-danger">{{
+                                                        firstNameWarning }}</small>
                                                 </div>
                                             </div>
                                             <div class="col-md-6 mb-4">
@@ -171,7 +222,10 @@ const handleRegister = async () => {
                                                     <label class="form-label" for="form3Example1n">นามสกุล</label>
                                                     <input type="text" id="form3Example1n"
                                                         class="form-control form-control-lg" v-model="lastName"
-                                                        required />
+                                                        @input="validateLastName" required />
+                                                    <!-- แสดงข้อความเตือนถ้านามสกุลไม่ผ่านการตรวจสอบ -->
+                                                    <small v-if="lastNameWarning" class="text-danger">{{ lastNameWarning
+                                                        }}</small>
                                                 </div>
                                             </div>
                                         </div>
@@ -182,15 +236,22 @@ const handleRegister = async () => {
                                                     <label class="form-label" for="form3Example1m1">Username</label>
                                                     <input type="text" id="form3Example1m1"
                                                         class="form-control form-control-lg" v-model="userName"
-                                                        required />
+                                                        @input="validateAndFilterUserName" required />
+                                                    <!-- แสดงข้อความเตือนถ้ามีอักขระต้องห้าม -->
+                                                    <small v-if="userNameWarning" class="text-danger">{{ userNameWarning
+                                                        }}</small>
                                                 </div>
                                             </div>
                                             <div class="col-md-6 mb-4">
-                                                <div class="form-outline">
+                                                <div class="form-outline" style="position: relative;">
                                                     <label class="form-label" for="form3Example1n1">Password</label>
-                                                    <input type="password" id="form3Example1n1"
-                                                        class="form-control form-control-lg" v-model="password"
-                                                        required />
+                                                    <input :type="showPassword ? 'text' : 'password'"
+                                                        id="form3Example1n1" class="form-control form-control-lg"
+                                                        v-model="password" required />
+                                                    <!-- ปุ่มแสดง/ซ่อนรหัสผ่าน -->
+                                                    <i :class="showPassword ? 'fa fa-eye-slash' : 'fa fa-eye'"
+                                                        @click="togglePasswordVisibility"
+                                                        style="position: absolute; right: 10px; top: 73%; transform: translateY(-50%); cursor: pointer; color: #495057; font-size: 1.2rem;"></i>
                                                 </div>
                                             </div>
                                         </div>

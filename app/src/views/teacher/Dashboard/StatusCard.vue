@@ -22,17 +22,17 @@
                     <div class="circle">{{ trainCountInternship }}</div>
                     <p>เข้ารับการฝึก</p>
                 </div>
-                <div class="status-circle" @click="filterStatus('ผ่าน')">
+                <div class="status-circle" @click="filterStatus('ประเมินเสร็จสิ้น')">
                     <div class="circle">{{ passCount }}</div>
-                    <p>ผ่าน</p>
+                    <p>ประเมินเสร็จสิ้น</p>
                 </div>
                 <div class="status-circle" @click="filterStatus('ไม่ผ่าน')">
                     <div class="circle">{{ failCount }}</div>
                     <p>ไม่ผ่าน</p>
                 </div>
-                <div class="status-circle" @click="filterStatus('เสร็จสิ้น')">
+                <div class="status-circle" @click="filterStatus('ไม่อนุมัติ')">
                     <div class="circle">{{ finish }}</div>
-                    <p>เสร็จสิ้น</p>
+                    <p>ไม่อนุมัติ</p>
                 </div>
             </div>
         </div>
@@ -59,9 +59,9 @@ const allCount = computed(() => props.students.length);
 const permissionCount = computed(() => props.students.filter(student => student.status === 'ขออนุมัติ').length);
 const trainCount = computed(() => props.students.filter(student => student.status === 'อนุมัติ').length);
 const trainCountInternship = computed(() => props.students.filter(student => student.status === 'เข้ารับการฝึก').length);
-const passCount = computed(() => props.students.filter(student => student.status === 'ผ่าน').length);
-const failCount = computed(() => props.students.filter(student => student.status === 'ไม่ผ่าน' || student.status === 'ไม่อนุมัติ').length);
-const finish = computed(() => props.students.filter(student => student.status === 'เสร็จสิ้น').length);
+const passCount = computed(() => props.students.filter(student => student.status === 'ประเมินเสร็จสิ้น').length);
+const failCount = computed(() => props.students.filter(student => student.status === 'ไม่ผ่าน').length);
+const finish = computed(() => props.students.filter(student => student.status === 'ไม่อนุมัติ').length);
 
 const filterStatus = (status) => {
     statusFilter.value = status;

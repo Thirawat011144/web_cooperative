@@ -120,32 +120,47 @@ watch(
         <div class="card">
             <div class="card-header">
                 <div class="card-title">
-                    ผลการค้นหา
-                    <div>
-                        <button class="btn btn-info m-1" v-if="sortedUsers.some((user) => user.collegeDetails)"
-                            @click="downloadExcelHight('student', sortedUsers)">
-                            ดาวน์โหลดเฉพาะข้อมูลส่วนตัว [Hight]
+                    &nbsp; ผลการค้นหา <br>
+                    <div class="btn-group m-1">
+                        <button class="btn btn-info dropdown-toggle" type="button" id="downloadMenuButton"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            ดาวน์โหลดข้อมูล
                         </button>
-
-                        <button class="btn btn-info m-1" v-else @click="downloadExcelBefore('student', sortedUsers)">
-                            ดาวน์โหลดเฉพาะข้อมูลส่วนตัว
-                        </button>
-                        <button class="btn btn-info m-1" v-if="
-                            sortedUsers.some(
-                                (user) =>
-                                    user.evaluationDetails && user.evaluationDetails.length > 0
-                            )
-                        " @click="downloadExcel('student', sortedUsers)">
-                            ดาวน์โหลดข้อมูลการประเมินจากสถานประกอบการ
-                        </button>
-                        <button class="btn btn-info m-1"
-                            v-if="sortedUsers.some((user) => user.evaluationUniversityDetails && user.evaluationUniversityDetails.length > 0)"
-                            @click="downloadSearchHight('student', sortedUsers)">ดาวน์โหลดข้อมูลการประเมินจากอาจารย์นิเทศ</button>
-                        <button class="btn btn-info m-1"
-                            v-if="sortedUsers.some((user) => user.evaluationHightDetails && user.evaluationHightDetails.length > 0)"
-                            @click="downloadExcelHightEvaluation('student', sortedUsers)">
-                            ดาวน์โหลดข้อมูลการประเมิน
-                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="downloadMenuButton">
+                            <li v-if="sortedUsers.some(user => user.collegeDetails)">
+                                <a class="dropdown-item" @click="downloadExcelHight('student', sortedUsers)"
+                                    style="cursor: pointer;">
+                                    ดาวน์โหลดเฉพาะข้อมูลส่วนตัว [Hight]
+                                </a>
+                            </li>
+                            <li v-else>
+                                <a class="dropdown-item" @click="downloadExcelBefore('student', sortedUsers)"
+                                    style="cursor: pointer;">
+                                    ดาวน์โหลดเฉพาะข้อมูลส่วนตัว
+                                </a>
+                            </li>
+                            <li
+                                v-if="sortedUsers.some(user => user.evaluationDetails && user.evaluationDetails.length > 0)">
+                                <a class="dropdown-item" @click="downloadExcel('student', sortedUsers)"
+                                    style="cursor: pointer;">
+                                    ดาวน์โหลดข้อมูลการประเมินจากสถานประกอบการ
+                                </a>
+                            </li>
+                            <li
+                                v-if="sortedUsers.some(user => user.evaluationUniversityDetails && user.evaluationUniversityDetails.length > 0)">
+                                <a class="dropdown-item" @click="downloadSearchHight('student', sortedUsers)"
+                                    style="cursor: pointer;">
+                                    ดาวน์โหลดข้อมูลการประเมินจากอาจารย์นิเทศ
+                                </a>
+                            </li>
+                            <li
+                                v-if="sortedUsers.some(user => user.evaluationHightDetails && user.evaluationHightDetails.length > 0)">
+                                <a class="dropdown-item" @click="downloadExcelHightEvaluation('student', sortedUsers)"
+                                    style="cursor: pointer;">
+                                    ดาวน์โหลดข้อมูลการประเมิน
+                                </a>
+                            </li>
+                        </ul>
                     </div>
                 </div>
                 <table class="table">
@@ -174,7 +189,7 @@ watch(
                                 </button>
                             </td>
                             <!-- ใช้ company ตามฟิลด์ในตาราง -->
-                            <td> 
+                            <td>
                                 <router-link :to="`/edit-cr2/${user.id}`">
                                     <button class="btn btn-primary m-1">
                                         <i class="fa-solid fa-pen-to-square"></i>

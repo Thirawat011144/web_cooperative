@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 // const CompaniesModel = require("../Models/Companies")
 const { UsersModel, CompaniesModel } = require("../Models/index");
+const InternshipModel = require('../Models/Internship')
 
 const authenticateToken = require('../Middleware/Authorization');
 
@@ -76,7 +77,7 @@ const authenticateToken = require('../Middleware/Authorization');
 
 router.post('/company', async (req, res) => {
     try {
-        const { companyName, companyDepartment, contactFirstName, contactLastName, companyPhone, companyEmail, companyAddress, studentID, academicYear } = req.body;
+        const { companyName,contactName,contactPosition, companyPhone, companyEmail, companyAddress, studentID, academicYear } = req.body;
 
         // หา record ที่มี studentID ตรงกับค่าในตาราง Users
         const user = await UsersModel.findOne({ where: { studentID } });
@@ -100,21 +101,22 @@ router.post('/company', async (req, res) => {
             if (existingCompany) {
                 // อัปเดตข้อมูลในฐานข้อมูล
                 existingCompany.companyName = companyName;
-                existingCompany.companyDepartment = companyDepartment;
-                existingCompany.contactFirstName = contactFirstName;
-                existingCompany.contactLastName = contactLastName;
+                existingCompany.contactName = contactName;
+                existingCompany.contactPosition = contactPosition;
                 existingCompany.companyPhone = companyPhone;
                 existingCompany.companyEmail = companyEmail;
                 existingCompany.companyAddress = companyAddress;
+                existingCompany.studentID = studentID;
+
+                
                 await existingCompany.save();
 
                 res.status(200).send({ message: "Success", existingCompany });
             } else {
                 const newCompanies = await CompaniesModel.create({
                     companyName,
-                    companyDepartment,
-                    contactFirstName,
-                    contactLastName,
+                    contactName,
+                    contactPosition,
                     companyPhone,
                     companyEmail,
                     companyAddress,
@@ -137,9 +139,8 @@ router.post('/company', async (req, res) => {
                 // สร้าง record ใหม่
                 const newCompany = await CompaniesModel.create({
                     companyName,
-                    companyDepartment,
-                    contactFirstName,
-                    contactLastName,
+                    contactName,
+                    contactPosition,
                     companyPhone,
                     companyEmail,
                     companyAddress,

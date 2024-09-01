@@ -1,6 +1,6 @@
 const express = require("express");
 const { Op, Sequelize } = require('sequelize');
-const { UsersModel, CompaniesModel, CollegesModel, dataEvaluationInternshipForUniversity, dataEvaluation,TeachersModels,EvaluatorsModels,dataEvaluationInternshipModel } = require("../Models/index");
+const { UsersModel, CompaniesModel, CollegesModel, dataEvaluationInternshipForUniversity, dataEvaluation, TeachersModels, EvaluatorsModels, dataEvaluationInternshipModel } = require("../Models/index");
 // const dataEvaluationInternshipModel = require("../Models/DataEvaluationInternship")
 // const authenticateToken = require('../Middleware/Authorization');
 
@@ -21,6 +21,41 @@ router.get("/users", async (req, res) => {
                     as: 'collegeDetails',
                     // attributes: ['collegeName']
                 },
+                {
+                    model: dataEvaluationInternshipForUniversity,
+                    as: 'evaluationUniversityDetails',
+                    // attributes: ['score', 'comments'] // เลือกฟิลด์ที่ต้องการส่งออก
+                    include: [
+                        {
+                            model: TeachersModels,
+                            as: 'universityTeacher', // alias ที่ตรงกับความสัมพันธ์ที่กำหนดไว้
+                            // attributes: ['firstName', 'lastName'] // เลือกฟิลด์ที่ต้องการส่งออก
+                        }
+                    ]
+                },
+                {
+                    model: dataEvaluationInternshipModel,
+                    as: 'evaluationDetails',
+                    // attributes: ['score', 'comments'] // เลือกฟิลด์ที่ต้องการส่งออก
+                    include: [{
+                        model: EvaluatorsModels,
+                        as: 'internshipEvaluator'
+                    }]
+                },
+                {
+                    model: dataEvaluation,
+                    as: 'evaluationHightDetails',
+                    include: [
+                        {
+                            model: TeachersModels,
+                            as: 'teacher'
+                        }, {
+                            model: EvaluatorsModels,
+                            as: 'evaluator'
+
+                        }
+                    ]   
+                }
             ]
         });
         res.send(users);
@@ -40,7 +75,8 @@ router.get("/user/:id", async (req, res) => {
                 {
                     model: CollegesModel,
                     as: 'collegeDetails'
-                }
+                },
+
             ]
         });
         if (!user) {
@@ -110,9 +146,9 @@ router.get("/users/search", async (req, res) => {
                     model: dataEvaluationInternshipModel,
                     as: 'evaluationDetails',
                     // attributes: ['score', 'comments'] // เลือกฟิลด์ที่ต้องการส่งออก
-                    include:[{
+                    include: [{
                         model: EvaluatorsModels,
-                        as:'internshipEvaluator'
+                        as: 'internshipEvaluator'
                     }]
                 },
                 {
@@ -130,14 +166,14 @@ router.get("/users/search", async (req, res) => {
                 {
                     model: dataEvaluation,
                     as: 'evaluationHightDetails',
-                    include:[
+                    include: [
                         {
-                            model:TeachersModels,
-                            as:'teacher'
-                        },{
-                            model:EvaluatorsModels,
-                            as:'evaluator'
-                            
+                            model: TeachersModels,
+                            as: 'teacher'
+                        }, {
+                            model: EvaluatorsModels,
+                            as: 'evaluator'
+
                         }
                     ]
                     // attributes: ['score', 'comments'] // เลือกฟิลด์ที่ต้องการส่งออก       

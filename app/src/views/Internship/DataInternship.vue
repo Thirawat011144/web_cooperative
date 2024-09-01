@@ -16,55 +16,22 @@
                         <div class="info-container">
                             <div class="info-column">
                                 <p><label>ชื่อบริษัท/ชื่อร้าน:</label> {{ job.company }}</p>
-                                <p><label>ประเภทหน่วยงาน:</label> {{ job.type }}</p>
                                 <p><label>ที่อยู่:</label> {{ job.location }}</p>
-                                <p><label>รหัสไปรษณีย์:</label> {{ job.zipCode }}</p>
-                                <p><label>เบอร์โทร:</label> {{ job.tel }}</p>
-                                <p><label>อีเมล์:</label> {{ job.mail }}</p>
-                            </div>
-                            <div class="info-separator"></div>
-                            <div class="info-column">
                                 <p><label>ชื่อผู้ติดต่อ:</label> {{ job.contactPerson }}</p>
                                 <p><label>ตำแหน่ง:</label> {{ job.contactPosition }}</p>
                                 <p><label>โทรศัพท์:</label> {{ job.contactTel }}</p>
+                            </div>
+                            <div class="info-separator"></div>
+                            <div class="info-column">
                                 <p><label>อีเมล์:</label> {{ job.contactEmail }}</p>
                                 <p><label>ที่อยู่สำหรับติดต่อ:</label> {{ job.location }}</p>
                                 <p><label>ช่องทางการติดต่ออื่นๆ:</label> {{ job.otherContact }}</p>
+                                <p><label>สาขาที่รับ:</label> {{ job.branch }}</p>
                             </div>
                         </div>
                     </div>
-                    <div class="section">
-                        <h2>ข้อมูลอื่นๆ</h2>
-                        <table class="table">
-                            <tr>
-                                <th>ตำแหน่งงาน</th>
-                                <td>{{ job.position }}</td>
-                            </tr>
-                            <tr>
-                                <th>สาขาที่รับ</th>
-                                <td>{{ job.branch }}</td>
-                            </tr>
-                            <tr>
-                                <th>อัตราที่รับ</th>
-                                <td>{{ job.vacancies }}</td>
-                            </tr>
-                            <tr>
-                                <th>เงินเดือน</th>
-                                <td>{{ job.salary }}</td>
-                            </tr>
-                            <tr>
-                                <th>เพศ</th>
-                                <td>{{ job.gender }}</td>
-                            </tr>
-                            <tr>
-                                <th>การศึกษา</th>
-                                <td>{{ job.educationLevel }}</td>
-                            </tr>
-                        </table>
-                    </div>
                 </div>
             </div>
-
         </div>
         <Footer />
     </div>
@@ -90,7 +57,6 @@ const fetchJob = async () => {
         console.error('Error fetching job:', error);
     }
 };
-
 
 // ดึงข้อมูลเมื่อคอมโพเนนต์ถูกเมาท์
 onMounted(() => {
@@ -127,8 +93,6 @@ onMounted(() => {
     max-width: 1000px;
     padding: 20px;
     background-color: #fff;
-    background-size: cover;
-    background-position: center;
     min-height: 100vh;
     margin: 20px auto;
     border-radius: 10px;
@@ -168,22 +132,6 @@ onMounted(() => {
 
 .section {
     margin-bottom: 20px;
-}
-
-.table {
-    width: 100%;
-    border-collapse: collapse;
-}
-
-.table th,
-.table td {
-    padding: 10px;
-    border: 1px solid #ddd;
-    text-align: left;
-}
-
-.text-bold {
-    font-weight: bold;
 }
 
 .info-container {

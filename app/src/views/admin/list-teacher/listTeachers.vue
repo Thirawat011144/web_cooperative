@@ -11,8 +11,8 @@
                     <tr>
                         <th>ลำดับ</th>
                         <th>ชื่อ-นามสกุล</th>
-                        <th>สาขาวิชา</th>
-                        <th>เครื่องมือ</th>
+                        <!-- <th>สาขาวิชา</th> -->
+                        <th>การจัดการ</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -20,8 +20,8 @@
                         <td>{{ index + 1 }}</td>
                         <td v-if="user.firstName === null"> ยังไม่มีข้อมูล </td>
                         <td v-else>{{ user.firstName }} {{ user.lastName }}</td>
-                        <td v-if="user.branch === null">ยังไม่มีข้อมูล</td>
-                        <td v-else>{{ user.branch }}</td>
+                        <!-- <td v-if="user.branch === null">ยังไม่มีข้อมูล</td> -->
+                        <!-- <td v-else>{{ user.branch }}</td> -->
                         <td style="display: flex; align-items: center;">
                             <button @click="deleteUser(user.id)" class="btn btn-danger btn-sm ml-2">ลบ</button>
                         </td>

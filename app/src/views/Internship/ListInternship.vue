@@ -17,7 +17,7 @@
               <span class="job-type">{{ formatDate(job.createdAt) }}</span>
             </div>
             <div class="job-details">
-              <p><span class="text-bold">ตำแหน่ง:</span> {{ job.position }}</p>
+              <!-- <p><span class="text-bold">ตำแหน่ง:</span> {{ job.position }}</p> -->
               <p><span class="text-bold">ที่อยู่:</span> {{ job.location }}</p>
               <!-- <p><span class="text-bold">โทรศัพท์:</span> {{ job.tel }}</p> -->
             </div>

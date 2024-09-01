@@ -585,10 +585,12 @@ const submitEvaluation = async () => {
       });
       const checkRole = localStorage.getItem(config.evaluatorStatus)
       const userYear = student.value.year;
-      if (userYear === "ป.ตรี ปีที่ 4") {
+      if (userYear === "ป.ตรี ปีที่ 4" && selectedStatus.value !== 'อาจารย์นิเทศ') {
         router.push('/home-evaluation/student-ev-tec4');
       } else if (userYear === "ป.ตรี ปีที่ 2") {
         router.push('/home-evaluation/student-ev-tec2');
+      }else if(userYear === 'ป.ตรี ปีที่ 4' && selectedStatus.value === 'อาจารย์นิเทศ'){
+        router.push('/teacher-index/list-ec4')
       } else {
         router.push('/home-evaluation/student-ev-vcr2');
       }

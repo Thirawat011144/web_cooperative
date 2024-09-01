@@ -738,13 +738,13 @@ const submitEvaluation = async () => {
             const userYear = student.value.year;
 
             if (evaluatorStatus === 'อาจารย์นิเทศ' && userYear === "ป.ตรี ปีที่ 2") {
-                router.push('/teacher-index/student-tec2active');
+                router.push('/teacher-index/list-ec2');
             } else if (evaluatorStatus === 'ผู้ดูแล' && userYear === "ปวส 2") {
                 router.push('/home-evaluation/student-ev-uvcr');
             } else if (evaluatorStatus === 'อาจารย์นิเทศ' && userYear === 'ปวช 3') {
-                router.push('/teacher-index/student-vcr2active');
+                router.push('/teacher-index/list-cr2');
             } else if (evaluatorStatus === 'อาจารย์นิเทศ' && userYear === 'ปวส 2') {
-                router.push('/teacher-index/student-uvcractive');
+                router.push('/teacher-index/list-dcr2');
             } else {
                 router.push('/home-evaluation/student-ev-vcr2');
             }

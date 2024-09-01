@@ -7,16 +7,16 @@ router.post("/internship", async (req, res) => {
     try {
         const {
             company,
-            position,
+            // position,
             location,
-            tel,
-            zipCode,
-            mail,
-            type,
-            vacancies,
-            salary,
-            gender,
-            educationLevel,
+            // tel,
+            // zipCode,
+            // mail,
+            // type,
+            // vacancies,
+            // salary,
+            // gender,
+            // educationLevel,
             contactPerson,
             contactPosition,
             contactEmail,
@@ -26,23 +26,23 @@ router.post("/internship", async (req, res) => {
         } = req.body;
 
         // ตรวจสอบว่าข้อมูลที่จำเป็นทั้งหมดถูกส่งมา
-        if (!company || !position || !location || !tel || !mail || !vacancies || !gender || !educationLevel || !contactPerson || !contactEmail || !contactTel || !branch) {
+        if (!company ||  !location ||  !contactPerson || !contactEmail || !contactTel || !branch || !contactPosition) {
             return res.status(400).json({ message: "กรุณากรอกข้อมูลให้ครบถ้วน" });
         }
 
         // ตั้งค่าดีฟอลต์เป็น "-" หากฟิลด์ใดไม่มีข้อมูล
         const newInternship = await InternshipModel.create({
             company: company || "-",
-            position: position || "-",
+            // position: position || "-",
             location: location || "-",
-            tel: tel || "-",
-            zipCode: zipCode || "-",
-            mail: mail || "-",
-            type: type || "-",
-            vacancies: vacancies || "-",
-            salary: salary || "-",
-            gender: gender || "-",
-            educationLevel: educationLevel || "-",
+            // tel: tel || "-",
+            // zipCode: zipCode || "-",
+            // mail: mail || "-",
+            // type: type || "-",
+            // vacancies: vacancies || "-",
+            // salary: salary || "-",
+            // gender: gender || "-",
+            // educationLevel: educationLevel || "-",
             contactPerson: contactPerson || "-",
             contactPosition: contactPosition || "-",
             contactEmail: contactEmail || "-",

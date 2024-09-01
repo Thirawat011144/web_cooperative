@@ -16,39 +16,9 @@
                     <span>เลขบัตรประชาชน:</span> {{ dataResult.idCard }}
                 </p>
                 <p class="card-text branch-container">
-                    <span>รับผิดชอบสาขา :</span>
-                    <select class="branch-select col-md-5 form-select" v-model="dataResult.branch"
-                        @change="updateBranch">
-                        <!-- <option value="" disabled>-</option> -->
-                        <option value="สาขาครุศาสตร์อุตสาหกรรมโยธา">สาขาครุศาสตร์อุตสาหกรรมโยธา</option>
-                        <option value="สาขาครุศาสตร์อุตสาหกรรมไฟฟ้า">สาขาครุศาสตร์อุตสาหกรรมไฟฟ้า</option>
-                        <option value="สาขาครุศาสตร์อุตสาหกรรมเครื่องกล">สาขาครุศาสตร์อุตสาหกรรมเครื่องกล</option>
-                        <option value="สาขาครุศาสตร์อุตสาหกรรมอุตสาหการ">สาขาครุศาสตร์อุตสาหกรรมอุตสาหการ</option>
-                        <option value="สาขาครุศาสตร์อุตสาหกรรมอิเล็กทรอนิกส์และโทรคมนาคม">
-                            สาขาครุศาสตร์อุตสาหกรรมอิเล็กทรอนิกส์และโทรคมนาคม</option>
-                        <option value="สาขาครุศาสตร์อุตสาหกรรมคอมพิวเตอร์">สาขาครุศาสตร์อุตสาหกรรมคอมพิวเตอร์</option>
-                        <option value="สาขาครุศาสตร์อุตสาหการเชื่อมประกอบ">สาขาครุศาสตร์อุตสาหการเชื่อมประกอบ</option>
-
-                        <option value="สาขาวิชาช่างโยธา">สาขาวิชาช่างโยธา</option>
-                        <option value="สาขาวิชาช่างก่อสร้าง">สาขาวิชาช่างก่อสร้าง</option>
-                        <option value="สาขาวิชาช่างเครื่องมือกลอัตโนมัติ">สาขาวิชาช่างเครื่องมือกลอัตโนมัติ</option>
-                        <option value="สาขาวิชาช่างยนต์">สาขาวิชาช่างยนต์</option>
-                        <option value="สาขาวิชาช่างกลเกษตร">สาขาวิชาช่างกลเกษตร</option>
-                        <option value="สาขาวิชาช่างกลโรงงาน">สาขาวิชาช่างกลโรงงาน</option>
-                        <option value="สาขาวิชาช่างท่อและประสาน">สาขาวิชาช่างท่อและประสาน</option>
-                        <option value="สาขาวิชาการออกแบบนวัตกรรมเครื่องจักรกล">สาขาวิชาการออกแบบนวัตกรรมเครื่องจักรกล
-                        </option>
-                        <option value="สาขาวิชาช่างอิเล็กทรอนิกส์">สาขาวิชาช่างอิเล็กทรอนิกส์</option>
-                        <option value="สาขาวิชาเทคโนโลยีคอมพิวเตอร์">สาขาวิชาเทคโนโลยีคอมพิวเตอร์</option>
-
-                        <!-- สาขาวิชาช่างก่อสร้าง (ซ้ำ) -->
-                        <option value="สาขาวิชาช่างไฟฟ้ากำลัง">สาขาวิชาช่างไฟฟ้ากำลัง</option>
-                        <!-- สาขาวิชาช่างยนต์ (ซ้ำ) -->
-                        <option value="สาขาวิชาเทคโนโลยีการเขียนแบบเครื่องกล">สาขาวิชาเทคโนโลยีการเขียนแบบเครื่องกล
-                        </option>
-                        <!-- สาขาวิชาช่างอิเล็กทรอนิกส์ (ซ้ำ) -->
-                        <option value="สาขาวิชาช่างเทคนิคคอมพิวเตอร์">สาขาวิชาช่างเทคนิคคอมพิวเตอร์</option>
-                    </select>
+                    <span class="d-flex ml-auto">รับผิดชอบสาขา :</span>
+                    <multiselect v-model="dataResult.branch" :options="branchOptions" label="name" track-by="name"
+                        multiple :close-on-select="false" placeholder="เลือกสาขา" @input="updateBranch"></multiselect>
                 </p>
                 <button @click="saveChanges" class="btn btn-primary">บันทึกการเปลี่ยนแปลง</button>
             </div>
@@ -59,17 +29,44 @@
     </div>
 </template>
 
+
 <script setup>
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
 import Swal from 'sweetalert2';
 import config from '../../../config';
+import Multiselect from 'vue-multiselect';
+import 'vue-multiselect/dist/vue-multiselect.css';
 
 const userData = JSON.parse(localStorage.getItem('userData') || '{}');
 const id = userData.id || null;
 
 const dataResult = ref(null);
 const loading = ref(true);
+
+// ตัวเลือกของสาขาที่สามารถเลือกได้
+const branchOptions = ref([
+    { name: 'สาขาครุศาสตร์อุตสาหกรรมโยธา' },
+    { name: 'สาขาครุศาสตร์อุตสาหกรรมไฟฟ้า' },
+    { name: 'สาขาครุศาสตร์อุตสาหกรรมเครื่องกล' },
+    { name: 'สาขาครุศาสตร์อุตสาหกรรมอุตสาหการ' },
+    { name: 'สาขาครุศาสตร์อุตสาหกรรมอิเล็กทรอนิกส์และโทรคมนาคม' },
+    { name: 'สาขาครุศาสตร์อุตสาหกรรมคอมพิวเตอร์' },
+    { name: 'สาขาครุศาสตร์อุตสาหการเชื่อมประกอบ' },
+    { name: 'สาขาวิชาช่างโยธา' },
+    { name: 'สาขาวิชาช่างก่อสร้าง' },
+    { name: 'สาขาวิชาช่างเครื่องมือกลอัตโนมัติ' },
+    { name: 'สาขาวิชาช่างยนต์' },
+    { name: 'สาขาวิชาช่างกลเกษตร' },
+    { name: 'สาขาวิชาช่างกลโรงงาน' },
+    { name: 'สาขาวิชาช่างท่อและประสาน' },
+    { name: 'สาขาวิชาการออกแบบนวัตกรรมเครื่องจักรกล' },
+    { name: 'สาขาวิชาช่างอิเล็กทรอนิกส์' },
+    { name: 'สาขาวิชาเทคโนโลยีคอมพิวเตอร์' },
+    { name: 'สาขาวิชาช่างไฟฟ้ากำลัง' },
+    { name: 'สาขาวิชาเทคโนโลยีการเขียนแบบเครื่องกล' },
+    { name: 'สาขาวิชาช่างเทคนิคคอมพิวเตอร์' }
+]);
 
 const fetchUserData = async () => {
     if (id) {
@@ -90,11 +87,10 @@ const fetchUserData = async () => {
 };
 
 const updateBranch = () => {
-    console.log('Branch updated to:', dataResult.value.branch);
+    console.log('Updated branches:', dataResult.value.branch);
 };
 
 const saveChanges = async () => {
-    // แสดงป๊อปอัพยืนยันการบันทึกการเปลี่ยนแปลง
     const result = await Swal.fire({
         title: 'คุณแน่ใจหรือไม่?',
         text: 'คุณต้องการบันทึกการเปลี่ยนแปลงหรือไม่?',
@@ -106,7 +102,6 @@ const saveChanges = async () => {
         cancelButtonText: 'ยกเลิก'
     });
 
-    // ตรวจสอบว่าผู้ใช้กดยืนยันการบันทึกหรือไม่
     if (result.isConfirmed) {
         try {
             await axios.put(`${config.api_path}/teacher/${id}`, { branch: dataResult.value.branch });
@@ -114,10 +109,8 @@ const saveChanges = async () => {
                 title: 'สำเร็จ',
                 text: 'บันทึกการเปลี่ยนแปลงสำเร็จ',
                 icon: 'success',
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    fetchUserData(); // รีเฟรชข้อมูลหลังจากการบันทึก
-                }
+            }).then(() => {
+                fetchUserData(); // รีเฟรชข้อมูลหลังจากการบันทึก
             });
         } catch (error) {
             Swal.fire({
@@ -134,7 +127,6 @@ onMounted(() => {
     fetchUserData();
 });
 </script>
-
 <style scoped>
 span {
     font-weight: bold;
